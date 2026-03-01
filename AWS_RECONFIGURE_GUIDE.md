@@ -48,9 +48,7 @@ notepad C:\Users\sande\.aws\credentials
 Add:
 ```
 [default]
-aws_access_key_id = AKIASXU7AW6PTXLMQVEL
-aws_secret_access_key = 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
-```
+
 
 ### 2. Edit config file:
 ```powershell
