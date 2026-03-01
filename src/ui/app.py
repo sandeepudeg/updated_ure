@@ -15,6 +15,7 @@ import uuid
 import requests
 import time
 import logging
+import boto3
 
 # AWS session will be initialized later if needed (not required for API mode)
 
