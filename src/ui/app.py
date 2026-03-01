@@ -795,12 +795,26 @@ uploaded_image = st.file_uploader(
     help="Upload a clear photo of your crop for disease identification. Supported formats: JPG, JPEG, PNG. Take photos in good lighting and focus on affected areas."
 )
 
-if uploaded_image:
+# Store uploaded image in session state so it persists across reruns
+if uploaded_image is not None:
+    st.session_state.uploaded_image = uploaded_image
+    st.session_state.uploaded_image_bytes = uploaded_image.getvalue()  # Store bytes for encoding
     col1, col2 = st.columns([1, 2])
     with col1:
         st.image(uploaded_image, caption="Uploaded Image", use_container_width=True)
     with col2:
-        st.info("Image uploaded! Ask a question about this crop.")
+        st.info("✅ Image uploaded! Ask a question about this crop.")
+elif 'uploaded_image_bytes' in st.session_state:
+    # Show previously uploaded image
+    col1, col2 = st.columns([1, 2])
+    with col1:
+        st.image(st.session_state.uploaded_image_bytes, caption="Uploaded Image", use_container_width=True)
+    with col2:
+        st.info("✅ Image ready for analysis.")
+        if st.button("🗑️ Remove image"):
+            del st.session_state.uploaded_image
+            del st.session_state.uploaded_image_bytes
+            st.rerun()
 
 logger.info(f"✓ Image upload rendered (took {time.time() - upload_start:.2f}s)")
 
@@ -851,13 +865,15 @@ if user_input:
     
     # Process query
     with st.spinner("🤔 Thinking..."):
-        # Encode image if provided
+        # Encode image if provided (check session state for persisted image)
         image_data = None
-        if uploaded_image:
+        if 'uploaded_image_bytes' in st.session_state:
             encode_start = time.time()
-            logger.info("Encoding uploaded image...")
-            image_data = encode_image(uploaded_image)
+            logger.info("Encoding uploaded image from session state...")
+            # Encode the stored bytes directly
+            image_data = base64.b64encode(st.session_state.uploaded_image_bytes).decode('utf-8')
             logger.info(f"✓ Image encoded (took {time.time() - encode_start:.2f}s)")
+            logger.info(f"Image data size: {len(image_data)} bytes")
         
         # Get response with location context
         if USE_API_MODE:
