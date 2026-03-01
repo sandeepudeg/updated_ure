@@ -62,22 +62,26 @@ except Exception as e:
 # AWS_SECRET_ACCESS_KEY = "..."
 # AWS_DEFAULT_REGION = "ap-south-1"
 #
-if st.secrets.get("aws"):
-    aws_secrets = st.secrets["aws"]
-    # push into environment; boto3 will pick these up automatically
-    os.environ.setdefault("AWS_ACCESS_KEY_ID", aws_secrets.get("AWS_ACCESS_KEY_ID", ""))
-    os.environ.setdefault("AWS_SECRET_ACCESS_KEY", aws_secrets.get("AWS_SECRET_ACCESS_KEY", ""))
-    if aws_secrets.get("AWS_SESSION_TOKEN"):
-        os.environ.setdefault("AWS_SESSION_TOKEN", aws_secrets["AWS_SESSION_TOKEN"])
-    os.environ.setdefault("AWS_DEFAULT_REGION", aws_secrets.get("AWS_DEFAULT_REGION", "us-east-1"))
+try:
+    if "aws" in st.secrets:
+        aws_secrets = st.secrets["aws"]
+        # push into environment; boto3 will pick these up automatically
+        os.environ.setdefault("AWS_ACCESS_KEY_ID", aws_secrets.get("AWS_ACCESS_KEY_ID", ""))
+        os.environ.setdefault("AWS_SECRET_ACCESS_KEY", aws_secrets.get("AWS_SECRET_ACCESS_KEY", ""))
+        if aws_secrets.get("AWS_SESSION_TOKEN"):
+            os.environ.setdefault("AWS_SESSION_TOKEN", aws_secrets["AWS_SESSION_TOKEN"])
+        os.environ.setdefault("AWS_DEFAULT_REGION", aws_secrets.get("AWS_DEFAULT_REGION", "us-east-1"))
 
-    # optionally set a default boto3 session for libraries that call boto3.client
-    boto3.setup_default_session(
-        aws_access_key_id=aws_secrets.get("AWS_ACCESS_KEY_ID"),
-        aws_secret_access_key=aws_secrets.get("AWS_SECRET_ACCESS_KEY"),
-        aws_session_token=aws_secrets.get("AWS_SESSION_TOKEN"),
-        region_name=aws_secrets.get("AWS_DEFAULT_REGION", "us-east-1"),
-    )
+        # optionally set a default boto3 session for libraries that call boto3.client
+        boto3.setup_default_session(
+            aws_access_key_id=aws_secrets.get("AWS_ACCESS_KEY_ID"),
+            aws_secret_access_key=aws_secrets.get("AWS_SECRET_ACCESS_KEY"),
+            aws_session_token=aws_secrets.get("AWS_SESSION_TOKEN"),
+            region_name=aws_secrets.get("AWS_DEFAULT_REGION", "us-east-1"),
+        )
+except:
+    # No secrets file - use local AWS credentials from ~/.aws/credentials
+    pass
 # Configuration
 USE_API_MODE = os.getenv('USE_API_MODE', 'false').lower() == 'true'
 API_ENDPOINT = os.getenv('API_ENDPOINT', 'https://8938dqxf33.execute-api.us-east-1.amazonaws.com/dev/query')
