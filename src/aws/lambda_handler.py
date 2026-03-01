@@ -257,8 +257,8 @@ def invoke_supervisor_agent(
                 region_name=os.getenv('BEDROCK_REGION', 'ap-south-1')
             )
             
-            # Get model ID from environment
-            model_id = os.getenv("BEDROCK_MODEL_ID", "apac.amazon.nova-lite-v1:0")
+            # Use direct model ID (not inference profile)
+            model_id = "amazon.nova-lite-v1:0"
             
             response = bedrock_runtime.converse(
                 modelId=model_id,

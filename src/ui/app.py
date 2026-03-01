@@ -16,20 +16,7 @@ import requests
 import time
 import logging
 
-import streamlit as st
-import boto3
-
-# Load credentials from secrets
-session = boto3.Session(
-    aws_access_key_id=st.secrets["aws"]["AWS_ACCESS_KEY_ID"],
-    aws_secret_access_key=st.secrets["aws"]["AWS_SECRET_ACCESS_KEY"],
-    region_name=st.secrets["aws"]["AWS_DEFAULT_REGION"]
-)
-
-# Example: connect to S3
-# s3 = session.client("s3")
-# buckets = s3.list_buckets()
-# st.write("Buckets:", [b["Name"] for b in buckets["Buckets"]])
+# AWS session will be initialized later if needed (not required for API mode)
 
 
 # Configure logging
@@ -81,6 +68,8 @@ st.set_page_config(
 logger.info(f"✓ Page configured (took {time.time() - page_config_start:.2f}s)")
 
 # Custom CSS
+css_start = time.time()
+logger.info("Applying custom CSS...")
 st.markdown("""
 <style>
     .main-header {
@@ -136,8 +125,11 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
+logger.info(f"✓ CSS applied (took {time.time() - css_start:.2f}s)")
 
 # Initialize session state
+session_start = time.time()
+logger.info("Initializing session state...")
 if 'messages' not in st.session_state:
     st.session_state.messages = []
 if 'user_id' not in st.session_state:
@@ -185,6 +177,9 @@ if 'feedback_submitted' not in st.session_state:
     st.session_state.feedback_submitted = set()
 if 'quick_action_query' not in st.session_state:
     st.session_state.quick_action_query = ""
+logger.info(f"✓ Session state initialized (took {time.time() - session_start:.2f}s)")
+logger.info(f"Total app initialization time: {time.time() - start_time:.2f}s")
+logger.info("=" * 60)
 
 
 def get_agent_badge(agent_name: str) -> str:
@@ -301,6 +296,15 @@ def submit_feedback_api(message_id: str, query: str, response: str, rating: str,
 
 def process_query_api(query: str, user_id: str, language: str = 'en', image_data: str = None, location: dict = None) -> dict:
     """Process query using deployed AWS API"""
+    api_start = time.time()
+    logger.info("=" * 60)
+    logger.info(f"API CALL STARTED")
+    logger.info(f"Endpoint: {API_ENDPOINT}")
+    logger.info(f"Query length: {len(query)} chars")
+    logger.info(f"Has image: {bool(image_data)}")
+    logger.info(f"Language: {language}")
+    logger.info("=" * 60)
+    
     try:
         payload = {
             'user_id': user_id,
@@ -310,14 +314,29 @@ def process_query_api(query: str, user_id: str, language: str = 'en', image_data
         
         if image_data:
             payload['image'] = image_data
+            logger.info(f"Image data size: {len(image_data)} bytes")
         
         if location:
             payload['location'] = location
+            logger.info(f"Location: {location}")
         
+        logger.info("Sending POST request...")
+        request_start = time.time()
         response = requests.post(API_ENDPOINT, json=payload, timeout=60)
+        request_time = time.time() - request_start
+        logger.info(f"✓ Request completed in {request_time:.2f}s")
+        logger.info(f"Response status: {response.status_code}")
         
         if response.status_code == 200:
+            parse_start = time.time()
             data = response.json()
+            parse_time = time.time() - parse_start
+            logger.info(f"✓ Response parsed in {parse_time:.2f}s")
+            logger.info(f"Response length: {len(data.get('response', ''))} chars")
+            logger.info(f"Agent used: {data.get('agent_used', 'unknown')}")
+            logger.info(f"Total API call time: {time.time() - api_start:.2f}s")
+            logger.info("=" * 60)
+            
             return {
                 'success': True,
                 'response': data.get('response', 'No response'),
@@ -325,6 +344,9 @@ def process_query_api(query: str, user_id: str, language: str = 'en', image_data
                 'metadata': data.get('metadata', {})
             }
         else:
+            logger.error(f"API Error: {response.status_code}")
+            logger.error(f"Response: {response.text[:200]}")
+            logger.info("=" * 60)
             return {
                 'success': False,
                 'response': f"API Error: {response.status_code}",
@@ -332,6 +354,9 @@ def process_query_api(query: str, user_id: str, language: str = 'en', image_data
                 'metadata': {}
             }
     except Exception as e:
+        logger.error(f"Connection Error: {str(e)}")
+        logger.error(f"Time elapsed: {time.time() - api_start:.2f}s")
+        logger.info("=" * 60)
         return {
             'success': False,
             'response': f"Connection Error: {str(e)}",
@@ -377,10 +402,15 @@ def process_query_local(query: str, image_data: str = None, location: dict = Non
 
 
 # Header
+header_start = time.time()
+logger.info("Rendering header...")
 st.markdown('<h1 class="main-header">🌾 GramSetu</h1>', unsafe_allow_html=True)
 st.markdown('<p class="sub-header">Your AI-Powered Rural Assistant</p>', unsafe_allow_html=True)
+logger.info(f"✓ Header rendered (took {time.time() - header_start:.2f}s)")
 
 # Sidebar
+sidebar_start = time.time()
+logger.info("Rendering sidebar...")
 with st.sidebar:
     st.header("⚙️ Settings")
     
@@ -665,7 +695,11 @@ with st.sidebar:
         st.session_state.messages = []
         st.rerun()
 
+logger.info(f"✓ Sidebar rendered (took {time.time() - sidebar_start:.2f}s)")
+
 # Main chat area
+chat_start = time.time()
+logger.info("Rendering main chat area...")
 st.header("💬 Chat")
 
 # Display welcome message if no messages
@@ -690,6 +724,8 @@ if len(st.session_state.messages) == 0:
     """)
 
 # Display chat messages
+messages_start = time.time()
+logger.info(f"Rendering {len(st.session_state.messages)} chat messages...")
 for idx, message in enumerate(st.session_state.messages):
     role = message['role']
     content = message['content']
@@ -748,7 +784,11 @@ for idx, message in enumerate(st.session_state.messages):
         else:
             st.caption("✅ Feedback submitted")
 
+logger.info(f"✓ Chat messages rendered (took {time.time() - messages_start:.2f}s)")
+
 # Image upload
+upload_start = time.time()
+logger.info("Rendering image upload...")
 uploaded_image = st.file_uploader(
     "📷 Upload crop image (optional)",
     type=['jpg', 'jpeg', 'png'],
@@ -762,16 +802,21 @@ if uploaded_image:
     with col2:
         st.info("Image uploaded! Ask a question about this crop.")
 
+logger.info(f"✓ Image upload rendered (took {time.time() - upload_start:.2f}s)")
+
 # Chat input
+input_start = time.time()
+logger.info("Rendering chat input...")
 # Use quick action query if set, otherwise empty
 default_query = st.session_state.quick_action_query if st.session_state.quick_action_query else ""
 
-logger.info("Rendering chat input...")
+logger.info("Rendering chat input widget...")
 user_input = st.chat_input(
     "Ask me anything about farming, schemes, or resources...",
     key="chat_input"
 )
-logger.info(f"Chat input rendered. User input: {bool(user_input)}")
+logger.info(f"✓ Chat input rendered (took {time.time() - input_start:.2f}s)")
+logger.info(f"User input received: {bool(user_input)}")
 
 # If there's a quick action query, show it in a text input for editing
 if st.session_state.quick_action_query and not user_input:
@@ -787,6 +832,12 @@ if st.session_state.quick_action_query and not user_input:
             st.rerun()
 
 if user_input:
+    query_process_start = time.time()
+    logger.info("=" * 60)
+    logger.info("PROCESSING USER QUERY")
+    logger.info(f"Query: {user_input[:100]}...")
+    logger.info("=" * 60)
+    
     # Clear quick action query if it was used
     if st.session_state.quick_action_query:
         st.session_state.quick_action_query = ""
@@ -796,18 +847,23 @@ if user_input:
         'role': 'user',
         'content': user_input
     })
+    logger.info("✓ User message added to session state")
     
     # Process query
     with st.spinner("🤔 Thinking..."):
         # Encode image if provided
         image_data = None
         if uploaded_image:
+            encode_start = time.time()
+            logger.info("Encoding uploaded image...")
             image_data = encode_image(uploaded_image)
+            logger.info(f"✓ Image encoded (took {time.time() - encode_start:.2f}s)")
         
         # Get response with location context
         if USE_API_MODE:
             # Use deployed AWS API
             user_id = st.session_state.user_profile.get('phone', f"user_{uuid.uuid4().hex[:8]}")
+            logger.info(f"Using API mode with user_id: {user_id}")
             result = process_query_api(
                 query=user_input,
                 user_id=user_id,
@@ -817,7 +873,10 @@ if user_input:
             )
         else:
             # Use local agents
+            logger.info("Using local agent mode")
+            local_start = time.time()
             result = process_query_local(user_input, image_data, st.session_state.location)
+            logger.info(f"✓ Local agent response (took {time.time() - local_start:.2f}s)")
         
         # Add assistant message
         st.session_state.messages.append({
@@ -825,10 +884,15 @@ if user_input:
             'content': result['response'],
             'agent': result['agent_used']
         })
+        logger.info("✓ Assistant message added to session state")
+        logger.info(f"Total query processing time: {time.time() - query_process_start:.2f}s")
+        logger.info("=" * 60)
     
     st.rerun()
 
 # Footer
+footer_start = time.time()
+logger.info("Rendering footer...")
 st.divider()
 st.markdown("""
 <div style="text-align: center; color: #666; font-size: 0.9rem;">
@@ -836,4 +900,8 @@ st.markdown("""
     <p>Powered by AWS Bedrock & Strands SDK</p>
 </div>
 """, unsafe_allow_html=True)
+logger.info(f"✓ Footer rendered (took {time.time() - footer_start:.2f}s)")
+logger.info(f"✓ Total page render time: {time.time() - chat_start:.2f}s")
+logger.info(f"✓✓ TOTAL APP EXECUTION TIME: {time.time() - start_time:.2f}s")
+logger.info("=" * 60)
 

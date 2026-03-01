@@ -10,12 +10,18 @@ headless = true
 port = 8501
 enableCORS = true
 enableXsrfProtection = false
-enableWebsocketCompression = true
+enableWebsocketCompression = false
 maxUploadSize = 200
 baseUrlPath = ""
 address = "0.0.0.0"
+runOnSave = false
+allowRunOnSave = false
 
 [browser]
 gatherUsageStats = false
-serverAddress = "0.0.0.0"
+serverAddress = "localhost"
 serverPort = 8501
+
+[logger]
+level = "info"
+messageFormat = "%(asctime)s %(levelname)s: %(message)s"

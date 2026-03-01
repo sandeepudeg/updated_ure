@@ -33,7 +33,7 @@ Always respond in a helpful, supportive manner.
 
 supervisor_simple_agent = Agent(
     model=BedrockModel(
-        model_id=os.getenv("BEDROCK_MODEL_ID", "us.amazon.nova-pro-v1:0"),
+        model_id=os.getenv("BEDROCK_MODEL_ID", "amazon.nova-lite-v1:0"),
         temperature=0.7
     ),
     system_prompt=SIMPLE_SUPERVISOR_PROMPT
