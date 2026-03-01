@@ -437,10 +437,10 @@ def process_query_local(query: str, image_data: str = None, location: dict = Non
                 ]
             }]
             
-            # Call Bedrock with vision support using inference profile
-            # Use the APAC inference profile for ap-south-1 region
+            # Call Bedrock with vision support
+            # Use Claude 3.5 Sonnet which has excellent vision capabilities
             response = bedrock_runtime.converse(
-                modelId="us.amazon.nova-lite-v1:0",  # Cross-region inference profile
+                modelId="anthropic.claude-3-5-sonnet-20241022-v2:0",
                 messages=messages,
                 inferenceConfig={
                     "temperature": 0.7,
