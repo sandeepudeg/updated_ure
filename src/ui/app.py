@@ -398,9 +398,6 @@ def process_query_api(query: str, user_id: str, language: str = 'en', image_data
 
 def process_query_local(query: str, image_data: str = None, location: dict = None) -> dict:
     """Process query using local agents (for development)"""
-    # Use simple supervisor for direct responses
-    from agents.supervisor_simple import supervisor_simple_agent
-    
     try:
         # Add location context to query if available
         if location:
@@ -414,16 +411,84 @@ def process_query_local(query: str, image_data: str = None, location: dict = Non
         else:
             query_with_context = query
         
-        # Get direct response from simple supervisor
-        response = supervisor_simple_agent(query_with_context)
-        
-        return {
-            'success': True,
-            'response': str(response),
-            'agent_used': 'supervisor',
-            'metadata': {'location': location}
-        }
+        # If image is provided, use Bedrock directly with vision support
+        if image_data:
+            logger.info("Processing query with image using Bedrock vision model")
+            import boto3
+            import json
+            
+            bedrock_runtime = boto3.client('bedrock-runtime', region_name='ap-south-1')
+            
+            # Prepare message with image
+            messages = [{
+                "role": "user",
+                "content": [
+                    {
+                        "image": {
+                            "format": "png",  # or "jpeg" based on image type
+                            "source": {
+                                "bytes": base64.b64decode(image_data)
+                            }
+                        }
+                    },
+                    {
+                        "text": query_with_context
+                    }
+                ]
+            }]
+            
+            # Call Bedrock with vision support
+            response = bedrock_runtime.converse(
+                modelId="amazon.nova-lite-v1:0",
+                messages=messages,
+                inferenceConfig={
+                    "temperature": 0.7,
+                    "maxTokens": 2000
+                },
+                system=[{
+                    "text": """You are Gram-Setu (Village Bridge), an AI assistant for Indian farmers.
+                    
+You provide direct, helpful answers about:
+- Crop diseases and pest management (analyze images to identify diseases)
+- Market prices and trends
+- Government schemes (PM-Kisan, PMFBY, etc.)
+- Irrigation and water management
+- Weather-based farming advice
+- Best farming practices
+
+GUIDELINES:
+- Use simple, farmer-friendly language
+- Provide practical, actionable advice
+- Suggest low-cost solutions first
+- Be specific and direct
+- When analyzing crop images, identify the crop, any visible diseases or pests, and provide treatment recommendations
+
+Always respond in a helpful, supportive manner."""
+                }]
+            )
+            
+            # Extract response text
+            response_text = response['output']['message']['content'][0]['text']
+            
+            return {
+                'success': True,
+                'response': response_text,
+                'agent_used': 'vision-model',
+                'metadata': {'location': location, 'has_image': True}
+            }
+        else:
+            # Use simple supervisor for text-only queries
+            from agents.supervisor_simple import supervisor_simple_agent
+            response = supervisor_simple_agent(query_with_context)
+            
+            return {
+                'success': True,
+                'response': str(response),
+                'agent_used': 'supervisor',
+                'metadata': {'location': location}
+            }
     except Exception as e:
+        logger.error(f"Error in process_query_local: {str(e)}")
         return {
             'success': False,
             'response': f"Error: {str(e)}",
