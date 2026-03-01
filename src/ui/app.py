@@ -437,9 +437,10 @@ def process_query_local(query: str, image_data: str = None, location: dict = Non
                 ]
             }]
             
-            # Call Bedrock with vision support
+            # Call Bedrock with vision support using inference profile
+            # Use the APAC inference profile for ap-south-1 region
             response = bedrock_runtime.converse(
-                modelId="amazon.nova-lite-v1:0",
+                modelId="us.amazon.nova-lite-v1:0",  # Cross-region inference profile
                 messages=messages,
                 inferenceConfig={
                     "temperature": 0.7,
