@@ -420,8 +420,30 @@ def process_query_local(query: str, image_data: str = None, location: dict = Non
             logger.info("Processing query with image using Bedrock vision model")
             import boto3
             import json
+            import imghdr
+            from io import BytesIO
             
             bedrock_runtime = boto3.client('bedrock-runtime', region_name='us-east-1')
+            
+            # Detect image format from the decoded bytes
+            image_bytes = base64.b64decode(image_data)
+            image_format = imghdr.what(None, h=image_bytes)
+            
+            # Map format to Bedrock-compatible format
+            if image_format in ['jpeg', 'jpg']:
+                bedrock_format = 'jpeg'
+            elif image_format == 'png':
+                bedrock_format = 'png'
+            elif image_format == 'gif':
+                bedrock_format = 'gif'
+            elif image_format == 'webp':
+                bedrock_format = 'webp'
+            else:
+                # Default to jpeg if format cannot be detected
+                bedrock_format = 'jpeg'
+                logger.warning(f"Could not detect image format, defaulting to jpeg. Detected: {image_format}")
+            
+            logger.info(f"Detected image format: {bedrock_format}")
             
             # Prepare message with image
             messages = [{
@@ -429,9 +451,9 @@ def process_query_local(query: str, image_data: str = None, location: dict = Non
                 "content": [
                     {
                         "image": {
-                            "format": "png",  # or "jpeg" based on image type
+                            "format": bedrock_format,
                             "source": {
-                                "bytes": base64.b64decode(image_data)
+                                "bytes": image_bytes
                             }
                         }
                     },
