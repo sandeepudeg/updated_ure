@@ -438,9 +438,9 @@ def process_query_local(query: str, image_data: str = None, location: dict = Non
             }]
             
             # Call Bedrock with vision support
-            # Use Claude 3.5 Sonnet which has excellent vision capabilities
+            # Use Claude 3.5 Sonnet via cross-region inference profile
             response = bedrock_runtime.converse(
-                modelId="anthropic.claude-3-5-sonnet-20241022-v2:0",
+                modelId="us.anthropic.claude-3-5-sonnet-20241022-v2:0",
                 messages=messages,
                 inferenceConfig={
                     "temperature": 0.7,
