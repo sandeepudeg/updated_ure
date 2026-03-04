@@ -62,6 +62,10 @@ lambda_layer/
 lambda_mumbai.zip
 *.zip
 
+# Privacy audit reports (may contain sensitive data)
+privacy_audit_report_*.json
+report_*.json
+
 # Large data files
 data/plantvillage/
 plant_dataset/
