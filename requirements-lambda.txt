@@ -3,10 +3,10 @@
 # Install with: pip install -r requirements-lambda.txt -t lambda_package/
 
 # ============================================================================
-# Core AWS SDK (already available in Lambda runtime, but pinned for consistency)
+# Core AWS SDK (already available in Lambda runtime - EXCLUDED from package)
 # ============================================================================
-boto3==1.34.34                    # AWS SDK for Python
-botocore==1.34.34                 # Low-level AWS service access
+# boto3==1.34.34                    # AWS SDK for Python (provided by Lambda)
+# botocore==1.34.34                 # Low-level AWS service access (provided by Lambda)
 
 # ============================================================================
 # AI/ML - Strands Agents SDK
@@ -18,7 +18,7 @@ anthropic==0.18.1                 # Anthropic Claude API client
 # HTTP & API (for MCP Client)
 # ============================================================================
 requests==2.31.0                  # HTTP library for MCP server calls
-urllib3==2.2.0                    # HTTP client
+# urllib3 will be installed as a dependency of requests (compatible version)
 
 # ============================================================================
 # Data Processing (minimal)
@@ -40,7 +40,7 @@ opensearch-py==2.4.2              # OpenSearch client for PlantVillage embedding
 # JSON & Data Validation
 # ============================================================================
 jsonschema==4.21.1                # JSON schema validation for MCP tool registry
-pydantic==2.6.0                   # Data validation
+pydantic>=2.6.0, <3.0.0                  # Data validation (version determined by strands-agents)
 
 # ============================================================================
 # Logging (CloudWatch integration)
@@ -52,7 +52,7 @@ aws-lambda-powertools==2.32.0     # Lambda utilities
 # Utilities
 # ============================================================================
 tenacity==8.2.3                   # Retry library for robust API calls
-cachetools==5.3.2                 # Caching utilities for MCP fallback
+cachetools>=5.5.0,<7.0.0          # Caching utilities for MCP fallback
 python-dateutil==2.8.2            # Date/time utilities
 pytz==2024.1                      # Timezone definitions
 

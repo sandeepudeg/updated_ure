@@ -95,10 +95,10 @@ logger.info(f"  - Total init time: {time.time() - start_time:.2f}s")
 page_config_start = time.time()
 logger.info("Configuring Streamlit page...")
 st.set_page_config(
-    page_title="GramSetu - Rural AI Assistant",
+    page_title="GramSetu - Enterprise AI Assistant",
     page_icon="🌾",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 logger.info(f"✓ Page configured (took {time.time() - page_config_start:.2f}s)")
 
@@ -107,56 +107,164 @@ css_start = time.time()
 logger.info("Applying custom CSS...")
 st.markdown("""
 <style>
-    .main-header {
-        font-size: 2.5rem;
-        color: #1B5E20;
-        text-align: center;
-        margin-bottom: 1rem;
+    /* Hide default Streamlit elements for enterprise look */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    .stDeployButton {display: none;}
+    
+    /* Enterprise Grade Styling */
+    .main {
+        background: linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 100%);
+        padding: 0 !important;
     }
+    
+    /* Remove default padding */
+    .block-container {
+        padding-top: 0rem;
+        padding-bottom: 0rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .main-header {
+        font-size: 2.8rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-align: center;
+        margin-bottom: 0.5rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    
     .sub-header {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         color: #2E7D32;
         text-align: center;
         margin-bottom: 2rem;
+        font-weight: 500;
     }
+    
     .chat-message {
-        padding: 1rem;
-        border-radius: 0.5rem;
+        padding: 1.2rem;
+        border-radius: 12px;
         margin-bottom: 1rem;
         color: #000000;
+        animation: fadeIn 0.3s ease-in;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
     .user-message {
-        background-color: #E3F2FD;
-        border-left: 4px solid #1976D2;
+        background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+        color: white;
+        border-left: none;
+        border-radius: 18px 18px 4px 18px;
     }
+    
     .assistant-message {
         background-color: #FFFFFF;
         border: 1px solid #E0E0E0;
-        border-left: 4px solid #43A047;
+        border-left: 4px solid #4CAF50;
+        border-radius: 18px 18px 18px 4px;
     }
+    
     .agent-badge {
         display: inline-block;
-        padding: 0.3rem 0.6rem;
-        border-radius: 0.3rem;
-        font-size: 0.85rem;
-        font-weight: bold;
-        margin-bottom: 0.5rem;
+        padding: 0.4rem 0.9rem;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 0.7rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12);
     }
+    
     .agri-expert {
-        background-color: #4CAF50;
-        color: #FFFFFF;
+        background: linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 100%);
+        color: #1B5E20;
     }
+    
     .policy-navigator {
-        background-color: #2196F3;
-        color: #FFFFFF;
+        background: linear-gradient(135deg, #BBDEFB 0%, #90CAF9 100%);
+        color: #0D47A1;
     }
+    
     .resource-optimizer {
-        background-color: #FF9800;
-        color: #FFFFFF;
+        background: linear-gradient(135deg, #FFE0B2 0%, #FFCC80 100%);
+        color: #E65100;
     }
+    
     .supervisor {
-        background-color: #9C27B0;
-        color: #FFFFFF;
+        background: linear-gradient(135deg, #E1BEE7 0%, #CE93D8 100%);
+        color: #4A148C;
+    }
+    
+    .vision-model {
+        background: linear-gradient(135deg, #E1BEE7 0%, #CE93D8 100%);
+        color: #6A1B9A;
+    }
+    
+    /* Info card styling */
+    .info-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 1rem;
+    }
+    
+    .info-card-header {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2E7D32;
+        margin-bottom: 1rem;
+    }
+    
+    /* Button styling */
+    .stButton>button {
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.2s;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        width: 100%;
+    }
+    
+    .stButton>button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    /* Input styling */
+    .stTextInput>div>div>input, .stTextArea>div>div>textarea {
+        border-radius: 8px;
+        border: 2px solid #E0E0E0;
+        transition: border-color 0.2s;
+    }
+    
+    .stTextInput>div>div>input:focus, .stTextArea>div>div>textarea:focus {
+        border-color: #4CAF50;
+        box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+    }
+    
+    /* Expander styling */
+    .streamlit-expanderHeader {
+        border-radius: 8px;
+        font-weight: 500;
+        background-color: white;
+    }
+    
+    /* Column styling for layout */
+    [data-testid="column"] {
+        background-color: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -223,14 +331,16 @@ def get_agent_badge(agent_name: str) -> str:
         'agri-expert': 'agri-expert',
         'policy-navigator': 'policy-navigator',
         'resource-optimizer': 'resource-optimizer',
-        'supervisor': 'supervisor'
+        'supervisor': 'supervisor',
+        'vision-model': 'vision-model'
     }
     
     agent_labels = {
         'agri-expert': '🌱 Agri Expert',
         'policy-navigator': '📋 Policy Navigator',
         'resource-optimizer': '⚡ Resource Optimizer',
-        'supervisor': '🎯 Supervisor'
+        'supervisor': '🎯 Supervisor',
+        'vision-model': '🔍 Vision AI'
     }
     
     css_class = agent_classes.get(agent_name, 'supervisor')
@@ -533,14 +643,35 @@ Always respond in a helpful, supportive manner."""
         }
 
 
-# Header
+# Enterprise Custom Header
 header_start = time.time()
-logger.info("Rendering header...")
-st.markdown('<h1 class="main-header">🌾 GramSetu</h1>', unsafe_allow_html=True)
-st.markdown('<p class="sub-header">Your AI-Powered Rural Assistant</p>', unsafe_allow_html=True)
-logger.info(f"✓ Header rendered (took {time.time() - header_start:.2f}s)")
+logger.info("Rendering enterprise header...")
+st.markdown("""
+<div style="background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%); 
+            color: white; 
+            padding: 1.5rem 2rem; 
+            margin: -1rem -1rem 2rem -1rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            border-radius: 0;">
+    <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto;">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div style="font-size: 2.5rem;">🌾</div>
+            <div>
+                <h1 style="margin: 0; font-size: 1.8rem; font-weight: 700;">GramSetu</h1>
+                <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">AI-Powered Rural Assistant for India</p>
+            </div>
+        </div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <div style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px;">
+                <span>👤 </span><span>{}</span>
+            </div>
+        </div>
+    </div>
+</div>
+""".format(st.session_state.user_profile.get('name', 'Guest User')), unsafe_allow_html=True)
+logger.info(f"✓ Enterprise header rendered (took {time.time() - header_start:.2f}s)")
 
-# Sidebar
+# Sidebar (keeping existing functionality but will be hidden by default)
 sidebar_start = time.time()
 logger.info("Rendering sidebar...")
 with st.sidebar:

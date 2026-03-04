@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramSetu - AI Assistant for Rural India</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🌾</div>
+                <div class="logo-text">
+                    <h1>GramSetu</h1>
+                    <p>AI-Powered Rural Assistant</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <select id="languageSelector" class="language-selector">
+                    <option value="en">🇬🇧 English</option>
+                    <option value="hi">🇮🇳 हिंदी</option>
+                    <option value="mr">🇮🇳 मराठी</option>
+                </select>
+                <div class="user-badge">
+                    <span>👤</span>
+                    <span id="userName">Guest User</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar-left">
+            <div class="sidebar-section">
+                <h3>🚀 Quick Actions</h3>
+                <button class="quick-action-btn" data-query="I need help identifying a crop disease">
+                    <span>🌱</span>
+                    <span>Crop Disease Help</span>
+                </button>
+                <button class="quick-action-btn" data-query="What government schemes are available for farmers?">
+                    <span>📋</span>
+                    <span>Government Schemes</span>
+                </button>
+                <button class="quick-action-btn" data-query="What are the current market prices for crops?">
+                    <span>💰</span>
+                    <span>Market Prices</span>
+                </button>
+                <button class="quick-action-btn" data-query="When should I irrigate my crops?">
+                    <span>💧</span>
+                    <span>Irrigation Tips</span>
+                </button>
+                <button class="quick-action-btn" data-query="What is the weather forecast for the next few days?">
+                    <span>🌤️</span>
+                    <span>Weather Forecast</span>
+                </button>
+                <button class="quick-action-btn" data-query="What festivals and tourist attractions are near me?">
+                    <span>🏞️</span>
+                    <span>Rural Tourism</span>
+                </button>
+                <button class="quick-action-btn" data-query="How can I start a homestay on my farm?">
+                    <span>🏡</span>
+                    <span>Start Homestay</span>
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>📍 Your Location</h3>
+                <div class="location-card">
+                    <h4>Auto-Detected</h4>
+                    <div class="location-info">
+                        <p><strong>District:</strong> <span id="userDistrict">Detecting...</span></p>
+                        <p><strong>State:</strong> <span id="userState">Detecting...</span></p>
+                        <p><strong>Country:</strong> <span id="userCountry">India</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>👤 User Profile</h3>
+                <div id="profileDisplay" style="display: none;">
+                    <p><strong>Name:</strong> <span id="profileName"></span></p>
+                    <p><strong>Village:</strong> <span id="profileVillage"></span></p>
+                    <p><strong>Crops:</strong> <span id="profileCrops"></span></p>
+                    <button class="edit-profile-btn" onclick="showProfileForm()">✏️ Edit Profile</button>
+                </div>
+                <form id="profileForm" class="profile-form">
+                    <input type="text" id="inputName" placeholder="Name / नाव" required>
+                    <input type="text" id="inputVillage" placeholder="Village / गाव" required>
+                    <select id="inputDistrict">
+                        <option value="Nashik">Nashik</option>
+                        <option value="Pune">Pune</option>
+                        <option value="Ahmednagar">Ahmednagar</option>
+                        <option value="Dhule">Dhule</option>
+                        <option value="Jalgaon">Jalgaon</option>
+                        <option value="Aurangabad">Aurangabad</option>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Nagpur">Nagpur</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <input type="tel" id="inputPhone" placeholder="Phone / फोन (+91XXXXXXXXXX)">
+                    <input type="text" id="inputCrops" placeholder="Crops (comma separated)">
+                    <input type="number" id="inputLandSize" placeholder="Land Size (acres)" step="0.5" min="0">
+                    <button type="submit" class="save-profile-btn">💾 Save Profile</button>
+                </form>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-container">
+            <div class="chat-header">
+                <h2>💬 Chat with GramSetu</h2>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <!-- Welcome Screen -->
+                <div class="welcome-screen" id="welcomeScreen">
+                    <div class="welcome-icon">🌾</div>
+                    <h3>Welcome to GramSetu!</h3>
+                    <p>Your AI-powered assistant for farming, market prices, government schemes, and more. Ask me anything or upload a crop image for disease identification.</p>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">🌱</div>
+                            <h4>Crop Diseases</h4>
+                            <p>Upload photos for instant disease identification</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">💰</div>
+                            <h4>Market Prices</h4>
+                            <p>Real-time prices in Indian Rupees</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">📋</div>
+                            <h4>Govt Schemes</h4>
+                            <p>PM-Kisan, PMFBY eligibility</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🌤️</div>
+                            <h4>Weather</h4>
+                            <p>Location-based forecasts</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <!-- Image Preview -->
+                <div class="image-preview" id="imagePreview" style="display: none;">
+                    <img id="previewImage" src="" alt="Uploaded crop">
+                    <div class="image-info">
+                        <strong id="imageName">image.jpg</strong>
+                        <p>Ready for analysis</p>
+                    </div>
+                    <button class="remove-image-btn" onclick="removeImage()">🗑️ Remove</button>
+                </div>
+
+                <div class="input-wrapper">
+                    <textarea id="chatInput" class="chat-input" rows="2" placeholder="Ask me anything about farming, schemes, or resources..."></textarea>
+                    <div class="input-actions">
+                        <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+                        <button class="icon-btn" onclick="document.getElementById('imageInput').click()" title="Upload Image">📷</button>
+                        <button class="icon-btn send-btn" onclick="sendMessage()" title="Send Message">📤</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="sidebar-right">
+            <div class="weather-widget">
+                <div class="weather-icon">☀️</div>
+                <div class="weather-temp">28°C</div>
+                <p style="margin-top: 0.5rem; color: #0277BD;">Sunny, Nashik</p>
+                <p style="font-size: 0.85rem; margin-top: 0.5rem;">
+                    <strong>Next 3 days:</strong> Clear skies<br>
+                    Good for irrigation
+                </p>
+            </div>
+
+            <div class="market-prices">
+                <h4>💰 Today's Prices (Nashik)</h4>
+                <div class="price-item">
+                    <span>Onion</span>
+                    <span class="price-value">₹3,000/q</span>
+                </div>
+                <div class="price-item">
+                    <span>Wheat</span>
+                    <span class="price-value">₹2,125/q</span>
+                </div>
+                <div class="price-item">
+                    <span>Tomato</span>
+                    <span class="price-value">₹1,800/q</span>
+                </div>
+                <div class="price-item">
+                    <span>Cotton</span>
+                    <span class="price-value">₹6,500/q</span>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h4>💡 Today's Tip</h4>
+                <p>
+                    <strong>Irrigation Alert:</strong> With clear weather expected, plan your irrigation for early morning or evening to minimize water loss.
+                </p>
+            </div>
+
+            <div class="info-card scheme-card">
+                <h4>📢 New Scheme</h4>
+                <p>
+                    <strong>PM-Kisan 16th Installment</strong> is now available. Check your eligibility and apply today!
+                </p>
+            </div>
+
+            <div class="info-card tourism-card">
+                <h4>🏞️ Rural Tourism</h4>
+                <p>
+                    <strong>Earn Extra Income!</strong> Turn your farm into a tourist destination. Offer homestays, farm tours, or cooking classes.
+                </p>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem;">
+                    💰 Potential: ₹15,000-₹50,000/month
+                </p>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p>Processing your request...</p>
+    </div>
+
+    <!-- Configuration Modal -->
+    <div class="config-modal" id="configModal" style="display: none;">
+        <div class="config-content">
+            <h3>⚙️ Configuration</h3>
+            <p>Please set your API Gateway URL:</p>
+            <input type="text" id="apiUrlInput" placeholder="https://your-api-gateway-url.amazonaws.com/dev/query" class="config-input">
+            <button onclick="saveApiUrl()" class="save-config-btn">Save</button>
+            <p class="config-note">You can also set this in config.js file</p>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -19,7 +19,7 @@ LAMBDA_FUNCTION_NAME = "ure-mvp-handler"
 LAMBDA_ROLE_NAME = "ure-lambda-execution-role"
 LAMBDA_RUNTIME = "python3.11"
 LAMBDA_TIMEOUT = 300  # 5 minutes
-LAMBDA_MEMORY = 512  # MB
+LAMBDA_MEMORY = 1024  # MB (increased for larger package)
 
 # AWS clients
 lambda_client = boto3.client('lambda', region_name='us-east-1')
@@ -83,8 +83,8 @@ def create_lambda_role():
 
 
 def create_deployment_package():
-    """Create Lambda deployment package"""
-    logger.info("Creating deployment package...")
+    """Create Lambda deployment package (source code only)"""
+    logger.info("Creating deployment package (source code only)...")
     
     # Create temp directory
     temp_dir = Path("temp_lambda_package")
@@ -105,9 +105,7 @@ def create_deployment_package():
     if Path(".env").exists():
         shutil.copy2(".env", temp_dir / ".env")
     
-    # Install dependencies
-    logger.info("Installing dependencies...")
-    os.system(f"pip install -r requirements-lambda.txt -t {temp_dir} --quiet")
+    logger.info("✓ Source code copied (dependencies will be provided by Lambda layer)")
     
     # Create zip file
     zip_path = Path("lambda_deployment.zip")
@@ -132,9 +130,9 @@ def deploy_lambda_function(role_arn, zip_path):
     """Deploy or update Lambda function"""
     logger.info("Deploying Lambda function...")
     
-    # Read zip file
-    with open(zip_path, 'rb') as f:
-        zip_content = f.read()
+    # Check file size
+    file_size = zip_path.stat().st_size
+    max_direct_upload = 50 * 1024 * 1024  # 50 MB (safe limit, actual is 70 MB)
     
     # Environment variables
     env_vars = {
@@ -148,13 +146,48 @@ def deploy_lambda_function(role_arn, zip_path):
         'LOG_LEVEL': 'INFO'
     }
     
+    # Determine deployment method based on file size
+    if file_size > max_direct_upload:
+        logger.info(f"Package size ({file_size / 1024 / 1024:.2f} MB) exceeds direct upload limit. Using S3...")
+        
+        # Upload to S3
+        s3_client = boto3.client('s3', region_name='us-east-1')
+        s3_bucket = f'ure-mvp-data-us-east-1-{account_id}'
+        s3_key = f'lambda-deployments/{LAMBDA_FUNCTION_NAME}.zip'
+        
+        logger.info(f"Uploading to s3://{s3_bucket}/{s3_key}...")
+        s3_client.upload_file(str(zip_path), s3_bucket, s3_key)
+        logger.info("✓ Uploaded to S3")
+        
+        code_config = {
+            'S3Bucket': s3_bucket,
+            'S3Key': s3_key
+        }
+    else:
+        # Direct upload
+        with open(zip_path, 'rb') as f:
+            zip_content = f.read()
+        code_config = {'ZipFile': zip_content}
+    
     try:
         # Try to update existing function
-        response = lambda_client.update_function_code(
-            FunctionName=LAMBDA_FUNCTION_NAME,
-            ZipFile=zip_content
-        )
+        if 'ZipFile' in code_config:
+            response = lambda_client.update_function_code(
+                FunctionName=LAMBDA_FUNCTION_NAME,
+                ZipFile=code_config['ZipFile']
+            )
+        else:
+            response = lambda_client.update_function_code(
+                FunctionName=LAMBDA_FUNCTION_NAME,
+                S3Bucket=code_config['S3Bucket'],
+                S3Key=code_config['S3Key']
+            )
         logger.info(f"✓ Updated existing function: {response['FunctionArn']}")
+        
+        # Wait for code update to complete
+        import time
+        logger.info("Waiting for code update to complete...")
+        time.sleep(5)
         
         # Update configuration
         lambda_client.update_function_configuration(
@@ -162,21 +195,27 @@ def deploy_lambda_function(role_arn, zip_path):
             Runtime=LAMBDA_RUNTIME,
             Timeout=LAMBDA_TIMEOUT,
             MemorySize=LAMBDA_MEMORY,
-            Environment={'Variables': env_vars}
+            Environment={'Variables': env_vars},
+            Layers=['arn:aws:lambda:us-east-1:188238313375:layer:ure-dependencies:2']
         )
-        logger.info("✓ Updated function configuration")
+        logger.info("✓ Updated function configuration (with layer)")
         
         return response['FunctionArn']
     
     except lambda_client.exceptions.ResourceNotFoundException:
         # Create new function
         logger.info("Creating new Lambda function...")
+        if 'ZipFile' in code_config:
+            code_param = {'ZipFile': code_config['ZipFile']}
+        else:
+            code_param = {'S3Bucket': code_config['S3Bucket'], 'S3Key': code_config['S3Key']}
+        
         response = lambda_client.create_function(
             FunctionName=LAMBDA_FUNCTION_NAME,
             Runtime=LAMBDA_RUNTIME,
             Role=role_arn,
             Handler='aws.lambda_handler.lambda_handler',
-            Code={'ZipFile': zip_content},
+            Code=code_param,
             Timeout=LAMBDA_TIMEOUT,
             MemorySize=LAMBDA_MEMORY,
             Environment={'Variables': env_vars},
