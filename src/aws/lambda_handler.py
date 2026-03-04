@@ -90,6 +90,7 @@ _mcp_client = None
 _guardrails = None
 _translator = None
 _pilot_metrics = None
+_ip_hasher = None
 
 def get_mcp_client():
     """Get or initialize MCP Client"""
@@ -149,6 +150,20 @@ def get_pilot_metrics():
             logger.error(f"Failed to initialize Pilot Metrics: {e}")
             _pilot_metrics = None
     return _pilot_metrics
+
+
+def get_ip_hasher():
+    """Get or initialize IP Address Hasher"""
+    global _ip_hasher
+    if _ip_hasher is None:
+        try:
+            from utils.ip_hasher import get_ip_hasher as get_hasher
+            _ip_hasher = get_hasher()
+            logger.info("IP Address Hasher initialized successfully")
+        except Exception as e:
+            logger.error(f"Failed to initialize IP Hasher: {e}")
+            _ip_hasher = None
+    return _ip_hasher
 
 
 def generate_presigned_url(s3_key: str, expiration: int = 3600) -> Optional[str]:
@@ -295,15 +310,27 @@ def store_conversation(
     query: str,
     response: str,
     agent_used: str,
-    metadata: Optional[Dict] = None
+    metadata: Optional[Dict] = None,
+    event: Optional[Dict] = None
 ):
-    """Store conversation in DynamoDB"""
+    """Store conversation in DynamoDB with hashed IP address and TTL"""
     try:
         table = dynamodb.Table(CONVERSATIONS_TABLE)
         
         # Get existing conversations
         existing = table.get_item(Key={'user_id': user_id})
         conversations = existing.get('Item', {}).get('conversations', [])
+        existing_expiry = existing.get('Item', {}).get('expiry_time')
+        
+        # Hash IP address if event is provided
+        if event:
+            ip_hasher = get_ip_hasher()
+            if ip_hasher:
+                hashed_ip = ip_hasher.extract_and_hash_ip(event)
+                if metadata is None:
+                    metadata = {}
+                metadata['hashed_ip'] = hashed_ip
+                logger.debug(f"Stored hashed IP for user {user_id}")
         
         # Add new conversation
         conversations.append({
@@ -318,14 +345,39 @@ def store_conversation(
         if len(conversations) > 50:
             conversations = conversations[-50:]
         
-        # Update table
-        table.put_item(Item={
-            'user_id': user_id,
-            'conversations': conversations,
-            'last_updated': datetime.utcnow().isoformat()
-        })
+        # Calculate TTL - extend session on every interaction (3 hours from now)
+        try:
+            from utils.ttl_manager import TTLManager
+            ttl_manager = TTLManager()
+            
+            # Extend session if existing expiry, otherwise create new
+            if existing_expiry:
+                new_expiry = ttl_manager.extend_session(existing_expiry)
+                logger.debug(f"Extended session TTL for user {user_id}")
+            else:
+                new_expiry = ttl_manager.calculate_expiry_time()
+                logger.debug(f"Set new session TTL for user {user_id}")
+            
+            # Update table with TTL
+            table.put_item(Item={
+                'user_id': user_id,
+                'conversations': conversations,
+                'last_updated': datetime.utcnow().isoformat(),
+                'expiry_time': new_expiry
+            })
+            
+            logger.info(f"Stored conversation for user {user_id} with TTL {new_expiry}")
         
-        logger.info(f"Stored conversation for user {user_id}")
+        except Exception as ttl_error:
+            # Fallback: Store without TTL if TTL calculation fails
+            logger.error(f"Failed to calculate TTL, storing without TTL: {ttl_error}")
+            table.put_item(Item={
+                'user_id': user_id,
+                'conversations': conversations,
+                'last_updated': datetime.utcnow().isoformat()
+            })
+            logger.info(f"Stored conversation for user {user_id} (without TTL)")
+    
     except ClientError as e:
         logger.error(f"Failed to store conversation: {e}")
 
@@ -635,7 +687,8 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 query=query,
                 response=result['response'],
                 agent_used=result['agent_used'],
-                metadata=result.get('metadata')
+                metadata=result.get('metadata'),
+                event=event  # Pass event for IP hashing
             )
         
         # Return response

@@ -1,0 +1,223 @@
+{
+  "region": {
+    "state": "Maharashtra",
+    "district": "Nashik",
+    "country": "India"
+  },
+  "festivals": [
+    {
+      "name": "Kumbh Mela",
+      "month": "Every 12 years (Last: 2015, Next: 2027)",
+      "significance": "One of the largest religious gatherings in the world",
+      "location": "Trimbakeshwar, Nashik",
+      "activities": ["Holy bath in Godavari", "Religious ceremonies", "Cultural programs"],
+      "best_for": "Spiritual seekers, cultural enthusiasts"
+    },
+    {
+      "name": "Ganesh Chaturthi",
+      "month": "August-September",
+      "significance": "Birth of Lord Ganesha",
+      "location": "Throughout Nashik",
+      "activities": ["Ganesh idol installations", "Processions", "Cultural events"],
+      "best_for": "Families, cultural tourists"
+    },
+    {
+      "name": "Grape Harvest Festival",
+      "month": "January-March",
+      "significance": "Celebration of grape harvest season",
+      "location": "Sula Vineyards and other wineries",
+      "activities": ["Wine tasting", "Grape stomping", "Live music", "Food stalls"],
+      "best_for": "Wine enthusiasts, young travelers"
+    },
+    {
+      "name": "Diwali",
+      "month": "October-November",
+      "significance": "Festival of Lights",
+      "location": "Villages around Nashik",
+      "activities": ["Traditional lamps", "Fireworks", "Sweets distribution", "Rangoli"],
+      "best_for": "Families, photographers"
+    },
+    {
+      "name": "Navratri",
+      "month": "September-October",
+      "significance": "Nine nights of Goddess worship",
+      "location": "Temples and villages",
+      "activities": ["Garba dance", "Traditional music", "Fasting rituals"],
+      "best_for": "Dance enthusiasts, spiritual tourists"
+    }
+  ],
+  "historical_sites": [
+    {
+      "name": "Trimbakeshwar Temple",
+      "type": "Religious",
+      "distance_from_nashik": "28 km",
+      "significance": "One of the 12 Jyotirlingas of Lord Shiva",
+      "best_time": "Early morning (5 AM - 12 PM)",
+      "entry_fee": "Free",
+      "highlights": ["Ancient architecture", "Source of Godavari river", "Religious ceremonies"]
+    },
+    {
+      "name": "Pandavleni Caves",
+      "type": "Historical/Archaeological",
+      "distance_from_nashik": "8 km",
+      "significance": "Ancient Buddhist caves dating back to 1st century BC",
+      "best_time": "October to March",
+      "entry_fee": "₹25 for Indians, ₹300 for foreigners",
+      "highlights": ["Rock-cut architecture", "Buddhist sculptures", "Panoramic city views"]
+    },
+    {
+      "name": "Sula Vineyards",
+      "type": "Agri-Tourism",
+      "distance_from_nashik": "15 km",
+      "significance": "India's largest wine producer",
+      "best_time": "November to February",
+      "entry_fee": "₹400-₹600 (includes wine tasting)",
+      "highlights": ["Wine tasting", "Vineyard tours", "Restaurant", "Wine shop"]
+    },
+    {
+      "name": "Saptashrungi Devi Temple",
+      "type": "Religious",
+      "distance_from_nashik": "60 km",
+      "significance": "Goddess temple on seven peaks",
+      "best_time": "Year-round",
+      "entry_fee": "Free",
+      "highlights": ["Mountain temple", "Scenic views", "Trekking"]
+    },
+    {
+      "name": "Coin Museum",
+      "type": "Museum",
+      "distance_from_nashik": "In Nashik city",
+      "significance": "Ancient coin collection",
+      "best_time": "Year-round",
+      "entry_fee": "₹10",
+      "highlights": ["Historical coins", "Numismatics", "Educational"]
+    }
+  ],
+  "agri_tourism": [
+    {
+      "activity": "Vineyard Tours",
+      "season": "November to March",
+      "price_range": "₹400-₹1,500 per person",
+      "duration": "2-4 hours",
+      "includes": ["Vineyard walk", "Wine tasting", "Grape harvesting (seasonal)", "Lunch"],
+      "popular_locations": ["Sula Vineyards", "York Winery", "Soma Vineyards"]
+    },
+    {
+      "activity": "Organic Farm Stays",
+      "season": "Year-round",
+      "price_range": "₹1,500-₹3,000 per night",
+      "duration": "1-3 nights",
+      "includes": ["Accommodation", "Organic meals", "Farm activities", "Village tour"],
+      "popular_locations": ["Villages around Nashik", "Igatpuri region"]
+    },
+    {
+      "activity": "Fruit Picking",
+      "season": "Seasonal (Grapes: Jan-Mar, Strawberries: Dec-Feb)",
+      "price_range": "₹300-₹800 per person",
+      "duration": "2-3 hours",
+      "includes": ["Fruit picking", "Farm tour", "Fresh fruit tasting"],
+      "popular_locations": ["Grape farms", "Strawberry farms in Mahabaleshwar"]
+    },
+    {
+      "activity": "Traditional Cooking Classes",
+      "season": "Year-round",
+      "price_range": "₹800-₹1,500 per person",
+      "duration": "3-4 hours",
+      "includes": ["Cooking lesson", "Recipe booklet", "Meal", "Market visit"],
+      "popular_locations": ["Village homestays", "Farm stays"]
+    }
+  ],
+  "handicrafts": [
+    {
+      "craft": "Paithani Sarees",
+      "description": "Traditional handwoven silk sarees",
+      "price_range": "₹10,000-₹2,00,000",
+      "where_to_buy": "Nashik city markets, Yeola (60 km from Nashik)",
+      "workshop_available": true
+    },
+    {
+      "craft": "Warli Painting",
+      "description": "Tribal art form using geometric patterns",
+      "price_range": "₹500-₹5,000",
+      "where_to_buy": "Local artisan villages, Nashik markets",
+      "workshop_available": true
+    },
+    {
+      "craft": "Pottery",
+      "description": "Traditional clay pottery and terracotta items",
+      "price_range": "₹100-₹2,000",
+      "where_to_buy": "Potter villages near Nashik",
+      "workshop_available": true
+    },
+    {
+      "craft": "Bamboo Crafts",
+      "description": "Baskets, furniture, and decorative items",
+      "price_range": "₹200-₹5,000",
+      "where_to_buy": "Village markets, artisan cooperatives",
+      "workshop_available": false
+    }
+  ],
+  "traditional_food": [
+    {
+      "dish": "Misal Pav",
+      "description": "Spicy sprouts curry with bread",
+      "price": "₹50-₹150",
+      "where_to_try": "Local eateries, homestays"
+    },
+    {
+      "dish": "Pithla Bhakri",
+      "description": "Traditional gram flour curry with millet bread",
+      "price": "₹80-₹200",
+      "where_to_try": "Village homestays, traditional restaurants"
+    },
+    {
+      "dish": "Puran Poli",
+      "description": "Sweet flatbread with lentil filling",
+      "price": "₹100-₹250",
+      "where_to_try": "Homestays, festival times"
+    },
+    {
+      "dish": "Varan Bhaat",
+      "description": "Simple dal and rice with ghee",
+      "price": "₹100-₹200",
+      "where_to_try": "Village homes, traditional eateries"
+    }
+  ],
+  "income_opportunities": {
+    "homestay": {
+      "initial_investment": "₹50,000-₹2,00,000",
+      "monthly_income_potential": "₹15,000-₹50,000",
+      "requirements": ["Clean rooms", "Basic amenities", "Food preparation", "Local knowledge"],
+      "licenses_needed": ["Tourism registration", "Food safety certificate", "Fire safety"]
+    },
+    "farm_tours": {
+      "initial_investment": "₹10,000-₹30,000",
+      "per_tour_income": "₹500-₹1,500 per person",
+      "requirements": ["Well-maintained farm", "Basic English", "Safety measures"],
+      "best_season": "October to March"
+    },
+    "cooking_classes": {
+      "initial_investment": "₹5,000-₹15,000",
+      "per_class_income": "₹800-₹1,500 per person",
+      "requirements": ["Traditional recipes", "Clean kitchen", "Teaching skills"],
+      "group_size": "2-6 people"
+    },
+    "local_guide": {
+      "initial_investment": "₹2,000-₹5,000 (training, materials)",
+      "daily_income": "₹500-₹1,000",
+      "requirements": ["Local knowledge", "Basic English", "Communication skills"],
+      "certification": "Tourism guide certification (optional)"
+    }
+  },
+  "best_time_to_visit": {
+    "peak_season": "October to March",
+    "monsoon": "June to September (scenic but rainy)",
+    "summer": "April to May (hot, less tourists)",
+    "festival_season": "August to November"
+  },
+  "getting_there": {
+    "by_air": "Nashik Airport (domestic flights from Mumbai, Bangalore)",
+    "by_train": "Nashik Road Railway Station (connected to major cities)",
+    "by_road": "170 km from Mumbai (3-4 hours), 210 km from Pune (4 hours)"
+  }
+}

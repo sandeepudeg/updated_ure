@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramSetu - Rural AI Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: #E8F5E9;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Header */
+        .top-header {
+            background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .top-header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .top-header .header-right {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .language-selector {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: 1px solid white;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            cursor: pointer;
+        }
+
+        .user-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Main container */
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Left Panel - Welcome & Agent Cards */
+        .left-panel {
+            width: 45%;
+            background: #F5F5DC;
+            padding: 2rem;
+            overflow-y: auto;
+            border-right: 2px solid #D4A574;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: #FFFFFF;
+            border: 3px solid #D4A574;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-section h1 {
+            font-size: 2rem;
+            color: #2E7D32;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .welcome-section p {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.6;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Agent Cards Grid */
+        .agent-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .agent-card {
+            background: #F8F8F0;
+            border: 2px solid #E0E0D0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .agent-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: #D4A574;
+        }
+
+        .agent-card .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .agent-card h3 {
+            font-size: 1.2rem;
+            color: #2E7D32;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .agent-card p {
+            font-size: 0.9rem;
+            color: #888;
+            line-height: 1.4;
+        }
+
+        /* Right Panel - Chat */
+        .right-panel {
+            width: 55%;
+            display: flex;
+            flex-direction: column;
+            background: #FFFFFF;
+        }
+
+        /* Chat Header - Inline with chat */
+        .chat-header {
+            background: #FFFFFF;
+            padding: 1.5rem 2rem;
+            border-bottom: 2px solid #D4A574;
+        }
+
+        .chat-header h2 {
+            font-size: 1.5rem;
+            color: #2E7D32;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chat-header h2::before {
+            content: "💬";
+            font-size: 1.8rem;
+        }
+
+        /* Chat Container */
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            background: #FAFAF5;
+        }
+
+        /* Chat messages */
+        .message {
+            margin-bottom: 1rem;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chat-message {
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            color: #000000;
+        }
+
+        .user-message {
+            background-color: #E3F2FD;
+            border-left: 4px solid #1976D2;
+            margin-left: 2rem;
+        }
+
+        .assistant-message {
+            background-color: #FFFFFF;
+            border: 2px solid #D4A574;
+            border-left: 4px solid #43A047;
+            margin-right: 2rem;
+        }
+
+        .agent-badge {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            border-radius: 0.3rem;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .badge-supervisor {
+            background-color: #9C27B0;
+        }
+
+        .badge-agri-expert {
+            background-color: #4CAF50;
+        }
+
+        .badge-policy {
+            background-color: #2196F3;
+        }
+
+        .badge-resource {
+            background-color: #FF9800;
+        }
+
+        /* Input Container */
+        .input-container {
+            padding: 1.5rem 2rem;
+            background: #FFFFFF;
+            border-top: 2px solid #D4A574;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        #userInput {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 2px solid #D4A574;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: "Source Sans Pro", sans-serif;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #userInput:focus {
+            border-color: #2E7D32;
+            box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
+        }
+
+        #sendButton {
+            padding: 0.75rem 2rem;
+            background: #2E7D32;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        #sendButton:hover:not(:disabled) {
+            background: #1B5E20;
+        }
+
+        #sendButton:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Loading indicator */
+        .loading {
+            display: flex;
+            gap: 5px;
+            padding: 1rem;
+        }
+
+        .loading span {
+            width: 8px;
+            height: 8px;
+            background: #2E7D32;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .loading span:nth-child(1) { animation-delay: -0.32s; }
+        .loading span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Error message */
+        .error {
+            background: #F8D7DA;
+            color: #721C24;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 2px solid #F5C6CB;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .left-panel,
+            .right-panel {
+                width: 100%;
+            }
+
+            .left-panel {
+                border-right: none;
+                border-bottom: 2px solid #D4A574;
+            }
+
+            .agent-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .agent-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .left-panel {
+                padding: 1rem;
+            }
+
+            .chat-container {
+                padding: 1rem;
+            }
+
+            .input-container {
+                padding: 1rem;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #F5F5DC;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #D4A574;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C4956A;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Panel: Welcome & Agent Cards -->
+        <div class="left-panel">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h1>Welcome to GramSetu!</h1>
+                <p>
+                    Your AI-powered assistant for farming, market prices, government 
+                    schemes, and more. Ask me anything or upload a crop image for disease 
+                    identification.
+                </p>
+            </div>
+
+            <!-- Agent Cards -->
+            <div class="agent-cards">
+                <!-- Crop Diseases -->
+                <div class="agent-card" onclick="suggestQuery('What disease is affecting my tomato plant?')">
+                    <div class="icon">🌱</div>
+                    <h3>Crop Diseases</h3>
+                    <p>Upload photos for instant disease identification</p>
+                </div>
+
+                <!-- Market Prices -->
+                <div class="agent-card" onclick="suggestQuery('What are current onion prices?')">
+                    <div class="icon">💰</div>
+                    <h3>Market Prices</h3>
+                    <p>Real-time prices in Indian Rupees</p>
+                </div>
+
+                <!-- Govt Schemes -->
+                <div class="agent-card" onclick="suggestQuery('Am I eligible for PM-Kisan?')">
+                    <div class="icon">📋</div>
+                    <h3>Govt Schemes</h3>
+                    <p>PM-Kisan, PMFBY eligibility</p>
+                </div>
+
+                <!-- Weather -->
+                <div class="agent-card" onclick="suggestQuery('What is the weather forecast?')">
+                    <div class="icon">🌤️</div>
+                    <h3>Weather</h3>
+                    <p>Location-based forecasts</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Chat -->
+        <div class="right-panel">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <h2>Chat with GramSetu</h2>
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="chat-container" id="chatContainer">
+                <!-- Messages will appear here -->
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <input 
+                        type="text" 
+                        id="userInput" 
+                        placeholder="Ask me anything about farming, schemes, or resources..."
+                        autocomplete="off"
+                    />
+                    <button id="sendButton">📤 Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Suggest query when agent card is clicked
+        function suggestQuery(query) {
+            document.getElementById('userInput').value = query;
+            document.getElementById('userInput').focus();
+        }
+
+        // Your existing app.js functionality will go here
+        // Or keep it in a separate app.js file
+    </script>
+    <script src="app.js"></script>
+</body>
+</html>

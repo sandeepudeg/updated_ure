@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramSetu - Rural AI Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Source Sans Pro", sans-serif;
+            background: #FFFFFF;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Header - Streamlit style */
+        .main-header {
+            background: #FFFFFF;
+            padding: 1.5rem 3rem 1rem 3rem;
+            border-bottom: 1px solid #E6E6E6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 2rem;
+            color: #1B5E20;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .header-left p {
+            font-size: 1rem;
+            color: #2E7D32;
+            font-weight: 400;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .language-selector {
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.25rem;
+            border: 1px solid #CCCCCC;
+            background: #FFFFFF;
+            color: #262730;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-family: "Source Sans Pro", sans-serif;
+        }
+
+        .user-badge {
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.25rem;
+            background: #F0F2F6;
+            font-size: 0.875rem;
+            color: #262730;
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Left Sidebar - Streamlit style */
+        .sidebar {
+            width: 280px;
+            background: #F0F2F6;
+            border-right: 1px solid #E6E6E6;
+            overflow-y: auto;
+            padding: 2rem 1rem;
+        }
+
+        .sidebar h3 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #262730;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .quick-action-btn {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            margin-bottom: 0.5rem;
+            background: #FFFFFF;
+            color: #262730;
+            border: 1px solid #CCCCCC;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            text-align: left;
+            transition: background 0.2s;
+            font-family: "Source Sans Pro", sans-serif;
+        }
+
+        .quick-action-btn:hover {
+            background: #E6E6E6;
+        }
+
+        .location-info {
+            background: #D4EDDA;
+            border: 1px solid #C3E6CB;
+            border-radius: 0.25rem;
+            padding: 0.75rem;
+        }
+
+        .location-info strong {
+            color: #155724;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .location-info div {
+            color: #155724;
+            font-size: 0.875rem;
+        }
+
+        .profile-input {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid #CCCCCC;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-family: "Source Sans Pro", sans-serif;
+        }
+
+        .save-profile-btn {
+            width: 100%;
+            padding: 0.5rem;
+            background: #1B5E20;
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: "Source Sans Pro", sans-serif;
+        }
+
+        .save-profile-btn:hover {
+            background: #2E7D32;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #FFFFFF;
+            overflow: hidden;
+        }
+
+        /* Chat Container */
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem 3rem;
+            background: #FAFAFA;
+        }
+
+        /* Welcome Section - Streamlit info box style */
+        .welcome {
+            background: #D1ECF1;
+            border: 1px solid #BEE5EB;
+            border-left: 4px solid #17A2B8;
+            border-radius: 0.25rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #0C5460;
+        }
+
+        .welcome strong {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .welcome p {
+            margin-top: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Agent Cards Grid */
+        .agent-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .agent-card {
+            background: #FFFFFF;
+            border: 1px solid #E0E0E0;
+            border-radius: 0.25rem;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .agent-card:hover {
+            border-color: #2E7D32;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .agent-card .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .agent-card h3 {
+            font-size: 1rem;
+            color: #262730;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .agent-card p {
+            font-size: 0.875rem;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        /* Chat Messages */
+        .message {
+            margin-bottom: 1rem;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .user-message {
+            background-color: #E3F2FD;
+            border-left: 4px solid #1976D2;
+            padding: 1rem;
+            border-radius: 0.25rem;
+            margin-left: 20%;
+            color: #000000;
+        }
+
+        .assistant-message {
+            background-color: #FFFFFF;
+            border: 1px solid #E0E0E0;
+            border-left: 4px solid #43A047;
+            padding: 1rem;
+            border-radius: 0.25rem;
+            margin-right: 20%;
+            color: #000000;
+        }
+
+        /* Input Container */
+        .input-container {
+            padding: 1rem 3rem 2rem 3rem;
+            background: #FFFFFF;
+            border-top: 1px solid #E6E6E6;
+        }
+
+        .image-preview {
+            padding: 0.5rem 1rem;
+            background: #E3F2FD;
+            border-radius: 0.25rem;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #1565C0;
+            margin-bottom: 0.5rem;
+        }
+
+        .image-preview.show {
+            display: flex;
+        }
+
+        .remove-image {
+            cursor: pointer;
+            color: #D32F2F;
+            font-weight: bold;
+            margin-left: auto;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        #imageInput {
+            display: none;
+        }
+
+        #chatInput {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid #CCCCCC;
+            border-radius: 0.25rem;
+            font-size: 1rem;
+            font-family: "Source Sans Pro", sans-serif;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #chatInput:focus {
+            border-color: #2E7D32;
+            box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
+        }
+
+        .upload-btn {
+            padding: 0.75rem 1rem;
+            background: #FFFFFF;
+            color: #262730;
+            border: 1px solid #CCCCCC;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+
+        .upload-btn:hover {
+            background: #F0F2F6;
+        }
+
+        .send-btn {
+            padding: 0.75rem 2rem;
+            background: #1B5E20;
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background 0.2s;
+            font-family: "Source Sans Pro", sans-serif;
+        }
+
+        .send-btn:hover {
+            background: #2E7D32;
+        }
+
+        /* Right Sidebar */
+        .right-sidebar {
+            width: 280px;
+            background: #F0F2F6;
+            border-left: 1px solid #E6E6E6;
+            overflow-y: auto;
+            padding: 2rem 1rem;
+        }
+
+        .info-card {
+            background: #FFFFFF;
+            border-radius: 0.25rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #E0E0E0;
+        }
+
+        .info-card h4 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #262730;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-card.weather {
+            background: #E3F2FD;
+            border-color: #BBDEFB;
+            text-align: center;
+        }
+
+        .info-card.weather .temp {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+            color: #1565C0;
+        }
+
+        .info-card.prices {
+            background: #F3E5F5;
+            border-color: #E1BEE7;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .info-card.tip {
+            background: #FFF9C4;
+            border-color: #FFF59D;
+        }
+
+        .info-card.scheme {
+            background: #C8E6C9;
+            border-color: #A5D6A7;
+        }
+
+        .info-card.tourism {
+            background: #FFE082;
+            border-color: #FFD54F;
+        }
+
+        .info-card p {
+            font-size: 0.875rem;
+            color: #262730;
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar,
+            .right-sidebar {
+                width: 100%;
+                border: none;
+                border-bottom: 1px solid #E6E6E6;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .agent-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .main-header {
+                padding: 1rem;
+            }
+
+            .chat-container {
+                padding: 1rem;
+            }
+
+            .input-container {
+                padding: 1rem;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #F0F2F6;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #CCCCCC;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #999999;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Header -->
+    <div class="main-header">
+        <div class="header-left">
+            <h1>🌾 GramSetu</h1>
+            <p>Your AI-Powered Rural Assistant</p>
+        </div>
+        <div class="header-right">
+            <select class="language-selector">
+                <option>🌐 English</option>
+                <option>हिंदी</option>
+                <option>मराठी</option>
+            </select>
+            <div class="user-badge">
+                👤 Guest User
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            <!-- Quick Actions -->
+            <div class="sidebar-section">
+                <h3>🚀 Quick Actions</h3>
+                <button class="quick-action-btn" onclick="suggestQuery('What disease is affecting my crop?')">
+                    🌱 Crop Disease Help
+                </button>
+                <button class="quick-action-btn" onclick="suggestQuery('Tell me about government schemes')">
+                    📋 Government Schemes
+                </button>
+                <button class="quick-action-btn" onclick="suggestQuery('What are current market prices?')">
+                    � Market Prices
+                </button>
+                <button class="quick-action-btn" onclick="suggestQuery('Give me irrigation tips')">
+                    💧 Irrigation Tips
+                </button>
+                <button class="quick-action-btn" onclick="suggestQuery('What is the weather forecast?')">
+                    🌤️ Weather Forecast
+                </button>
+                <button class="quick-action-btn" onclick="suggestQuery('Tell me about rural tourism')">
+                    �️ Rural Tourism
+                </button>
+                <button class="quick-action-btn" onclick="suggestQuery('Start homestay business')">
+                    🏠 Start Homestay
+                </button>
+            </div>
+
+            <!-- Your Location -->
+            <div class="sidebar-section">
+                <h3>� Your Location</h3>
+                <div class="location-info">
+                    <strong>Auto-Detected</strong>
+                    <div>District: Pune</div>
+                    <div>State: Maharashtra</div>
+                    <div>Country: India</div>
+                </div>
+            </div>
+
+            <!-- User Profile -->
+            <div class="sidebar-section">
+                <h3>👤 User Profile</h3>
+                <input type="text" class="profile-input" placeholder="Name / नाम" />
+                <input type="text" class="profile-input" placeholder="Village / गाव" />
+                <select class="profile-input">
+                    <option>Nashik</option>
+                    <option>Pune</option>
+                    <option>Mumbai</option>
+                </select>
+                <input type="text" class="profile-input" placeholder="Phone / फोन (+91XXXXXXXXXX)" />
+                <input type="text" class="profile-input" placeholder="Crops (comma separated)" />
+                <input type="text" class="profile-input" placeholder="Land Size (acres)" />
+                <button class="save-profile-btn">💾 Save Profile</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Chat Container -->
+            <div class="chat-container" id="chatContainer">
+                <!-- Welcome Message -->
+                <div class="welcome">
+                    <strong>👋 Welcome to GramSetu!</strong>
+                    <p>
+                        Your AI-powered assistant for farming, market prices, government 
+                        schemes, and more. Ask me anything or upload a crop image for disease 
+                        identification.
+                    </p>
+                </div>
+
+                <!-- Agent Cards -->
+                <div class="agent-cards">
+                    <div class="agent-card" onclick="suggestQuery('What disease is affecting my tomato plant?')">
+                        <div class="icon">🌱</div>
+                        <h3>Crop Diseases</h3>
+                        <p>Upload photos for instant disease identification</p>
+                    </div>
+
+                    <div class="agent-card" onclick="suggestQuery('What are current onion prices?')">
+                        <div class="icon">💰</div>
+                        <h3>Market Prices</h3>
+                        <p>Real-time prices in Indian Rupees</p>
+                    </div>
+
+                    <div class="agent-card" onclick="suggestQuery('Am I eligible for PM-Kisan?')">
+                        <div class="icon">📋</div>
+                        <h3>Govt Schemes</h3>
+                        <p>PM-Kisan, PMFBY eligibility</p>
+                    </div>
+
+                    <div class="agent-card" onclick="suggestQuery('What is the weather forecast?')">
+                        <div class="icon">🌤️</div>
+                        <h3>Weather</h3>
+                        <p>Location-based forecasts</p>
+                    </div>
+
+                    <div class="agent-card" onclick="suggestQuery('Give me irrigation tips for my crops')">
+                        <div class="icon">�</div>
+                        <h3>Irrigation</h3>
+                        <p>Water management and irrigation tips</p>
+                    </div>
+
+                    <div class="agent-card" onclick="suggestQuery('How can I start rural tourism business?')">
+                        <div class="icon">�️</div>
+                        <h3>Rural Tourism</h3>
+                        <p>Homestays, farm tours, extra income</p>
+                    </div>
+                </div>
+
+                <!-- Chat Messages -->
+                <div id="chatMessages">
+                    <!-- Messages will appear here -->
+                </div>
+            </div>
+
+            <!-- Input Container -->
+            <div class="input-container">
+                <div class="image-preview" id="imagePreview">
+                    📷 <span id="imageName"></span>
+                    <span class="remove-image" onclick="removeImage()">✕</span>
+                </div>
+
+                <div class="input-wrapper">
+                    <input 
+                        type="file" 
+                        id="imageInput" 
+                        accept="image/*"
+                        onchange="handleImageSelect(event)"
+                    />
+                    <input 
+                        type="text" 
+                        id="chatInput"
+                        placeholder="Ask me anything about farming, schemes, or resources..."
+                        autocomplete="off"
+                    />
+                    <button class="upload-btn" onclick="document.getElementById('imageInput').click()" title="Upload crop image">
+                        📷
+                    </button>
+                    <button class="send-btn" id="sendBtn">Send</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="right-sidebar">
+            <!-- Weather Card -->
+            <div class="info-card weather">
+                <div>☀️</div>
+                <div class="temp">28°C</div>
+                <div>Sunny, Nashik</div>
+                <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+                    Next 3 days: Clear skies<br>
+                    Good for irrigation
+                </p>
+            </div>
+
+            <!-- Today's Prices -->
+            <div class="info-card prices">
+                <h4>💰 Today's Prices (Nashik)</h4>
+                <div class="price-item">
+                    <span>Onion</span>
+                    <strong>₹3,000/q</strong>
+                </div>
+                <div class="price-item">
+                    <span>Wheat</span>
+                    <strong>₹2,125/q</strong>
+                </div>
+                <div class="price-item">
+                    <span>Tomato</span>
+                    <strong>₹1,800/q</strong>
+                </div>
+                <div class="price-item">
+                    <span>Cotton</span>
+                    <strong>₹6,500/q</strong>
+                </div>
+            </div>
+
+            <!-- Today's Tip -->
+            <div class="info-card tip">
+                <h4>� Today's Tip</h4>
+                <p>
+                    <strong>Irrigation Alert:</strong> With clear weather expected, plan your 
+                    irrigation for early morning or evening to minimize water loss.
+                </p>
+            </div>
+
+            <!-- New Scheme -->
+            <div class="info-card scheme">
+                <h4>📢 New Scheme</h4>
+                <p>
+                    <strong>PM-Kisan 16th Installment</strong> is now available. Check your 
+                    eligibility and apply today!
+                </p>
+            </div>
+
+            <!-- Rural Tourism -->
+            <div class="info-card tourism">
+                <h4>🏞️ Rural Tourism</h4>
+                <p>
+                    <strong>Earn Extra Income!</strong> Turn your farm into a tourist destination. 
+                    Offer homestays, farm tours, or cooking classes.
+                </p>
+                <p style="font-size: 0.8125rem; color: #666; margin-top: 0.5rem;">
+                    💰 Potential: ₹15,000-₹50,000/month
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedImage = null;
+
+        // Suggest query when buttons/cards are clicked
+        function suggestQuery(query) {
+            document.getElementById('chatInput').value = query;
+            document.getElementById('chatInput').focus();
+        }
+
+        // Handle image selection
+        function handleImageSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                selectedImage = file;
+                document.getElementById('imageName').textContent = file.name;
+                document.getElementById('imagePreview').classList.add('show');
+            }
+        }
+
+        // Remove selected image
+        function removeImage() {
+            selectedImage = null;
+            document.getElementById('imageInput').value = '';
+            document.getElementById('imagePreview').classList.remove('show');
+        }
+
+        // Send message
+        document.getElementById('sendBtn').addEventListener('click', sendMessage);
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message && !selectedImage) return;
+
+            // Add user message
+            let displayMessage = message;
+            if (selectedImage) {
+                displayMessage = `📷 ${selectedImage.name}\n${message || 'What disease is affecting this crop?'}`;
+            }
+            addMessage(displayMessage, 'user');
+            input.value = '';
+
+            // Simulate assistant response (replace with actual API call)
+            setTimeout(() => {
+                if (selectedImage) {
+                    addMessage('I can see your crop image. This is a demo response. Connect to the Lambda API with image processing for real disease identification.', 'assistant');
+                    removeImage();
+                } else {
+                    addMessage('I received your message: "' + message + '". This is a demo response. Connect to the Lambda API for real responses.', 'assistant');
+                }
+            }, 1000);
+        }
+
+        function addMessage(text, type) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = type === 'user' ? 'user-message' : 'assistant-message';
+            messageContent.textContent = text;
+            
+            messageDiv.appendChild(messageContent);
+            messagesDiv.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            const chatContainer = document.getElementById('chatContainer');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    </script>
+</body>
+</html>

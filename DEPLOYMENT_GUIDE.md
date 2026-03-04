@@ -1,322 +1,307 @@
-# URE MVP Deployment Guide
+# Docker Lambda Deployment Guide
 
-## Overview
-This guide covers deploying the URE (Unified Rural Ecosystem) MVP to AWS.
+Complete guide for testing, building, deploying, and auditing the URE Lambda function with privacy features.
+
+---
 
 ## Prerequisites
-- AWS Account with appropriate permissions
+
+- Docker Desktop installed and running
 - AWS CLI configured with credentials
-- Python 3.11 installed
-- All dependencies installed (`pip install -r requirements.txt`)
+- Python 3.11 with `rural` virtual environment
+- AWS Account: 188238313375
+- Region: us-east-1
 
-## Architecture
-```
-User → API Gateway → Lambda → Bedrock/DynamoDB/S3
-                            ↓
-                    Supervisor Agent
-                    ↓     ↓     ↓
-            Agri-Expert  Policy  Resource
-                         Navigator Optimizer
-```
+---
 
-## Deployment Steps
+## Step 1: Local Testing
 
-### 1. Verify Local Setup
-```bash
-# Test Lambda handler locally
-py scripts/test_lambda_local.py
+Test the Lambda handler locally before deployment.
 
-# Test end-to-end system
-py tests/test_end_to_end.py
-```
+### Run Unit Tests
 
-### 2. Deploy Lambda Function
-```bash
-# Automated deployment (recommended)
-py scripts/deploy_lambda.py
+```powershell
+# Activate virtual environment
+rural
+
+# Run all unit tests
+py -m pytest tests/ -v
+
+# Run specific test files
+py -m pytest tests/test_ip_hasher.py -v
+py -m pytest tests/test_ttl_manager.py -v
+py -m pytest tests/test_migration_handler.py -v
+py -m pytest tests/test_privacy_auditor.py -v
 ```
 
-This script will:
-- Create IAM role with necessary permissions
-- Package Lambda deployment zip
-- Deploy/update Lambda function
-- Create API Gateway REST API
-- Configure Lambda integration
+### Test Lambda Handler Locally
 
-### 3. Manual Deployment (Alternative)
-
-#### Step 3.1: Create IAM Role
-```bash
-aws iam create-role \
-  --role-name ure-lambda-execution-role \
-  --assume-role-policy-document file://lambda-trust-policy.json
-
-aws iam attach-role-policy \
-  --role-name ure-lambda-execution-role \
-  --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-
-aws iam attach-role-policy \
-  --role-name ure-lambda-execution-role \
-  --policy-arn arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
-
-aws iam attach-role-policy \
-  --role-name ure-lambda-execution-role \
-  --policy-arn arn:aws:iam::aws:policy/AmazonS3FullAccess
-
-aws iam attach-role-policy \
-  --role-name ure-lambda-execution-role \
-  --policy-arn arn:aws:iam::aws:policy/AmazonBedrockFullAccess
+```powershell
+# Test Lambda handler with mock events
+py scripts/test_lambda_locally.py
 ```
 
-#### Step 3.2: Create Deployment Package
-```bash
-# Create package directory
-mkdir lambda_package
-cd lambda_package
+This will run 4 tests:
+1. Basic text query
+2. Query with location context
+3. API Gateway event format (with IP hashing)
+4. Error handling for missing parameters
 
-# Copy source code
-cp -r ../src/* .
+**Expected Output**: All 4 tests should pass ✅
 
-# Install dependencies
-pip install -r ../requirements-lambda.txt -t .
+---
 
-# Create zip
-zip -r ../lambda_deployment.zip .
-cd ..
+## Step 2: Build and Deploy to AWS
+
+Deploy the Docker container to AWS Lambda.
+
+### Option A: Full Deployment (Recommended)
+
+```powershell
+# Run full deployment (tests + build + deploy)
+.\scripts\deploy_docker_lambda.ps1
 ```
 
-#### Step 3.3: Deploy Lambda
-```bash
-aws lambda create-function \
-  --function-name ure-mvp-handler \
-  --runtime python3.11 \
-  --role arn:aws:iam::ACCOUNT_ID:role/ure-lambda-execution-role \
-  --handler aws.lambda_handler.lambda_handler \
-  --zip-file fileb://lambda_deployment.zip \
-  --timeout 300 \
-  --memory-size 512 \
-  --environment Variables="{
-    DYNAMODB_TABLE_NAME=ure-conversations,
-    DYNAMODB_USER_TABLE=ure-user-profiles,
-    S3_BUCKET_NAME=ure-mvp-data-us-east-1-ACCOUNT_ID,
-    BEDROCK_KB_ID=YOUR_KB_ID,
-    BEDROCK_MODEL_ID=us.amazon.nova-pro-v1:0,
-    BEDROCK_REGION=us-east-1
-  }"
+### Option B: Skip Tests (if already tested)
+
+```powershell
+# Skip tests, run build + deploy
+.\scripts\deploy_docker_lambda.ps1 -SkipTests
 ```
 
-#### Step 3.4: Create API Gateway
-```bash
-# Create REST API
-aws apigateway create-rest-api \
-  --name ure-mvp-api \
-  --description "API for URE MVP"
+### Option C: Skip Build (if image already built)
 
-# Get API ID and Root Resource ID
-API_ID=<from previous command>
-ROOT_ID=<from get-resources command>
-
-# Create /query resource
-aws apigateway create-resource \
-  --rest-api-id $API_ID \
-  --parent-id $ROOT_ID \
-  --path-part query
-
-# Create POST method
-aws apigateway put-method \
-  --rest-api-id $API_ID \
-  --resource-id $RESOURCE_ID \
-  --http-method POST \
-  --authorization-type NONE
-
-# Set Lambda integration
-aws apigateway put-integration \
-  --rest-api-id $API_ID \
-  --resource-id $RESOURCE_ID \
-  --http-method POST \
-  --type AWS_PROXY \
-  --integration-http-method POST \
-  --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:ACCOUNT_ID:function:ure-mvp-handler/invocations
-
-# Deploy API
-aws apigateway create-deployment \
-  --rest-api-id $API_ID \
-  --stage-name prod
+```powershell
+# Skip build, just deploy existing image
+.\scripts\deploy_docker_lambda.ps1 -SkipBuild
 ```
 
-### 4. Test Deployment
-```bash
-# Test API endpoint
-curl -X POST https://API_ID.execute-api.us-east-1.amazonaws.com/prod/query \
-  -H "Content-Type: application/json" \
-  -d '{
-    "user_id": "test_farmer",
-    "query": "What are the symptoms of tomato blight?",
-    "language": "en"
-  }'
+### What the Deployment Script Does
+
+1. ✅ Runs unit tests (unless skipped)
+2. ✅ Checks Docker is running
+3. ✅ Verifies AWS CLI and credentials
+4. ✅ Creates ECR repository (if needed)
+5. ✅ Logs in to ECR
+6. ✅ Builds Docker image
+7. ✅ Tags image for ECR
+8. ✅ Pushes image to ECR
+9. ✅ Updates Lambda function code
+10. ✅ Waits for Lambda to be ready
+11. ✅ Updates environment variables
+
+**Expected Duration**: 5-10 minutes (first build may take longer)
+
+---
+
+## Step 3: Verify Deployment
+
+### Check Lambda Function Status
+
+```powershell
+# Get Lambda function info
+aws lambda get-function --function-name ure-mvp-handler --region us-east-1
 ```
 
-### 5. Deploy Streamlit UI
+### Test Lambda Function
 
-#### Option A: Local Deployment
-```bash
-# Run Streamlit locally
-py -m streamlit run src/ui/app.py --server.port=8501
+```powershell
+# Test with AWS CLI
+aws lambda invoke `
+  --function-name ure-mvp-handler `
+  --payload '{"user_id":"test_001","query":"What is tomato blight?"}' `
+  --region us-east-1 `
+  response.json
+
+# View response
+cat response.json | ConvertFrom-Json | ConvertTo-Json -Depth 10
 ```
 
-#### Option B: EC2 Deployment
-```bash
-# SSH to EC2 instance
-ssh -i your-key.pem ec2-user@your-instance
+### Check CloudWatch Logs
 
-# Install dependencies
-sudo yum install python3.11 git -y
-git clone your-repo
-cd your-repo
-pip3.11 install -r requirements.txt
-
-# Run Streamlit with systemd
-sudo systemctl start ure-streamlit
+```powershell
+# View recent logs
+aws logs tail /aws/lambda/ure-mvp-handler --follow --region us-east-1
 ```
 
-#### Option C: ECS/Fargate Deployment
-See `docker/Dockerfile` for containerized deployment.
+---
 
-### 6. Deploy MCP Servers
+## Step 4: Run Privacy Audit
 
-#### Option A: EC2 Deployment
-```bash
-# Start MCP servers on EC2
-nohup py src/mcp/servers/agmarknet_server.py > agmarknet.log 2>&1 &
-nohup py src/mcp/servers/weather_server.py > weather.log 2>&1 &
+Scan DynamoDB tables for PII and privacy compliance.
+
+### Run Privacy Audit Script
+
+```powershell
+# Run privacy audit
+py scripts/run_privacy_audit.py
 ```
 
-#### Option B: ECS/Fargate Deployment
-Deploy as separate containers with load balancer.
+### What the Audit Checks
 
-## Environment Variables
+- ✅ IP addresses (should be hashed)
+- ✅ Email addresses
+- ✅ Phone numbers
+- ✅ Aadhaar numbers
+- ✅ Credit card numbers
+- ✅ Location data
+- ✅ TTL expiry times
+- ✅ Potential PII in queries/responses
 
-### Lambda Function
-- `DYNAMODB_TABLE_NAME`: ure-conversations
-- `DYNAMODB_USER_TABLE`: ure-user-profiles
-- `DYNAMODB_VILLAGE_TABLE`: ure-village-amenities
-- `S3_BUCKET_NAME`: ure-mvp-data-us-east-1-{account_id}
-- `BEDROCK_KB_ID`: Your Knowledge Base ID
-- `BEDROCK_MODEL_ID`: us.amazon.nova-pro-v1:0
-- `BEDROCK_REGION`: us-east-1
-- `LOG_LEVEL`: INFO
+### Expected Output
 
-### Streamlit UI
-- All Lambda variables plus:
-- `API_GATEWAY_URL`: Your API Gateway endpoint
-- `STREAMLIT_SERVER_PORT`: 8501
+```
+Privacy Audit Report
+====================
 
-### MCP Servers
-- `OPENWEATHER_API_KEY`: Your OpenWeatherMap API key
+Conversations Table: ure-conversations
+- Total records: X
+- Records with PII: Y
+- IP addresses hashed: ✅
+- TTL configured: ✅
 
-## Monitoring
+User Profiles Table: ure-user-profiles
+- Total records: X
+- Records with PII: Y
 
-### CloudWatch Logs
-```bash
-# View Lambda logs
-aws logs tail /aws/lambda/ure-mvp-handler --follow
-
-# View specific log stream
-aws logs get-log-events \
-  --log-group-name /aws/lambda/ure-mvp-handler \
-  --log-stream-name 2024/01/01/[$LATEST]abc123
+Recommendations:
+- Consider encrypting location data
+- Review query content for PII
 ```
 
-### CloudWatch Metrics
-- Lambda invocations
-- Lambda errors
-- Lambda duration
-- API Gateway 4xx/5xx errors
-- DynamoDB read/write capacity
+---
 
-## Cost Optimization
+## Step 5: Enable TTL on DynamoDB (One-time Setup)
 
-### Lambda
-- Use provisioned concurrency for consistent performance
-- Optimize memory allocation (current: 512MB)
-- Set appropriate timeout (current: 300s)
+Enable automatic data deletion after TTL expires.
 
-### Bedrock
-- Use inference profiles for cost savings
-- Cache responses when possible
-- Monitor token usage
+```powershell
+# Enable TTL on conversations table
+aws dynamodb update-time-to-live `
+  --table-name ure-conversations `
+  --time-to-live-specification "Enabled=true,AttributeName=expiry_time" `
+  --region us-east-1
 
-### DynamoDB
-- Use on-demand billing for variable workload
-- Enable point-in-time recovery for production
+# Verify TTL is enabled
+aws dynamodb describe-time-to-live `
+  --table-name ure-conversations `
+  --region us-east-1
+```
 
-### S3
-- Use S3 Intelligent-Tiering for images
-- Enable lifecycle policies for old data
+**Expected Output**: `TimeToLiveStatus: ENABLED`
 
-## Security
-
-### IAM Roles
-- Follow principle of least privilege
-- Use separate roles for dev/prod
-- Enable MFA for sensitive operations
-
-### API Gateway
-- Add API key authentication
-- Enable throttling (rate limiting)
-- Use WAF for DDoS protection
-
-### Data Encryption
-- Enable encryption at rest for DynamoDB
-- Use S3 bucket encryption
-- Enable HTTPS only for API Gateway
+---
 
 ## Troubleshooting
 
-### Lambda Timeout
-- Increase timeout in Lambda configuration
-- Optimize agent response time
-- Use async processing for long operations
+### Docker Build Fails
 
-### Memory Issues
-- Increase Lambda memory allocation
-- Optimize dependency size
-- Use Lambda Layers for large libraries
+```powershell
+# Check Docker is running
+docker info
 
-### API Gateway 502 Errors
-- Check Lambda execution role permissions
-- Verify Lambda function is not timing out
-- Check CloudWatch logs for errors
+# Clean Docker cache
+docker system prune -a
 
-## Rollback
-
-### Lambda Function
-```bash
-# List versions
-aws lambda list-versions-by-function --function-name ure-mvp-handler
-
-# Rollback to previous version
-aws lambda update-alias \
-  --function-name ure-mvp-handler \
-  --name prod \
-  --function-version PREVIOUS_VERSION
+# Rebuild without cache
+docker build --no-cache -t ure-lambda:latest -f Dockerfile .
 ```
 
-### API Gateway
-```bash
-# List deployments
-aws apigateway get-deployments --rest-api-id $API_ID
+### ECR Push Fails
 
-# Rollback to previous deployment
-aws apigateway update-stage \
-  --rest-api-id $API_ID \
-  --stage-name prod \
-  --patch-operations op=replace,path=/deploymentId,value=PREVIOUS_DEPLOYMENT_ID
+```powershell
+# Re-login to ECR
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 188238313375.dkr.ecr.us-east-1.amazonaws.com
+
+# Check ECR repository exists
+aws ecr describe-repositories --repository-names ure-lambda --region us-east-1
 ```
+
+### Lambda Update Fails
+
+```powershell
+# Check Lambda function exists
+aws lambda get-function --function-name ure-mvp-handler --region us-east-1
+
+# Check IAM permissions
+aws iam get-role --role-name lambda-execution-role
+```
+
+### Tests Fail
+
+```powershell
+# Run tests with verbose output
+py -m pytest tests/ -v -s
+
+# Run specific test
+py -m pytest tests/test_ip_hasher.py::test_hash_ip_address -v
+```
+
+---
+
+## Environment Variables
+
+The Lambda function uses these environment variables:
+
+| Variable | Value | Description |
+|----------|-------|-------------|
+| `DYNAMODB_TABLE_NAME` | `ure-conversations` | Conversations table |
+| `DYNAMODB_USER_TABLE` | `ure-user-profiles` | User profiles table |
+| `S3_BUCKET_NAME` | `ure-mvp-data-us-east-1-188238313375` | S3 bucket for files |
+| `LOG_LEVEL` | `INFO` | Logging level |
+| `IP_HASH_SALT` | `<random-salt>` | Salt for IP hashing |
+| `BEDROCK_REGION` | `us-east-1` | Bedrock region |
+
+---
+
+## Privacy Features Deployed
+
+✅ **IP Address Hashing**: All IP addresses hashed with SHA-256 + salt  
+✅ **TTL Auto-Deletion**: Conversations auto-deleted after 3 hours  
+✅ **Encryption at Rest**: AWS-managed encryption on DynamoDB and S3  
+✅ **HTTPS Only**: All API calls over HTTPS  
+✅ **Privacy Audit**: Automated PII detection and reporting  
+
+---
+
+## Next Steps
+
+1. **Test in Production**: Send real queries through API Gateway
+2. **Monitor Metrics**: Check CloudWatch for errors and performance
+3. **Run Regular Audits**: Schedule weekly privacy audits
+4. **Implement Cognito**: Add anonymous authentication (Task 5.5)
+5. **Add Migration Handler**: Migrate legacy users (Task 5.4)
+
+---
+
+## Quick Commands Reference
+
+```powershell
+# Full deployment pipeline
+py -m pytest tests/ -v && .\scripts\deploy_docker_lambda.ps1 && py scripts/run_privacy_audit.py
+
+# Test locally
+py scripts/test_lambda_locally.py
+
+# Deploy only
+.\scripts\deploy_docker_lambda.ps1 -SkipTests
+
+# Audit only
+py scripts/run_privacy_audit.py
+
+# View logs
+aws logs tail /aws/lambda/ure-mvp-handler --follow --region us-east-1
+
+# Test Lambda
+aws lambda invoke --function-name ure-mvp-handler --payload '{"user_id":"test","query":"hello"}' --region us-east-1 response.json
+```
+
+---
 
 ## Support
 
 For issues or questions:
-1. Check CloudWatch logs
-2. Review this deployment guide
-3. Contact the development team
+1. Check CloudWatch logs for errors
+2. Run privacy audit to verify data compliance
+3. Review this guide for troubleshooting steps
+4. Check AWS Console for Lambda/ECR/DynamoDB status
