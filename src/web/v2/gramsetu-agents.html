@@ -1471,6 +1471,20 @@
             const file = e.target.files[0];
             if (file) {
                 state.selectedImage = file;
+                
+                // Display image preview in chat immediately
+                const userMsg = document.createElement('div');
+                userMsg.className = 'message user';
+                userMsg.innerHTML = '<em>Image uploaded</em>';
+                
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.style.cssText = 'max-width: 200px; border-radius: 8px; margin-top: 8px; display: block; box-shadow: 0 2px 8px rgba(0,0,0,0.1);';
+                userMsg.appendChild(img);
+                
+                chatMessages.appendChild(userMsg);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
                 // Visual feedback on chat upload button
                 chatUploadBtn.innerHTML = '<i class="fas fa-check-circle"></i>';
                 chatUploadBtn.style.background = '#4caf50';
@@ -1523,21 +1537,10 @@
 
         function sendMessage() {
             const message = chatInput.value.trim();
-            if (message || state.selectedImage) {
+            if (message) {
                 const userMsg = document.createElement('div');
                 userMsg.className = 'message user';
                 userMsg.textContent = message;
-                
-                if (state.selectedImage) {
-                    const img = document.createElement('img');
-                    img.src = URL.createObjectURL(state.selectedImage);
-                    img.style.cssText = 'max-width: 150px; border-radius: 8px; margin-top: 8px; display: block;';
-                    userMsg.appendChild(document.createElement('br'));
-                    userMsg.appendChild(img);
-                    state.selectedImage = null;
-                    imageName.textContent = '';
-                    imageInput.value = '';
-                }
                 
                 chatMessages.appendChild(userMsg);
                 chatInput.value = '';
