@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramSetu - Rural AI Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Welcome Splash Screen -->
+    <div class="welcome-splash" id="welcomeSplash">
+        <div class="splash-content">
+            <div class="splash-logo">🌾</div>
+            <h1 class="splash-title">Welcome to GramSetu</h1>
+            <p class="splash-subtitle">Your AI-Powered Rural Assistant</p>
+            
+            <div class="splash-features">
+                <div class="splash-feature">
+                    <div class="splash-feature-icon">🌱</div>
+                    <div class="splash-feature-title">Crop Diseases</div>
+                    <div class="splash-feature-desc">Instant disease identification</div>
+                </div>
+                <div class="splash-feature">
+                    <div class="splash-feature-icon">💰</div>
+                    <div class="splash-feature-title">Market Prices</div>
+                    <div class="splash-feature-desc">Real-time price updates</div>
+                </div>
+                <div class="splash-feature">
+                    <div class="splash-feature-icon">📋</div>
+                    <div class="splash-feature-title">Govt Schemes</div>
+                    <div class="splash-feature-desc">Eligibility & benefits</div>
+                </div>
+                <div class="splash-feature">
+                    <div class="splash-feature-icon">🌤️</div>
+                    <div class="splash-feature-title">Weather</div>
+                    <div class="splash-feature-desc">Location-based forecasts</div>
+                </div>
+                <div class="splash-feature">
+                    <div class="splash-feature-icon">💧</div>
+                    <div class="splash-feature-title">Irrigation</div>
+                    <div class="splash-feature-desc">Water management tips</div>
+                </div>
+                <div class="splash-feature">
+                    <div class="splash-feature-icon">🏞️</div>
+                    <div class="splash-feature-title">Rural Tourism</div>
+                    <div class="splash-feature-desc">Extra income opportunities</div>
+                </div>
+            </div>
+            
+            <div class="splash-loading">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Onboarding Form -->
+    <div class="onboarding-overlay hidden" id="onboardingOverlay">
+        <div class="onboarding-card">
+            <div class="onboarding-header">
+                <div class="onboarding-icon">👋</div>
+                <h2 class="onboarding-title">Welcome, Farmer!</h2>
+                <p class="onboarding-subtitle">Help us personalize your experience by sharing a few details</p>
+            </div>
+
+            <form class="onboarding-form" id="onboardingForm">
+                <div class="form-group">
+                    <label for="userName">
+                        Your Name <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="userName" 
+                        class="form-input" 
+                        placeholder="Enter your name"
+                        required
+                    />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="userState">
+                            State <span class="required">*</span>
+                        </label>
+                        <select id="userState" class="form-select" required>
+                            <option value="">Select State</option>
+                            <option value="Andhra Pradesh">Andhra Pradesh</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                            <option value="Telangana">Telangana</option>
+                            <option value="Gujarat">Gujarat</option>
+                            <option value="Rajasthan">Rajasthan</option>
+                            <option value="Madhya Pradesh">Madhya Pradesh</option>
+                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                            <option value="Punjab">Punjab</option>
+                            <option value="Haryana">Haryana</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userDistrict">
+                            District <span class="optional">(Optional)</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="userDistrict" 
+                            class="form-input" 
+                            placeholder="Your district"
+                        />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="userLanguage">
+                        Preferred Language <span class="required">*</span>
+                    </label>
+                    <select id="userLanguage" class="form-select" required>
+                        <option value="English">English</option>
+                        <option value="हिंदी">हिंदी (Hindi)</option>
+                        <option value="मराठी">मराठी (Marathi)</option>
+                        <option value="తెలుగు">తెలుగు (Telugu)</option>
+                        <option value="தமிழ்">தமிழ் (Tamil)</option>
+                        <option value="ಕನ್ನಡ">ಕನ್ನಡ (Kannada)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="userCrops">
+                        Main Crops <span class="optional">(Optional)</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="userCrops" 
+                        class="form-input" 
+                        placeholder="e.g., Rice, Wheat, Cotton"
+                    />
+                    <span class="form-help-text">This helps us provide relevant crop-specific advice</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="userFarmSize">
+                        Farm Size <span class="optional">(Optional)</span>
+                    </label>
+                    <select id="userFarmSize" class="form-select">
+                        <option value="">Select farm size</option>
+                        <option value="< 1 acre">Less than 1 acre</option>
+                        <option value="1-2 acres">1-2 acres</option>
+                        <option value="2-5 acres">2-5 acres</option>
+                        <option value="5-10 acres">5-10 acres</option>
+                        <option value="> 10 acres">More than 10 acres</option>
+                    </select>
+                </div>
+
+                <div class="form-checkbox">
+                    <input type="checkbox" id="saveData" checked />
+                    <label for="saveData" class="form-checkbox-label">
+                        <strong>Save my information</strong> to provide personalized recommendations and remember my preferences across sessions. You can delete your data anytime.
+                    </label>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="skipOnboarding()">
+                        Skip for Now
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        Get Started 🚀
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="top-header">
+        <h1>🌾 GramSetu</h1>
+        <div class="header-right">
+            <select class="language-selector" aria-label="Language selector">
+                <option>English</option>
+                <option>हिंदी</option>
+                <option>मराठी</option>
+            </select>
+            <div class="user-badge">👤 Guest User</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Left Panel -->
+        <div class="left-panel">
+            <h2 class="panel-title">🚀 Quick Actions</h2>
+            <div class="quick-actions">
+                <button class="quick-action" data-query="What disease is affecting my tomato plant?">🌱 Crop Disease Help</button>
+                <button class="quick-action" data-query="Am I eligible for PM-Kisan?">📋 Government Schemes</button>
+                <button class="quick-action" data-query="What are current onion prices?">💰 Market Prices</button>
+                <button class="quick-action" data-query="Give me irrigation tips for this week">💧 Irrigation Tips</button>
+                <button class="quick-action" data-query="What is the weather forecast?">🌤️ Weather Forecast</button>
+                <button class="quick-action" data-query="How can I start rural tourism on my farm?">🏞️ Rural Tourism</button>
+            </div>
+
+            <h2 class="panel-title">📍 Your Location</h2>
+            <div class="info-card">
+                <strong>Auto-Detected</strong><br>
+                District: Bengaluru<br>
+                State: Karnataka<br>
+                Country: India
+            </div>
+
+            <h2 class="panel-title">👤 User Profile</h2>
+            <div class="info-card">
+                Guest User<br>
+                <small>Use quick actions to start chatting</small>
+            </div>
+        </div>
+
+        <!-- Center Panel -->
+        <div class="center-panel">
+            <div class="welcome-section">
+                <div class="tile-top">
+                    <h2>Welcome to GramSetu!</h2>
+                    <div class="agent-cards">
+                        <div class="agent-card" data-query="What disease is affecting my tomato plant?">
+                            <div class="icon">🌱</div>
+                            <h3>Crop Diseases</h3>
+                            <p>Upload photos for instant disease identification</p>
+                        </div>
+                        <div class="agent-card" data-query="What are current onion prices?">
+                            <div class="icon">💰</div>
+                            <h3>Market Prices</h3>
+                            <p>Real-time prices in Indian Rupees</p>
+                        </div>
+                        <div class="agent-card" data-query="Am I eligible for PM-Kisan?">
+                            <div class="icon">📋</div>
+                            <h3>Govt Schemes</h3>
+                            <p>PM-Kisan, PMFBY eligibility</p>
+                        </div>
+                        <div class="agent-card" data-query="What is the weather forecast?">
+                            <div class="icon">🌤️</div>
+                            <h3>Weather</h3>
+                            <p>Location-based forecasts</p>
+                        </div>
+                        <div class="agent-card" data-query="Give me irrigation tips for this week">
+                            <div class="icon">💧</div>
+                            <h3>Irrigation Tips</h3>
+                            <p>Water planning for better crop health</p>
+                        </div>
+                        <div class="agent-card" data-query="How can I start rural tourism on my farm?">
+                            <div class="icon">🏞️</div>
+                            <h3>Rural Tourism</h3>
+                            <p>Homestay and farm-tour income ideas</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tile-bottom">
+                    <h2>Chat History</h2>
+                    <div class="history-group">
+                        <div class="history-title">Current Chat</div>
+                        <div class="chat-container" id="chatContainer">
+                            <!-- Current chat messages will appear here -->
+                        </div>
+
+                        <div class="chat-controls">
+                            <div class="input-container">
+                                <div class="input-wrapper">
+                                    <input
+                                        type="text"
+                                        id="userInput"
+                                        placeholder="Ask me anything about farming, schemes, or resources..."
+                                        autocomplete="off"
+                                    />
+                                    <button id="sendButton">📤 Send</button>
+                                </div>
+                                <div class="upload-controls">
+                                    <input type="file" id="imageInput" accept="image/*" style="display:none" />
+                                    <button id="uploadImageButton" type="button">📷 Upload Image</button>
+                                    <span id="selectedImageName">No image selected</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="history-group">
+                        <div class="history-title">Older Chats</div>
+                        <div class="older-chats">
+                            <div class="older-chat-item">Yesterday: Fertilizer schedule for onions</div>
+                            <div class="older-chat-item">Mar 2: PM-Kisan eligibility check</div>
+                            <div class="older-chat-item">Feb 28: Pest control for tomato crop</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="right-panel">
+            <div class="chat-header">
+                <h2>Chat with GramSetu</h2>
+            </div>
+
+            <div class="info-card">
+                <strong>☀️ 28C - Sunny, Nashik</strong><br>
+                Next 3 days: Clear skies, good for irrigation.
+            </div>
+
+            <div class="info-card">
+                <strong>💰 Today's Prices (Nashik)</strong><br>
+                Onion: Rs3000/q<br>
+                Wheat: Rs2125/q<br>
+                Tomato: Rs1800/q<br>
+                Cotton: Rs6500/q
+            </div>
+
+            <div class="info-card">
+                <strong>💡 Today's Tip</strong><br>
+                Plan irrigation in early morning or evening to reduce water loss.
+            </div>
+
+            <div class="info-card">
+                <strong>📢 New Scheme</strong><br>
+                PM-Kisan installment update is available. Check eligibility and apply.
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

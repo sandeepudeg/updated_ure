@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramSetu - AI Assistant for Rural India</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="config.js"></script>
+    <style>
+        :root {
+            --primary: #4caf50;
+            --primary-dark: #388e3c;
+            --secondary: #ff9800;
+            --teal: #00695c;
+            --light: #f9f9f9;
+            --dark: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            color: var(--dark);
+            line-height: 1.5;
+            min-height: 100vh;
+            font-size: 12px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(to right, #2e7d32, var(--teal));
+            color: white;
+            padding: 1rem 5%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-left,
+        .header-right {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .header-left {
+            justify-content: flex-start;
+            gap: 12px;
+        }
+
+        .header-right {
+            justify-content: flex-end;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            color: #ffeb3b;
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-text .tagline {
+            font-size: 0.7rem;
+            opacity: 0.9;
+        }
+
+        .header > .tagline {
+            font-size: 0.75rem;
+            opacity: 0.95;
+            text-align: center;
+        }
+
+        /* Control Bar */
+        .control-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .image-name-display {
+            font-size: 0.8rem;
+            color: white;
+            opacity: 0.9;
+        }
+
+        .language-selector {
+            padding: 0.6rem 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            font-weight: 600;
+        }
+
+        .language-selector option {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .language-selector:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Agents Section */
+        .agents-section {
+            padding: 1.5rem 5%;
+            text-align: center;
+        }
+
+        .section-title h2 {
+            font-size: 1.5rem;
+            color: #2e7d32;
+            margin-bottom: 1rem;
+        }
+
+        .agents-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .agent-card {
+            width: 140px;
+            height: 140px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .agent-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        .agent-card:hover .agent-inner {
+            transform: rotateY(180deg);
+        }
+
+        .agent-front, .agent-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            text-align: center;
+            color: white;
+        }
+
+        .agent-back {
+            background: white;
+            color: var(--dark);
+            transform: rotateY(180deg);
+            font-size: 0.75rem;
+            border: 2px solid #eee;
+        }
+
+        .agent-icon {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .agent-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+        }
+
+        .agent-role {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        .agent-1 .agent-front { background: linear-gradient(135deg, #43A047, #66BB6A); }
+        .agent-2 .agent-front { background: linear-gradient(135deg, #E53935, #EF5350); }
+        .agent-3 .agent-front { background: linear-gradient(135deg, #FB8C00, #FFA726); }
+        .agent-4 .agent-front { background: linear-gradient(135deg, #1E88E5, #42A5F5); }
+        .agent-5 .agent-front { background: linear-gradient(135deg, #00ACC1, #26C6DA); }
+        .agent-6 .agent-front { background: linear-gradient(135deg, #8E24AA, #AB47BC); }
+
+        /* Main Container */
+        .app-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 20px;
+            padding: 0 5%;
+            max-width: 1600px;
+            margin: 0 auto 2rem;
+        }
+
+        .tile {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100vh - 450px);
+        }
+
+        .tile-header {
+            background: linear-gradient(to right, #2e7d32, var(--teal));
+            color: white;
+            padding: 0.6rem 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tile-content {
+            padding: 1rem;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        /* Left Panel - Location & Profile */
+        .location-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .location-card {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-radius: 12px;
+            padding: 1rem;
+            border-left: 4px solid #2196f3;
+        }
+
+        .location-badge {
+            color: #1976d2;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .location-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.4rem 0;
+            font-size: 0.75rem;
+        }
+
+        .location-label {
+            color: #424242;
+            font-weight: 600;
+        }
+
+        .location-value {
+            color: #616161;
+        }
+
+        /* Profile Form */
+        .profile-section {
+            margin-top: 1.5rem;
+        }
+
+        .profile-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .form-control {
+            padding: 0.6rem 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .form-control::placeholder {
+            color: #9e9e9e;
+        }
+
+        .btn-save {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-save:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Chat */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background: #f5f9f5;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+        }
+
+        .message.user {
+            background: #e3f2fd;
+            align-self: flex-end;
+        }
+
+        .message.bot {
+            background: #e8f5e9;
+            align-self: flex-start;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input input {
+            flex-grow: 1;
+            padding: 0.6rem 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.75rem;
+        }
+
+        .chat-input button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            width: 45px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .chat-input .upload-icon-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .chat-input .upload-icon-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Info Hub */
+        .info-hub-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .weather-box {
+            background: linear-gradient(135deg, #d6eaf8, #e3f2fd);
+            color: #1565c0;
+            border-radius: 12px;
+            padding: 18px 15px;
+            text-align: center;
+        }
+
+        .weather-icon-large {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+
+        .temperature-large {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #1565c0;
+        }
+
+        .location-text {
+            font-size: 0.85rem;
+            color: #424242;
+            margin: 8px 0;
+        }
+
+        .info-box {
+            border-radius: 12px;
+            padding: 14px;
+            transition: transform 0.2s;
+        }
+
+        .info-box:hover {
+            transform: translateY(-2px);
+        }
+
+        .info-box.market-prices {
+            background: linear-gradient(135deg, #f3e5f5, #fce4ec);
+        }
+
+        .info-box.market-prices .info-box-header {
+            color: #7b1fa2;
+        }
+
+        /* Today's Tip Box - Light Yellow/Cream */
+        .info-box.todays-tip {
+            background: linear-gradient(135deg, #fff9c4, #fff8e1);
+        }
+
+        .info-box.todays-tip .info-box-header {
+            color: #f57c00;
+        }
+
+        .tip-highlight {
+            font-weight: 600;
+            color: #e65100;
+        }
+
+        /* New Scheme Box - Light Green */
+        .info-box.new-scheme {
+            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+        }
+
+        .info-box.new-scheme .info-box-header {
+            color: #388e3c;
+        }
+
+        .scheme-highlight {
+            color: #d84315;
+            font-weight: 700;
+        }
+
+        /* Rural Tourism Box - Light Yellow */
+        .info-box.rural-tourism {
+            background: linear-gradient(135deg, #fff9c4, #fffde7);
+        }
+
+        .info-box.rural-tourism .info-box-header {
+            color: #f57c00;
+        }
+
+        .income-highlight {
+            color: #2e7d32;
+            font-weight: 700;
+            font-size: 0.75rem;
+            margin-top: 6px;
+            display: block;
+        }
+
+        .info-box-header {
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .info-box-content {
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+
+        .price-list p {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 4px 0;
+        }
+
+        .price-list p span:first-child {
+            color: #616161;
+            font-weight: 500;
+        }
+
+        .price-val {
+            color: #2e7d32;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        /* Welcome Splash Screen */
+        .welcome-splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2e7d32 0%, #388e3c 50%, #4caf50 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .splash-content {
+            text-align: center;
+            color: white;
+            max-width: 900px;
+            padding: 2rem;
+        }
+
+        .splash-logo {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .splash-title {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .splash-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 3rem;
+            opacity: 0.95;
+        }
+
+        .splash-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .splash-feature {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .splash-feature:nth-child(1) { animation-delay: 0.1s; }
+        .splash-feature:nth-child(2) { animation-delay: 0.2s; }
+        .splash-feature:nth-child(3) { animation-delay: 0.3s; }
+        .splash-feature:nth-child(4) { animation-delay: 0.4s; }
+        .splash-feature:nth-child(5) { animation-delay: 0.5s; }
+        .splash-feature:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .splash-feature-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .splash-feature-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .splash-feature-desc {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .splash-loading {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .splash-loading span {
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        .splash-loading span:nth-child(2) { animation-delay: 0.2s; }
+        .splash-loading span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        /* Onboarding Overlay */
+        .onboarding-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .onboarding-overlay.hidden {
+            display: none;
+        }
+
+        .onboarding-card {
+            background: white;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .onboarding-header {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .onboarding-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .onboarding-title {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .onboarding-subtitle {
+            font-size: 1rem;
+            opacity: 0.95;
+        }
+
+        .onboarding-form {
+            padding: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .onboarding-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .onboarding-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .required {
+            color: #e53935;
+        }
+
+        .optional {
+            color: #666;
+            font-weight: 400;
+            font-size: 0.9rem;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .form-help-text {
+            display: block;
+            margin-top: 0.3rem;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .form-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #f5f9f5;
+            border-radius: 10px;
+        }
+
+        .form-checkbox input[type="checkbox"] {
+            margin-top: 0.2rem;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .form-checkbox-label {
+            font-size: 0.95rem;
+            color: var(--dark);
+            line-height: 1.5;
+            cursor: pointer;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            padding: 0.9rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            .splash-features {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome Splash Screen -->
+    <div class="welcome-splash" id="welcomeSplash">
+        <div class="splash-content">
+            <div class="splash-logo">🌾</div>
+            <h1 class="splash-title">Welcome to GramSetu</h1>
+            <p class="splash-subtitle">Your AI-Powered Rural Assistant</p>
+            
+            <div class="splash-features">
+                <div class="splash-feature">
+                    <div class="splash-feature-icon">🌱</div>
+                    <div class="splash-feature-title">Crop Diseases</div>
+                    <div class="splash-feature-desc">Instant disease identification</div>
+                </div>
+                <div class="splash-feature">
+                    <div class="splash-feature-icon">💰</div>
+                    <div class="splash-feature-title">Market Prices</div>
+                    <div class="splash-feature-desc">Real-time price updates</div>
+                </div>
+                <div class="splash-feature">
+                    <div class="splash-feature-icon">📋</div>
+                    <div class="splash-feature-title">Govt Schemes</div>
+                    <div class="splash-feature-desc">Eligibility & benefits</div>
+                </div>
+                <div class="splash-feature">
+                    <div class="splash-feature-icon">🌤️</div>
+                    <div class="splash-feature-title">Weather</div>
+                    <div class="splash-feature-desc">Location-based forecasts</div>
+                </div>
+                <div class="splash-feature">
+                    <div class="splash-feature-icon">💧</div>
+                    <div class="splash-feature-title">Irrigation</div>
+                    <div class="splash-feature-desc">Water management tips</div>
+                </div>
+                <div class="splash-feature">
+                    <div class="splash-feature-icon">🏞️</div>
+                    <div class="splash-feature-title">Rural Tourism</div>
+                    <div class="splash-feature-desc">Extra income opportunities</div>
+                </div>
+            </div>
+            
+            <div class="splash-loading">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Onboarding Form -->
+    <div class="onboarding-overlay hidden" id="onboardingOverlay">
+        <div class="onboarding-card">
+            <div class="onboarding-header">
+                <div class="onboarding-icon">👋</div>
+                <h2 class="onboarding-title">Welcome, Farmer!</h2>
+                <p class="onboarding-subtitle">Help us personalize your experience by sharing a few details</p>
+            </div>
+
+            <form class="onboarding-form" id="onboardingForm">
+                <div class="form-group">
+                    <label for="userName">
+                        Your Name <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="userName" 
+                        class="form-input" 
+                        placeholder="Enter your name"
+                        required
+                    />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="userState">
+                            State <span class="required">*</span>
+                        </label>
+                        <select id="userState" class="form-select" required>
+                            <option value="">Select State</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Punjab">Punjab</option>
+                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userDistrict">
+                            District <span class="optional">(Optional)</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="userDistrict" 
+                            class="form-input" 
+                            placeholder="Your district"
+                        />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="userLanguage">
+                        Preferred Language <span class="required">*</span>
+                    </label>
+                    <select id="userLanguage" class="form-select" required>
+                        <option value="English">English</option>
+                        <option value="हिंदी">हिंदी (Hindi)</option>
+                        <option value="मराठी">मराठी (Marathi)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="userCrops">
+                        Main Crops <span class="optional">(Optional)</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="userCrops" 
+                        class="form-input" 
+                        placeholder="e.g., Rice, Wheat, Cotton"
+                    />
+                    <span class="form-help-text">This helps us provide relevant crop-specific advice</span>
+                </div>
+
+                <div class="form-checkbox">
+                    <input type="checkbox" id="saveData" checked />
+                    <label for="saveData" class="form-checkbox-label">
+                        <strong>Save my information</strong> to provide personalized recommendations
+                    </label>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="skipOnboarding()">
+                        Skip for Now
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        Get Started 🚀
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-top">
+            <div class="header-left">
+                <!-- Upload button removed - now in chat input area -->
+            </div>
+            
+            <div class="logo-container">
+                <div class="logo-icon"><i class="fas fa-tractor"></i></div>
+                <div class="logo-text">
+                    <h1>GramSetu</h1>
+                    <p class="tagline">Bridging Technology and Rural India</p>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <select class="language-selector" id="languageSelector">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी (Hindi)</option>
+                    <option value="mr">मराठी (Marathi)</option>
+                    <option value="te">తెలుగు (Telugu)</option>
+                    <option value="ta">தமிழ் (Tamil)</option>
+                    <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                </select>
+            </div>
+        </div>
+        <p class="tagline">Empowering farmers with AI-driven solutions for agriculture, market access, and rural development</p>
+    </header>
+
+    <!-- Hidden file input for image upload -->
+    <input type="file" id="imageInput" accept="image/*" style="display:none" />
+
+    <!-- Agents Section -->
+    <section class="agents-section">
+        <div class="section-title">
+            <h2>Our Digital Assistants</h2>
+        </div>
+        <div class="agents-container">
+            <div class="agent-card agent-1">
+                <div class="agent-inner">
+                    <div class="agent-front">
+                        <div class="agent-icon"><i class="fas fa-seedling"></i></div>
+                        <div class="agent-name">Krishak Mitra</div>
+                        <div class="agent-role">Crop Specialist</div>
+                    </div>
+                    <div class="agent-back">
+                        Provides expert advice on crop selection, planting techniques, and cultivation practices.
+                    </div>
+                </div>
+            </div>
+
+            <div class="agent-card agent-2">
+                <div class="agent-inner">
+                    <div class="agent-front">
+                        <div class="agent-icon"><i class="fas fa-bug"></i></div>
+                        <div class="agent-name">Rog Nivaarak</div>
+                        <div class="agent-role">Disease Expert</div>
+                    </div>
+                    <div class="agent-back">
+                        Identifies plant diseases and pests from images, recommends organic solutions.
+                    </div>
+                </div>
+            </div>
+
+            <div class="agent-card agent-3">
+                <div class="agent-inner">
+                    <div class="agent-front">
+                        <div class="agent-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="agent-name">Bazaar Darshi</div>
+                        <div class="agent-role">Market Analyst</div>
+                    </div>
+                    <div class="agent-back">
+                        Provides real-time market prices, demand forecasts, and connects farmers with buyers.
+                    </div>
+                </div>
+            </div>
+
+            <div class="agent-card agent-4">
+                <div class="agent-inner">
+                    <div class="agent-front">
+                        <div class="agent-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                        <div class="agent-name">Sarkar Sahayak</div>
+                        <div class="agent-role">Scheme Advisor</div>
+                    </div>
+                    <div class="agent-back">
+                        Guides farmers through government schemes, subsidies, and loan programs.
+                    </div>
+                </div>
+            </div>
+
+            <div class="agent-card agent-5">
+                <div class="agent-inner">
+                    <div class="agent-front">
+                        <div class="agent-icon"><i class="fas fa-cloud-sun-rain"></i></div>
+                        <div class="agent-name">Mausam Gyaata</div>
+                        <div class="agent-role">Weather Expert</div>
+                    </div>
+                    <div class="agent-back">
+                        Provides hyperlocal weather forecasts, irrigation advice, and climate alerts.
+                    </div>
+                </div>
+            </div>
+
+            <div class="agent-card agent-6">
+                <div class="agent-inner">
+                    <div class="agent-front">
+                        <div class="agent-icon"><i class="fas fa-book-open"></i></div>
+                        <div class="agent-name">Krishi Bodh</div>
+                        <div class="agent-role">Knowledge Guide</div>
+                    </div>
+                    <div class="agent-back">
+                        Offers educational resources, new farming techniques, and expert connections.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Three Tiles Section -->
+    <div class="app-container">
+        <!-- Left Tile - Location & Profile -->
+        <div class="tile">
+            <div class="tile-content">
+                <!-- Your Location -->
+                <div class="location-section">
+                    <div class="section-header">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Your Location</span>
+                    </div>
+                    <div class="location-card">
+                        <div class="location-badge">Auto-Detected</div>
+                        <div class="location-item">
+                            <span class="location-label">District:</span>
+                            <span class="location-value">Nashik</span>
+                        </div>
+                        <div class="location-item">
+                            <span class="location-label">State:</span>
+                            <span class="location-value">Maharashtra</span>
+                        </div>
+                        <div class="location-item">
+                            <span class="location-label">Country:</span>
+                            <span class="location-value">India</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Profile -->
+                <div class="profile-section">
+                    <div class="section-header">
+                        <i class="fas fa-user-circle"></i>
+                        <span>User Profile</span>
+                    </div>
+                    <form class="profile-form">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Name / नाव" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Village / गाव" />
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control">
+                                <option>Nashik</option>
+                                <option>Pune</option>
+                                <option>Ahmednagar</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" class="form-control" placeholder="Phone / फोन (+91XXXXXXXXXX)" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Crops (comma separated)" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Land Size (acres)" />
+                        </div>
+                        <button type="submit" class="btn-save">
+                            <i class="fas fa-save"></i> Save Profile
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Tile - Chat -->
+        <div class="tile">
+            <div class="tile-header">
+                <i class="fas fa-comments"></i> GramSetu Assistant
+            </div>
+            <div class="tile-content chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot">Hello! I'm GramSetu, your AI farming assistant. How can I help you today?</div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="Ask anything about farming..." />
+                    <button class="upload-icon-btn" id="chatUploadBtn" title="Upload Image">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                    <button id="sendBtn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Tile - Information Hub -->
+        <div class="tile">
+            <div class="tile-header">
+                <i class="fas fa-info-circle"></i> Information Hub
+            </div>
+            <div class="tile-content info-hub-wrapper">
+                <!-- 1. Weather Box -->
+                <div class="weather-box">
+                    <div class="weather-icon-large">☀️</div>
+                    <div class="temperature-large">28°C</div>
+                    <div class="location-text">Sunny, Nashik</div>
+                    <div style="font-size: 0.8rem; color: #616161;">
+                        <strong>Next 3 days:</strong> Clear skies<br>Good for irrigation
+                    </div>
+                </div>
+
+                <!-- 2. Market Prices -->
+                <div class="info-box market-prices">
+                    <div class="info-box-header">
+                        🔥 Today's Prices (Nashik)
+                    </div>
+                    <div class="info-box-content price-list">
+                        <p><span>Onion</span> <span class="price-val">₹3,000/q</span></p>
+                        <p><span>Wheat</span> <span class="price-val">₹2,125/q</span></p>
+                        <p><span>Tomato</span> <span class="price-val">₹1,800/q</span></p>
+                        <p><span>Cotton</span> <span class="price-val">₹6,500/q</span></p>
+                    </div>
+                </div>
+
+                <!-- 3. Today's Tip -->
+                <div class="info-box todays-tip">
+                    <div class="info-box-header">
+                        💡 Today's Tip
+                    </div>
+                    <div class="info-box-content">
+                        <span class="tip-highlight">Irrigation Alert:</span> With clear weather expected, plan your irrigation for early morning or evening to minimize water loss.
+                    </div>
+                </div>
+
+                <!-- 4. New Scheme -->
+                <div class="info-box new-scheme">
+                    <div class="info-box-header">
+                        📢 New Scheme
+                    </div>
+                    <div class="info-box-content">
+                        <span class="scheme-highlight">PM-Kisan 16th Installment</span> is now available. Check your eligibility and apply today!
+                    </div>
+                </div>
+
+                <!-- 5. Rural Tourism -->
+                <div class="info-box rural-tourism">
+                    <div class="info-box-header">
+                        🏞️ Rural Tourism
+                    </div>
+                    <div class="info-box-content">
+                        <strong>Earn Extra Income!</strong> Turn your farm into a tourist destination. Offer homestays, farm tours, or cooking classes.
+                        <span class="income-highlight">💰 Potential: ₹15,000-₹50,000/month</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        const state = {
+            selectedImage: null,
+            currentLanguage: 'en',
+            userProfile: loadUserProfile() || {}
+        };
+
+        // Load user profile from localStorage
+        function loadUserProfile() {
+            const stored = localStorage.getItem('gramsetu_profile');
+            if (stored) {
+                try {
+                    return JSON.parse(stored);
+                } catch (e) {
+                    return null;
+                }
+            }
+            return null;
+        }
+
+        // Initialize splash screen
+        function initSplashScreen() {
+            const splash = document.getElementById('welcomeSplash');
+            const onboarding = document.getElementById('onboardingOverlay');
+            
+            // Auto-hide splash after 5 seconds
+            setTimeout(() => {
+                if (splash) {
+                    splash.style.animation = 'fadeOut 0.5s ease-in-out forwards';
+                    setTimeout(() => {
+                        splash.remove();
+                        // Show onboarding if user hasn't completed it
+                        if (!state.userProfile.name) {
+                            showOnboarding();
+                        } else {
+                            displayPersonalizedWelcome();
+                        }
+                    }, 500);
+                }
+            }, 5000);
+            
+            // Allow click to skip splash
+            if (splash) {
+                splash.addEventListener('click', () => {
+                    splash.style.animation = 'fadeOut 0.3s ease-in-out forwards';
+                    setTimeout(() => {
+                        splash.remove();
+                        if (!state.userProfile.name) {
+                            showOnboarding();
+                        } else {
+                            displayPersonalizedWelcome();
+                        }
+                    }, 300);
+                });
+            }
+        }
+
+        // Show onboarding
+        function showOnboarding() {
+            const onboarding = document.getElementById('onboardingOverlay');
+            if (onboarding) {
+                onboarding.classList.remove('hidden');
+            }
+        }
+
+        // Skip onboarding
+        function skipOnboarding() {
+            const onboarding = document.getElementById('onboardingOverlay');
+            if (onboarding) {
+                onboarding.classList.add('hidden');
+            }
+        }
+
+        // Handle onboarding form submission
+        function handleOnboardingSubmit(event) {
+            event.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('userName').value.trim(),
+                state: document.getElementById('userState').value,
+                district: document.getElementById('userDistrict').value.trim(),
+                language: document.getElementById('userLanguage').value,
+                crops: document.getElementById('userCrops').value.trim(),
+                saveData: document.getElementById('saveData').checked,
+                createdAt: Date.now()
+            };
+            
+            // Validate required fields
+            if (!formData.name || !formData.state || !formData.language) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Save to state and localStorage
+            state.userProfile = formData;
+            if (formData.saveData) {
+                localStorage.setItem('gramsetu_profile', JSON.stringify(formData));
+            }
+            
+            // Hide onboarding
+            document.getElementById('onboardingOverlay').classList.add('hidden');
+            
+            // Display personalized welcome
+            displayPersonalizedWelcome();
+        }
+
+        // Get time-based greeting
+        function getGreeting() {
+            const hour = new Date().getHours();
+            if (hour < 12) return 'Good morning';
+            if (hour < 17) return 'Good afternoon';
+            return 'Good evening';
+        }
+
+        // Display personalized welcome
+        function displayPersonalizedWelcome() {
+            const profile = state.userProfile;
+            const greeting = getGreeting();
+            const cropsText = profile.crops ? ` I see you grow ${profile.crops}.` : '';
+            const locationText = profile.district ? `${profile.district}, ${profile.state}` : profile.state;
+            
+            // Update header tagline
+            const tagline = document.querySelector('.header .tagline');
+            if (tagline && profile.name) {
+                tagline.textContent = `${greeting}, ${profile.name}! Welcome to GramSetu from ${locationText}`;
+            }
+            
+            // Update first bot message
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = '';
+            const welcomeMsg = document.createElement('div');
+            welcomeMsg.className = 'message bot';
+            welcomeMsg.innerHTML = `<strong>${greeting}, ${profile.name}! 🌾</strong><br><br>
+                Welcome to GramSetu!${cropsText} I'm here to help you with farming advice, market prices, and government schemes for ${locationText}.<br><br>
+                How can I assist you today?`;
+            chatMessages.appendChild(welcomeMsg);
+        }
+
+        // Upload Image
+        const chatUploadBtn = document.getElementById('chatUploadBtn');
+        const imageInput = document.getElementById('imageInput');
+
+        // Handle chat upload button
+        chatUploadBtn.addEventListener('click', () => imageInput.click());
+
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                state.selectedImage = file;
+                // Visual feedback on chat upload button
+                chatUploadBtn.innerHTML = '<i class="fas fa-check-circle"></i>';
+                chatUploadBtn.style.background = '#4caf50';
+                setTimeout(() => {
+                    chatUploadBtn.innerHTML = '<i class="fas fa-camera"></i>';
+                    chatUploadBtn.style.background = '';
+                }, 2000);
+            }
+        });
+
+        // Language Selector
+        const langSelector = document.getElementById('languageSelector');
+        langSelector.addEventListener('change', (e) => {
+            state.currentLanguage = e.target.value;
+            const langNames = {
+                'en': 'English',
+                'hi': 'हिंदी (Hindi)',
+                'mr': 'मराठी (Marathi)',
+                'te': 'తెలుగు (Telugu)',
+                'ta': 'தமிழ் (Tamil)',
+                'kn': 'ಕನ್ನಡ (Kannada)'
+            };
+            
+            // Show notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #4caf50;
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                z-index: 10000;
+            `;
+            notification.textContent = `Language changed to ${langNames[state.currentLanguage]}`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'fadeOut 0.3s ease-out';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        });
+
+        // Chat
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const chatMessages = document.getElementById('chatMessages');
+
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (message || state.selectedImage) {
+                const userMsg = document.createElement('div');
+                userMsg.className = 'message user';
+                userMsg.textContent = message;
+                
+                if (state.selectedImage) {
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(state.selectedImage);
+                    img.style.cssText = 'max-width: 150px; border-radius: 8px; margin-top: 8px; display: block;';
+                    userMsg.appendChild(document.createElement('br'));
+                    userMsg.appendChild(img);
+                    state.selectedImage = null;
+                    imageName.textContent = '';
+                    imageInput.value = '';
+                }
+                
+                chatMessages.appendChild(userMsg);
+                chatInput.value = '';
+                
+                setTimeout(() => {
+                    const botMsg = document.createElement('div');
+                    botMsg.className = 'message bot';
+                    
+                    // Personalize response if profile exists
+                    if (state.userProfile.name) {
+                        botMsg.textContent = `Thank you for your query, ${state.userProfile.name}. Our agricultural experts are analyzing your question for ${state.userProfile.state}.`;
+                    } else {
+                        botMsg.textContent = 'Thank you for your query. Our agricultural experts are analyzing your question.';
+                    }
+                    
+                    chatMessages.appendChild(botMsg);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1000);
+                
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Onboarding form submission
+        const onboardingForm = document.getElementById('onboardingForm');
+        if (onboardingForm) {
+            onboardingForm.addEventListener('submit', handleOnboardingSubmit);
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            initSplashScreen();
+        });
+    </script>
+</body>
+</html>
