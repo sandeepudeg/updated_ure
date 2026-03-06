@@ -1279,3 +1279,39 @@ Resources:
 | 7-8 | Pilot | Deploy to AWS, onboard 50 farmers, collect feedback |
 | 9 | Submission | Final demo, documentation, hackathon submission |
 
+
+
+---
+
+## Web Interface Design (MVP)
+
+### Overview
+The GramSetu web interface provides a simple, intuitive entry point for farmers in the pilot village.
+
+### Key Components (MVP)
+1. **Splash Screen**: 5-second feature showcase
+2. **Onboarding Form**: Optional user profile collection
+3. **3-Column Layout**: Location | Chat | Info Hub
+4. **Image Upload**: Camera icon in chat input
+5. **Agent Cards**: 6 flip cards with Hindi names
+
+### Technical Stack (MVP)
+- **File**: `src/web/v2/gramsetu-agents.html` (standalone)
+- **Config**: `src/web/v2/config.js`
+- **Deployment**: S3 + CloudFront
+- **URL**: https://d3v7khazsfb4vd.cloudfront.net/
+
+### Deployment (MVP)
+- **Script**: `scripts/deploy_web_interface.ps1`
+- **S3 Bucket**: `ure-mvp-data-us-east-1-188238313375/web-ui/`
+- **CloudFront**: `d3v7khazsfb4vd.cloudfront.net`
+- **Steps**: Upload files → Update CloudFront → Invalidate cache
+
+### User Flow (MVP)
+1. Visit URL → Splash screen
+2. Onboarding form (optional)
+3. Main interface with 3 columns
+4. Type question or upload image
+5. Receive response from agents
+
+---

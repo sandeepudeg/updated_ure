@@ -13,6 +13,9 @@ RUN pip install --no-cache-dir -r requirements-lambda.txt
 # Copy application code (entire src directory structure)
 COPY src/ ${LAMBDA_TASK_ROOT}/src/
 
+# Copy data folder (for CSV fallback)
+COPY data/mandi_prices/Agriculture_price_dataset.csv ${LAMBDA_TASK_ROOT}/data/mandi_prices/Agriculture_price_dataset.csv
+
 # Set environment variables
 ENV PYTHONPATH="${LAMBDA_TASK_ROOT}:${LAMBDA_TASK_ROOT}/src"
 ENV LOG_LEVEL="INFO"

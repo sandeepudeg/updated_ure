@@ -17,6 +17,59 @@ from .rural_tourism import rural_tourism_agent
 
 load_dotenv()
 
+# Wrapper functions to use agents as tools
+def call_agri_expert(query: str) -> str:
+    """
+    Call the Agricultural Expert agent for crop diseases, pests, market prices, and treatment recommendations.
+    
+    Args:
+        query: The farmer's question about crops, diseases, pests, or market prices
+    
+    Returns:
+        Expert advice and recommendations
+    """
+    response = agri_expert_agent(query)
+    return str(response)
+
+def call_policy_navigator(query: str) -> str:
+    """
+    Call the Policy Navigator agent for government schemes, subsidies, and eligibility information.
+    
+    Args:
+        query: The farmer's question about government schemes, PM-Kisan, subsidies, or loans
+    
+    Returns:
+        Information about schemes, eligibility, and application process
+    """
+    response = policy_navigator_agent(query)
+    return str(response)
+
+def call_resource_optimizer(query: str) -> str:
+    """
+    Call the Resource Optimizer agent for irrigation, water management, and weather-based recommendations.
+    
+    Args:
+        query: The farmer's question about irrigation, water, weather, or crop rotation
+    
+    Returns:
+        Recommendations for resource optimization and management
+    """
+    response = resource_optimizer_agent(query)
+    return str(response)
+
+def call_rural_tourism(query: str) -> str:
+    """
+    Call the Rural Tourism agent for local festivals, historical places, and agri-tourism opportunities.
+    
+    Args:
+        query: The farmer's question about tourism, festivals, homestays, or handicrafts
+    
+    Returns:
+        Information about rural tourism and income opportunities
+    """
+    response = rural_tourism_agent(query)
+    return str(response)
+
 SUPERVISOR_PROMPT = """You are Gram-Setu (Village Bridge) AI Orchestrator.
 
 CRITICAL INSTRUCTION: You MUST call the appropriate agent tool and return their response directly. 
@@ -38,16 +91,16 @@ IMPORTANT CONTEXT:
 TASK: Analyze farmer queries and route to the appropriate specialist agent BY CALLING THE TOOL.
 
 AVAILABLE AGENTS:
-1. agri_expert_agent: Crop diseases, pests, market prices, treatment recommendations
-2. policy_navigator_agent: PM-Kisan scheme eligibility, government subsidies, application guidance
-3. resource_optimizer_agent: Irrigation scheduling, water management, weather-based recommendations
-4. rural_tourism_agent: Local festivals, historical places, agri-tourism, homestays, income opportunities
+1. call_agri_expert: Crop diseases, pests, market prices, treatment recommendations
+2. call_policy_navigator: PM-Kisan scheme eligibility, government subsidies, application guidance
+3. call_resource_optimizer: Irrigation scheduling, water management, weather-based recommendations
+4. call_rural_tourism: Local festivals, historical places, agri-tourism, homestays, income opportunities
 
 ROUTING LOGIC:
-- IF query contains "Image Analysis:" OR mentions disease/pest/crop problem → CALL agri_expert_agent WITH FULL QUERY
-- IF query mentions PM-Kisan/subsidy/scheme/government benefits → CALL policy_navigator_agent
-- IF query mentions irrigation/water/weather/pump schedule/crop rotation/yield optimization/soil management → CALL resource_optimizer_agent
-- IF query mentions tourism/festival/historical place/homestay/handicraft/village tourism → CALL rural_tourism_agent
+- IF query contains "Image Analysis:" OR mentions disease/pest/crop problem → CALL call_agri_expert WITH FULL QUERY
+- IF query mentions PM-Kisan/subsidy/scheme/government benefits → CALL call_policy_navigator
+- IF query mentions irrigation/water/weather/pump schedule/crop rotation/yield optimization/soil management → CALL call_resource_optimizer
+- IF query mentions tourism/festival/historical place/homestay/handicraft/village tourism → CALL call_rural_tourism
 - IF query is complex (multiple domains) → Call multiple agents in sequence
 
 CRITICAL: NEVER say "I will route this to..." or "Action: ..." or "Please analyze...". 
@@ -112,7 +165,7 @@ supervisor_agent = Agent(
         temperature=0.3
     ),
     system_prompt=SUPERVISOR_PROMPT,
-    tools=[agri_expert_agent, policy_navigator_agent, resource_optimizer_agent, rural_tourism_agent]
+    tools=[call_agri_expert, call_policy_navigator, call_resource_optimizer, call_rural_tourism]
 )
 
 if __name__ == "__main__":

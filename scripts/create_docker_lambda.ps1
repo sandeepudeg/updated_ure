@@ -144,7 +144,7 @@ try {
         --timeout 300 `
         --memory-size 512 `
         --region $Region `
-        --environment "Variables={DYNAMODB_TABLE_NAME=ure-conversations,DYNAMODB_USER_TABLE=ure-user-profiles,S3_BUCKET_NAME=ure-mvp-data-us-east-1-188238313375,LOG_LEVEL=INFO,IP_HASH_SALT=production-salt-$(Get-Random),BEDROCK_REGION=us-east-1}" `
+        --environment "Variables={DYNAMODB_TABLE_NAME=ure-conversations,DYNAMODB_USER_TABLE=ure-user-profiles,S3_BUCKET_NAME=ure-mvp-data-us-east-1-188238313375,LOG_LEVEL=INFO,IP_HASH_SALT=production-salt-$(Get-Random),BEDROCK_REGION=us-east-1,DATA_GOV_API_KEY=579b464db66ec23bdd000001cdd3946e44ce4aad7209ff7b23ac571b}" `
         --output json | ConvertFrom-Json
     
     Write-Host "✅ Lambda function created successfully!" -ForegroundColor Green

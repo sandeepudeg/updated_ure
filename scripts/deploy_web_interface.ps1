@@ -4,26 +4,27 @@
 $S3_BUCKET = "ure-mvp-data-us-east-1-188238313375"
 $CLOUDFRONT_DIST = "E354ZTACSUHKWS"
 $WEB_DIR = "src/web/v2"
+$S3_PREFIX = "web-ui"  # CloudFront origin path
 
 Write-Host "Deploying Web Interface to S3..." -ForegroundColor Green
 
 # Upload HTML file
 Write-Host "Uploading gramsetu-agents.html..."
-aws s3 cp "$WEB_DIR/gramsetu-agents.html" "s3://$S3_BUCKET/gramsetu-agents.html" --content-type "text/html"
+aws s3 cp "$WEB_DIR/gramsetu-agents.html" "s3://$S3_BUCKET/$S3_PREFIX/gramsetu-agents.html" --content-type "text/html"
 
 # Upload config.js
 Write-Host "Uploading config.js..."
-aws s3 cp "$WEB_DIR/config.js" "s3://$S3_BUCKET/config.js" --content-type "application/javascript"
+aws s3 cp "$WEB_DIR/config.js" "s3://$S3_BUCKET/$S3_PREFIX/config.js" --content-type "application/javascript"
 
 # Upload other files if needed
 Write-Host "Uploading index.html..."
-aws s3 cp "$WEB_DIR/index.html" "s3://$S3_BUCKET/index.html" --content-type "text/html"
+aws s3 cp "$WEB_DIR/index.html" "s3://$S3_BUCKET/$S3_PREFIX/index.html" --content-type "text/html"
 
 Write-Host "Uploading app.js..."
-aws s3 cp "$WEB_DIR/app.js" "s3://$S3_BUCKET/app.js" --content-type "application/javascript"
+aws s3 cp "$WEB_DIR/app.js" "s3://$S3_BUCKET/$S3_PREFIX/app.js" --content-type "application/javascript"
 
 Write-Host "Uploading styles.css..."
-aws s3 cp "$WEB_DIR/styles.css" "s3://$S3_BUCKET/styles.css" --content-type "text/css"
+aws s3 cp "$WEB_DIR/styles.css" "s3://$S3_BUCKET/$S3_PREFIX/styles.css" --content-type "text/css"
 
 # Get current CloudFront distribution config
 Write-Host "Updating CloudFront default root object..." -ForegroundColor Yellow

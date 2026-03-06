@@ -916,3 +916,58 @@ The Strands Agents SDK provides:
 - Expansion to 1000+ villages
 - Sovereign infrastructure deployment
 - Ecosystem partnerships with government and NGOs
+
+
+---
+
+### Requirement 16: Modern Web Interface with Enhanced User Experience
+
+**User Story:** As a farmer, I want an intuitive, visually appealing web interface with easy image upload and agent selection, so that I can interact with the system efficiently without technical barriers.
+
+#### Acceptance Criteria
+
+1. WHEN a user visits the web application, THE System SHALL display a 5-second splash screen showcasing the 6 available features (Crop Diseases, Market Prices, Govt Schemes, Weather, Irrigation, Rural Tourism)
+2. WHEN the splash screen completes, THE System SHALL present an onboarding form collecting user details (name, state, district, language, crops, farm size) with consent checkbox for data storage
+3. WHEN a user completes onboarding or skips it, THE System SHALL display a 3-column layout with: Left Panel (Location & User Profile), Center Panel (Chat Interface), Right Panel (Information Hub with weather, prices, tips)
+4. WHEN a user wants to upload an image, THE System SHALL provide a camera icon button positioned between the text input field and send button in the chat interface
+5. WHEN a user views the interface, THE System SHALL display 6 agent cards in a 2x3 grid with flip animation showing agent names in Hindi (Krishak Mitra, Rog Nivaarak, Bazaar Darshi, Sarkar Sahayak, Mausam Gyaata, Krishi Bodh) and descriptions on hover
+6. WHEN a user selects an image file, THE System SHALL provide visual feedback by changing the upload icon to a checkmark for 2 seconds
+7. WHEN a user accesses the application, THE System SHALL load configuration from config.js including API endpoint, language options, districts, states, and agent metadata
+8. WHEN a user profile is saved, THE System SHALL store it in browser localStorage and display user name in header badge and location in left sidebar
+9. WHEN the interface loads, THE System SHALL apply a warm agricultural color scheme with green gradients (#4caf50, #2e7d32) and earth tones for a professional yet approachable appearance
+10. WHEN a user interacts with the chat, THE System SHALL maintain conversation history visible in the center panel with user messages aligned right (blue background) and bot messages aligned left (green background)
+
+**Technical Implementation Details:**
+- Single-page application: `gramsetu-agents.html` (standalone with embedded CSS/JS)
+- Configuration file: `config.js` (centralized settings for API, languages, agents)
+- Deployment: S3 bucket (`ure-mvp-data-us-east-1-188238313375/web-ui/`) + CloudFront distribution (d3v7khazsfb4vd.cloudfront.net)
+- Default root object: `gramsetu-agents.html` for clean URL access
+- Font: Segoe UI with reduced sizes (12px base) for compact view
+- Responsive design: 3-column layout adapts to mobile/tablet screens
+
+_Requirements: 16.1, 16.2, 16.3, 16.4, 16.5, 16.6, 16.7, 16.8, 16.9, 16.10_
+
+---
+
+### Requirement 17: Automated Web Interface Deployment
+
+**User Story:** As a DevOps engineer, I want an automated deployment script for the web interface, so that updates can be deployed to production quickly and reliably.
+
+#### Acceptance Criteria
+
+1. WHEN the deployment script is executed, THE System SHALL upload all web interface files (HTML, CSS, JS) to the S3 bucket at the correct path (`web-ui/`)
+2. WHEN files are uploaded to S3, THE System SHALL set appropriate content types (text/html, application/javascript, text/css)
+3. WHEN the upload completes, THE System SHALL update the CloudFront distribution configuration to set `gramsetu-agents.html` as the default root object
+4. WHEN the CloudFront configuration is updated, THE System SHALL create a cache invalidation for all paths (`/*`) to ensure users see the latest version
+5. WHEN the deployment completes, THE System SHALL display the CloudFront URL (https://d3v7khazsfb4vd.cloudfront.net/) for accessing the application
+6. WHEN deployment errors occur, THE System SHALL provide clear error messages and continue with remaining steps where possible
+
+**Technical Implementation Details:**
+- Deployment script: `scripts/deploy_web_interface.ps1`
+- S3 bucket: `ure-mvp-data-us-east-1-188238313375`
+- S3 path: `/web-ui/`
+- CloudFront distribution ID: `E354ZTACSUHKWS`
+- CloudFront domain: `d3v7khazsfb4vd.cloudfront.net`
+- Files deployed: `gramsetu-agents.html`, `config.js`, `index.html`, `app.js`, `styles.css`
+
+_Requirements: 17.1, 17.2, 17.3, 17.4, 17.5, 17.6_

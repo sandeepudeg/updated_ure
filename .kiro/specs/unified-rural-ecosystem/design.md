@@ -928,3 +928,335 @@ A property is a characteristic or behavior that should hold true across all vali
 - X-Ray: Distributed tracing for debugging
 - Cost Explorer: Budget tracking and optimization
 
+
+
+---
+
+## Web Interface Design (GramSetu v2)
+
+### Overview
+
+The GramSetu web interface provides an intuitive, visually appealing entry point for farmers to interact with the URE multi-agent system. The design emphasizes simplicity, accessibility, and a warm agricultural aesthetic.
+
+### Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    GRAMSETU WEB INTERFACE                       │
+│                  (gramsetu-agents.html)                         │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ├─ Splash Screen (5 seconds)
+                              ├─ Onboarding Form (optional)
+                              └─ Main Interface (3-column layout)
+                                    │
+                    ┌───────────────┼───────────────┐
+                    │               │               │
+              ┌─────▼─────┐  ┌─────▼─────┐  ┌─────▼─────┐
+              │ Left Panel │  │Center Panel│  │Right Panel│
+              │  Location  │  │    Chat    │  │Info Hub   │
+              │  Profile   │  │  Interface │  │Weather    │
+              │  Agents    │  │            │  │Prices     │
+              └────────────┘  └────────────┘  └───────────┘
+                                    │
+                                    ▼
+                            API Gateway
+                                    │
+                                    ▼
+                            Lambda Handler
+                                    │
+                                    ▼
+                          Supervisor Agent
+```
+
+### Component Structure
+
+#### 1. Splash Screen
+- **Duration**: 5 seconds (auto-dismiss) or click to skip
+- **Content**: 
+  - Large animated wheat emoji (🌾) with bounce animation
+  - 6 feature cards in 2x3 grid with staggered fade-in
+  - Features: Crop Diseases, Market Prices, Govt Schemes, Weather, Irrigation, Rural Tourism
+- **Styling**: Green gradient background (#2e7d32 to #4caf50)
+
+#### 2. Onboarding Form
+- **Trigger**: First-time users (no localStorage profile)
+- **Fields**:
+  - Required: Name, State, Preferred Language
+  - Optional: District, Main Crops, Farm Size
+  - Consent checkbox (checked by default)
+- **Actions**: 
+  - "Skip for Now" (anonymous use)
+  - "Get Started" (save profile to localStorage)
+- **Styling**: White card with green header, smooth slide-up animation
+
+#### 3. Main Interface Layout
+
+##### Left Panel (Location & Profile)
+- **Your Location Section**:
+  - Auto-detected location (Nashik, Maharashtra, India)
+  - Blue gradient card with location icon
+  - Display: District, State, Country
+- **User Profile Section**:
+  - Bilingual form fields (English/Hindi)
+  - Fields: Name, Village, District dropdown, Phone, Crops, Land Size
+  - Save Profile button with icon
+- **Agent Cards** (6 cards in 2x3 grid):
+  - Flip animation on hover
+  - Front: Hindi name + icon + gradient background
+  - Back: Description in English
+  - Agents: Krishak Mitra, Rog Nivaarak, Bazaar Darshi, Sarkar Sahayak, Mausam Gyaata, Krishi Bodh
+
+##### Center Panel (Chat Interface)
+- **Header**: "Chat with GramSetu" with chat icon
+- **Messages Area**:
+  - Scrollable container with green background (#f5f9f5)
+  - User messages: Right-aligned, blue background (#e3f2fd)
+  - Bot messages: Left-aligned, green background (#e8f5e9)
+  - Max width: 80% for readability
+- **Input Area**:
+  - Layout: `[Text Input] [Camera Icon] [Send Button]`
+  - Text input: Flexible width, placeholder "Ask anything about farming..."
+  - Camera icon: Green button (45x45px) for image upload
+  - Send button: Orange background (#ff9800) with paper plane icon
+  - Visual feedback: Camera icon changes to checkmark for 2 seconds after file selection
+
+##### Right Panel (Information Hub)
+- **Weather Box**:
+  - Large weather icon and temperature
+  - Location display
+  - Blue gradient background
+- **Market Prices Box**:
+  - Current prices for common crops
+  - Purple gradient background
+- **Today's Tip Box**:
+  - Agricultural advice
+  - Yellow/cream gradient background
+- **New Scheme Box**:
+  - Government scheme highlights
+  - Light green gradient background
+- **Rural Tourism Box**:
+  - Income opportunities
+  - Light yellow gradient background
+
+### Technical Implementation
+
+#### File Structure
+```
+src/web/v2/
+├── gramsetu-agents.html    # Standalone HTML with embedded CSS/JS
+├── config.js               # Configuration (API endpoint, languages, agents)
+├── index.html              # Alternative modular version
+├── app.js                  # Modular JavaScript
+├── styles.css              # Modular CSS
+└── README.md               # Documentation
+```
+
+#### Configuration (config.js)
+```javascript
+const CONFIG = {
+    API_ENDPOINT: 'https://8938dqxf33.execute-api.us-east-1.amazonaws.com/dev/query',
+    AWS_REGION: 'us-east-1',
+    APP_NAME: 'GramSetu',
+    DEFAULT_LOCATION: { district: 'Nashik', state: 'Maharashtra', country: 'India' },
+    LANGUAGES: [/* 6 Indian languages */],
+    DISTRICTS: [/* Maharashtra districts */],
+    AGENTS: [/* 6 agent configurations */],
+    FEATURES: { imageUpload: true, voiceInput: false, ... },
+    UI: { splashScreenDuration: 5000, maxFileSize: 5MB, ... }
+};
+```
+
+#### Key JavaScript Functions
+- `initSplashScreen()`: Display and auto-hide splash screen
+- `initOnboarding()`: Show onboarding form for first-time users
+- `saveUserProfile()`: Store profile to localStorage
+- `handleImageUpload()`: Process image selection and upload to S3
+- `sendMessage()`: Send user query to API Gateway
+- `displayMessage()`: Render messages in chat interface
+- `updateLocation()`: Display user location in left panel
+
+### Styling Guidelines
+
+#### Color Palette
+- **Primary Green**: #4caf50 (buttons, accents)
+- **Dark Green**: #2e7d32, #388e3c (headers, gradients)
+- **Secondary Orange**: #ff9800 (send button)
+- **Teal**: #00695c (header gradient)
+- **Light Backgrounds**: #f9f9f9, #e8f5e9, #c8e6c9
+- **Message Backgrounds**: #e3f2fd (user), #e8f5e9 (bot)
+
+#### Typography
+- **Font Family**: Segoe UI, Tahoma, Geneva, Verdana, sans-serif
+- **Base Font Size**: 12px (compact view)
+- **Header Logo**: 1.5rem
+- **Section Headers**: 0.95rem
+- **Form Controls**: 0.75rem
+- **Chat Messages**: 0.85rem
+
+#### Responsive Design
+- **Desktop**: 3-column layout (1fr 2fr 1fr grid)
+- **Tablet**: 2-column layout (stack right panel below)
+- **Mobile**: Single column (stack all panels vertically)
+
+### Deployment Architecture
+
+```
+Developer Machine
+    │
+    ├─ Edit: src/web/v2/gramsetu-agents.html
+    ├─ Edit: src/web/v2/config.js
+    │
+    ▼
+Run: scripts/deploy_web_interface.ps1
+    │
+    ├─ Upload to S3: ure-mvp-data-us-east-1-188238313375/web-ui/
+    ├─ Set Content-Type headers
+    ├─ Update CloudFront default root object
+    ├─ Invalidate CloudFront cache
+    │
+    ▼
+CloudFront Distribution (E354ZTACSUHKWS)
+    │
+    ├─ Domain: d3v7khazsfb4vd.cloudfront.net
+    ├─ Origin: S3 bucket /web-ui/ path
+    ├─ Default Root Object: gramsetu-agents.html
+    │
+    ▼
+Users Access: https://d3v7khazsfb4vd.cloudfront.net/
+```
+
+### Deployment Script (deploy_web_interface.ps1)
+
+**Steps**:
+1. Upload `gramsetu-agents.html` to S3 with `text/html` content type
+2. Upload `config.js` to S3 with `application/javascript` content type
+3. Upload supporting files (`index.html`, `app.js`, `styles.css`)
+4. Get current CloudFront distribution configuration
+5. Update `DefaultRootObject` to `gramsetu-agents.html`
+6. Apply CloudFront configuration changes
+7. Create cache invalidation for `/*` paths
+8. Display success message with CloudFront URL
+
+**Error Handling**:
+- S3 Block Public Access: Skip ACL commands (CloudFront can still access)
+- CloudFront propagation: Wait 2-5 minutes for changes to take effect
+- Cache invalidation: Ensure users see latest version immediately
+
+### User Experience Flow
+
+#### First-Time User
+1. Visit https://d3v7khazsfb4vd.cloudfront.net/
+2. See splash screen (5 seconds) showcasing features
+3. Presented with onboarding form
+4. Fill in name, state, language (required fields)
+5. Optionally add district, crops, farm size
+6. Click "Get Started" or "Skip for Now"
+7. Profile saved to localStorage (if consented)
+8. Main interface loads with 3-column layout
+9. User name displayed in header badge
+10. Location displayed in left sidebar
+
+#### Returning User
+1. Visit https://d3v7khazsfb4vd.cloudfront.net/
+2. See splash screen (5 seconds)
+3. Profile loaded from localStorage
+4. Main interface loads with personalized data
+5. Previous conversation history available
+6. User can update profile in left panel
+
+#### Image Upload Flow
+1. User clicks camera icon in chat input
+2. File picker opens
+3. User selects image file
+4. Camera icon changes to checkmark (2 seconds)
+5. Image uploaded to S3
+6. Image URL sent to API Gateway with query
+7. Supervisor Agent routes to Agri-Expert
+8. Disease identification result displayed in chat
+
+#### Chat Interaction Flow
+1. User types question in text input
+2. User clicks send button (or presses Enter)
+3. Message displayed in chat (right-aligned, blue)
+4. API request sent to Lambda via API Gateway
+5. Supervisor Agent processes query
+6. Response displayed in chat (left-aligned, green)
+7. Conversation history stored in DynamoDB
+8. User can continue conversation with context
+
+### Accessibility Features
+
+- **Keyboard Navigation**: Tab through form fields and buttons
+- **Screen Reader Support**: Semantic HTML with ARIA labels
+- **High Contrast**: Clear color differentiation for readability
+- **Touch-Friendly**: Large buttons (45x45px minimum) for mobile
+- **Error Messages**: Clear validation feedback for form inputs
+- **Loading States**: Visual feedback during API calls
+
+### Performance Optimizations
+
+- **Standalone HTML**: Single file reduces HTTP requests
+- **Embedded CSS/JS**: No external stylesheet/script loading
+- **CloudFront CDN**: Global edge locations for fast delivery
+- **Lazy Loading**: Images loaded on demand
+- **LocalStorage**: Profile and preferences cached locally
+- **Debounced Input**: Prevent excessive API calls during typing
+
+### Security Considerations
+
+- **HTTPS Only**: All traffic encrypted via CloudFront
+- **Content Security Policy**: Restrict inline scripts (future enhancement)
+- **Input Validation**: Client-side validation before API calls
+- **XSS Prevention**: Sanitize user input before display
+- **CORS Configuration**: API Gateway allows CloudFront origin only
+- **No Sensitive Data**: Profile stored in localStorage (user consent required)
+
+---
+
+## Integration with Backend
+
+### API Communication
+
+**Endpoint**: `https://8938dqxf33.execute-api.us-east-1.amazonaws.com/dev/query`
+
+**Request Format**:
+```json
+{
+  "user_id": "user123",
+  "message": "What disease is affecting my tomato plant?",
+  "image_url": "s3://bucket/images/tomato-leaf.jpg",
+  "user_profile": {
+    "name": "Ramesh Kumar",
+    "location": "Nashik, Maharashtra",
+    "crops": "Tomato, Wheat",
+    "farm_size": "5 acres"
+  },
+  "conversation_history": [...]
+}
+```
+
+**Response Format**:
+```json
+{
+  "response": "Based on the image, your tomato plant has Early Blight...",
+  "agent": "Agri-Expert",
+  "confidence": 0.92,
+  "recommendations": [...],
+  "related_schemes": [...]
+}
+```
+
+### State Management
+
+**LocalStorage Keys**:
+- `gramsetu_profile`: User profile data
+- `gramsetu_chat_history`: Recent conversation history
+- `gramsetu_preferences`: UI preferences (language, theme)
+
+**Session Management**:
+- User ID generated on first visit (UUID)
+- Session persists across browser sessions
+- Conversation history synced with DynamoDB
+
+---

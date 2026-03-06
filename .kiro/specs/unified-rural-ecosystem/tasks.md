@@ -866,3 +866,178 @@ This document outlines the implementation tasks for the complete URE system base
 - Each checkpoint should be validated before proceeding to the next phase.
 - Parallel execution is possible for independent tasks.
 - Timeline assumes 3-4 developers working full-time on the project.
+
+
+---
+
+## Phase 8: Web Interface Development (Weeks 15-16)
+
+### TASK-8.1: GramSetu Web Interface Implementation
+**Objective**: Create modern, user-friendly web interface with enhanced UX
+**Acceptance Criteria**:
+- Standalone HTML file with embedded CSS/JS created
+- 3-column responsive layout implemented
+- Splash screen with 5-second auto-dismiss
+- Onboarding form with localStorage persistence
+- 6 agent flip cards with Hindi names
+- Image upload icon positioned in chat input
+- Configuration file (config.js) created
+
+**Sub-tasks**:
+1. Create `src/web/v2/gramsetu-agents.html` with complete structure
+2. Implement splash screen with animated wheat emoji and 6 feature cards
+3. Create onboarding form with required/optional fields and consent checkbox
+4. Build 3-column layout (Location/Profile | Chat | Info Hub)
+5. Add 6 agent cards with flip animation (Krishak Mitra, Rog Nivaarak, etc.)
+6. Position camera icon button between text input and send button
+7. Implement visual feedback (checkmark) for image selection
+8. Create `config.js` with API endpoint, languages, districts, agents
+9. Add localStorage integration for user profile
+10. Implement chat interface with message history
+11. Style with warm agricultural color scheme (green gradients, earth tones)
+12. Reduce font sizes for compact view (12px base)
+13. Test responsive design on mobile/tablet/desktop
+
+**[CHECKPOINT-8.1]**: Web interface loads correctly, all features functional
+
+---
+
+### TASK-8.2: Web Interface API Integration
+**Objective**: Connect web interface to Lambda backend via API Gateway
+**Acceptance Criteria**:
+- API endpoint configured in config.js
+- Image upload to S3 working
+- Chat messages sent to API Gateway
+- Responses displayed in chat interface
+- Conversation history synced with DynamoDB
+- Error handling for API failures
+
+**Sub-tasks**:
+1. Configure API endpoint in `config.js`
+2. Implement `sendMessage()` function to call API Gateway
+3. Implement `handleImageUpload()` to upload images to S3
+4. Add request/response handling with loading states
+5. Implement error handling and retry logic
+6. Add conversation history retrieval from DynamoDB
+7. Test end-to-end flow: user input → API → agent → response
+
+**[CHECKPOINT-8.2]**: API integration working, messages sent and received
+
+---
+
+### TASK-8.3: Deployment Infrastructure Setup
+**Objective**: Set up S3 + CloudFront deployment pipeline
+**Acceptance Criteria**:
+- S3 bucket configured for static hosting
+- CloudFront distribution created
+- Default root object set to gramsetu-agents.html
+- Automated deployment script created
+- Cache invalidation working
+
+**Sub-tasks**:
+1. Create/configure S3 bucket: `ure-mvp-data-us-east-1-188238313375`
+2. Create `/web-ui/` path in S3 bucket
+3. Configure CloudFront distribution (E354ZTACSUHKWS)
+4. Set origin to S3 bucket `/web-ui/` path
+5. Configure default root object: `gramsetu-agents.html`
+6. Create deployment script: `scripts/deploy_web_interface.ps1`
+7. Implement file upload with content-type headers
+8. Add CloudFront configuration update logic
+9. Implement cache invalidation
+10. Test deployment end-to-end
+
+**[CHECKPOINT-8.3]**: Deployment script works, CloudFront serves latest files
+
+---
+
+### TASK-8.4: Automated Deployment Script
+**Objective**: Create PowerShell script for automated web interface deployment
+**Acceptance Criteria**:
+- Script uploads all web files to S3
+- Content-Type headers set correctly
+- CloudFront default root object updated
+- Cache invalidation triggered
+- Success/error messages displayed
+
+**Sub-tasks**:
+1. Create `scripts/deploy_web_interface.ps1`
+2. Add S3 upload commands for HTML, JS, CSS files
+3. Set content-type headers (text/html, application/javascript, text/css)
+4. Get current CloudFront distribution configuration
+5. Update `DefaultRootObject` to `gramsetu-agents.html`
+6. Apply CloudFront configuration changes
+7. Create cache invalidation for `/*` paths
+8. Add error handling for S3 Block Public Access
+9. Display CloudFront URL on completion
+10. Test script with sample files
+
+**[CHECKPOINT-8.4]**: Deployment script runs successfully, files accessible via CloudFront
+
+---
+
+### TASK-8.5: User Experience Testing
+**Objective**: Validate web interface usability and performance
+**Acceptance Criteria**:
+- Splash screen displays and auto-dismisses
+- Onboarding form saves to localStorage
+- Agent cards flip on hover
+- Image upload works with visual feedback
+- Chat interface displays messages correctly
+- Responsive design works on all devices
+- Page load time < 3 seconds
+
+**Sub-tasks**:
+1. Test splash screen animation and auto-dismiss
+2. Test onboarding form validation and localStorage
+3. Test agent card flip animations
+4. Test image upload with camera icon
+5. Test chat interface message display
+6. Test responsive layout on mobile/tablet/desktop
+7. Measure page load time with CloudFront
+8. Test browser compatibility (Chrome, Firefox, Safari, Edge)
+9. Test accessibility (keyboard navigation, screen readers)
+10. Collect user feedback from pilot village
+
+**[CHECKPOINT-8.5]**: All UX tests pass, user feedback positive
+
+---
+
+### TASK-8.6: Documentation and Handoff
+**Objective**: Document web interface architecture and deployment process
+**Acceptance Criteria**:
+- README.md created with setup instructions
+- Deployment guide documented
+- Configuration options explained
+- Troubleshooting guide created
+- Code comments added
+
+**Sub-tasks**:
+1. Create `src/web/v2/README.md` with overview
+2. Document file structure and component architecture
+3. Explain configuration options in config.js
+4. Document deployment process step-by-step
+5. Add troubleshooting section for common issues
+6. Document API integration and request/response formats
+7. Add code comments to JavaScript functions
+8. Create visual diagrams for architecture
+9. Document browser compatibility and requirements
+10. Add maintenance and update procedures
+
+**[CHECKPOINT-8.6]**: Documentation complete and reviewed
+
+---
+
+## Task Summary: Web Interface
+
+| Task | Description | Duration | Dependencies |
+|------|-------------|----------|--------------|
+| TASK-8.1 | GramSetu Web Interface Implementation | 3 days | None |
+| TASK-8.2 | Web Interface API Integration | 2 days | TASK-8.1, API Gateway setup |
+| TASK-8.3 | Deployment Infrastructure Setup | 2 days | S3, CloudFront access |
+| TASK-8.4 | Automated Deployment Script | 1 day | TASK-8.3 |
+| TASK-8.5 | User Experience Testing | 2 days | TASK-8.1, TASK-8.2 |
+| TASK-8.6 | Documentation and Handoff | 1 day | All above tasks |
+
+**Total Duration**: 11 days (2.2 weeks)
+
+---

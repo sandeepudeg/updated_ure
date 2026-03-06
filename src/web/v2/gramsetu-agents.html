@@ -1094,7 +1094,7 @@
             <h2>Our Digital Assistants</h2>
         </div>
         <div class="agents-container">
-            <div class="agent-card agent-1">
+            <div class="agent-card agent-1" data-agent-id="krishak-mitra">
                 <div class="agent-inner">
                     <div class="agent-front">
                         <div class="agent-icon"><i class="fas fa-seedling"></i></div>
@@ -1107,7 +1107,7 @@
                 </div>
             </div>
 
-            <div class="agent-card agent-2">
+            <div class="agent-card agent-2" data-agent-id="rog-nivaarak">
                 <div class="agent-inner">
                     <div class="agent-front">
                         <div class="agent-icon"><i class="fas fa-bug"></i></div>
@@ -1120,7 +1120,7 @@
                 </div>
             </div>
 
-            <div class="agent-card agent-3">
+            <div class="agent-card agent-3" data-agent-id="bazaar-darshi">
                 <div class="agent-inner">
                     <div class="agent-front">
                         <div class="agent-icon"><i class="fas fa-chart-line"></i></div>
@@ -1133,7 +1133,7 @@
                 </div>
             </div>
 
-            <div class="agent-card agent-4">
+            <div class="agent-card agent-4" data-agent-id="sarkar-sahayak">
                 <div class="agent-inner">
                     <div class="agent-front">
                         <div class="agent-icon"><i class="fas fa-file-invoice-dollar"></i></div>
@@ -1146,7 +1146,7 @@
                 </div>
             </div>
 
-            <div class="agent-card agent-5">
+            <div class="agent-card agent-5" data-agent-id="mausam-gyaata">
                 <div class="agent-inner">
                     <div class="agent-front">
                         <div class="agent-icon"><i class="fas fa-cloud-sun-rain"></i></div>
@@ -1159,7 +1159,7 @@
                 </div>
             </div>
 
-            <div class="agent-card agent-6">
+            <div class="agent-card agent-6" data-agent-id="krishi-bodh">
                 <div class="agent-inner">
                     <div class="agent-front">
                         <div class="agent-icon"><i class="fas fa-book-open"></i></div>
@@ -1326,7 +1326,8 @@
         const state = {
             selectedImage: null,
             currentLanguage: 'en',
-            userProfile: loadUserProfile() || {}
+            userProfile: loadUserProfile() || {},
+            selectedAgent: null
         };
 
         // Load user profile from localStorage
@@ -1535,32 +1536,87 @@
         const sendBtn = document.getElementById('sendBtn');
         const chatMessages = document.getElementById('chatMessages');
 
-        function sendMessage() {
+        async function sendMessage() {
             const message = chatInput.value.trim();
-            if (message) {
+            if (message || state.selectedImage) {
+                // Display user message
                 const userMsg = document.createElement('div');
                 userMsg.className = 'message user';
                 userMsg.textContent = message;
                 
                 chatMessages.appendChild(userMsg);
                 chatInput.value = '';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
                 
-                setTimeout(() => {
+                // Show loading message
+                const loadingMsg = document.createElement('div');
+                loadingMsg.className = 'message bot';
+                loadingMsg.innerHTML = '<em>Analyzing your query...</em>';
+                chatMessages.appendChild(loadingMsg);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                try {
+                    // Prepare API request
+                    const payload = {
+                        user_id: state.userProfile.name || 'guest_user',
+                        query: message,
+                        language: state.currentLanguage,
+                        location: state.userProfile.district ? 
+                            `${state.userProfile.district}, ${state.userProfile.state}` : 
+                            (state.userProfile.state || 'Unknown')
+                    };
+                    
+                    // Add image if selected
+                    if (state.selectedImage) {
+                        const reader = new FileReader();
+                        const imageBase64 = await new Promise((resolve, reject) => {
+                            reader.onload = () => resolve(reader.result.split(',')[1]);
+                            reader.onerror = reject;
+                            reader.readAsDataURL(state.selectedImage);
+                        });
+                        payload.image = imageBase64;
+                        state.selectedImage = null; // Clear after adding to payload
+                    }
+                    
+                    // Call API
+                    const response = await fetch(CONFIG.API_ENDPOINT, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`API error: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    // Remove loading message
+                    loadingMsg.remove();
+                    
+                    // Display bot response
                     const botMsg = document.createElement('div');
                     botMsg.className = 'message bot';
-                    
-                    // Personalize response if profile exists
-                    if (state.userProfile.name) {
-                        botMsg.textContent = `Thank you for your query, ${state.userProfile.name}. Our agricultural experts are analyzing your question for ${state.userProfile.state}.`;
-                    } else {
-                        botMsg.textContent = 'Thank you for your query. Our agricultural experts are analyzing your question.';
-                    }
+                    botMsg.textContent = data.response || 'Sorry, I could not process your request.';
                     
                     chatMessages.appendChild(botMsg);
                     chatMessages.scrollTop = chatMessages.scrollHeight;
-                }, 1000);
-                
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                } catch (error) {
+                    console.error('Error calling API:', error);
+                    
+                    // Remove loading message
+                    loadingMsg.remove();
+                    
+                    // Show error message
+                    const errorMsg = document.createElement('div');
+                    errorMsg.className = 'message bot';
+                    errorMsg.innerHTML = '<em>Sorry, I encountered an error. Please try again.</em>';
+                    chatMessages.appendChild(errorMsg);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
             }
         }
 
@@ -1578,9 +1634,89 @@
             onboardingForm.addEventListener('submit', handleOnboardingSubmit);
         }
 
+        // Agent card click handlers
+        const agentMessages = {
+            'krishak-mitra': {
+                name: 'Krishak Mitra',
+                icon: '🌱',
+                message: 'Namaste! I am Krishak Mitra, your Crop Specialist. I can help you with crop selection, planting techniques, soil preparation, fertilizer recommendations, and cultivation best practices. How can I assist you today?'
+            },
+            'rog-nivaarak': {
+                name: 'Rog Nivaarak',
+                icon: '🐛',
+                message: 'Hello! I am Rog Nivaarak, your Disease Expert. I specialize in identifying plant diseases and pests from images and recommending organic treatment solutions. Upload a photo of your affected crop or describe the symptoms, and I will help you!'
+            },
+            'bazaar-darshi': {
+                name: 'Bazaar Darshi',
+                icon: '📈',
+                message: 'Greetings! I am Bazaar Darshi, your Market Analyst. I provide real-time market prices, demand forecasts, and help connect you with buyers for the best prices. Ask me about current market rates or which crops are profitable this season!'
+            },
+            'sarkar-sahayak': {
+                name: 'Sarkar Sahayak',
+                icon: '📋',
+                message: 'Namaste! I am Sarkar Sahayak, your Government Scheme Advisor. I can guide you through various government schemes, subsidies, loan programs, and help you check eligibility. Ask me about PM-KISAN, PMFBY, crop insurance, or any other scheme!'
+            },
+            'mausam-gyaata': {
+                name: 'Mausam Gyaata',
+                icon: '🌤️',
+                message: 'Hello! I am Mausam Gyaata, your Weather Expert. I provide hyperlocal weather forecasts, irrigation advice based on upcoming weather, and climate alerts. Ask me about weather conditions, rainfall predictions, or when to irrigate your crops!'
+            },
+            'krishi-bodh': {
+                name: 'Krishi Bodh',
+                icon: '📚',
+                message: 'Namaste! I am Krishi Bodh, your Knowledge Guide. I offer educational resources, latest farming techniques, water conservation methods, soil health improvement tips, and information about training programs. What would you like to learn today?'
+            }
+        };
+
+        function activateAgent(agentId) {
+            const agent = agentMessages[agentId];
+            if (!agent) return;
+
+            // Clear chat or add agent message
+            const botMsg = document.createElement('div');
+            botMsg.className = 'message bot';
+            botMsg.innerHTML = `<strong>${agent.icon} ${agent.name}</strong><br><br>${agent.message}`;
+            
+            chatMessages.appendChild(botMsg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Store selected agent
+            state.selectedAgent = agentId;
+
+            // Visual feedback - highlight selected agent
+            document.querySelectorAll('.agent-card').forEach(card => {
+                card.style.transform = '';
+                card.style.boxShadow = '';
+            });
+            
+            const selectedCard = document.querySelector(`[data-agent-id="${agentId}"]`);
+            if (selectedCard) {
+                selectedCard.style.transform = 'scale(1.05)';
+                selectedCard.style.boxShadow = '0 8px 16px rgba(76, 175, 80, 0.4)';
+                
+                // Reset after animation
+                setTimeout(() => {
+                    selectedCard.style.transform = '';
+                }, 300);
+            }
+        }
+
+        // Add click handlers to all agent cards
+        function initializeAgentCards() {
+            document.querySelectorAll('.agent-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    const agentId = card.getAttribute('data-agent-id');
+                    if (agentId) {
+                        activateAgent(agentId);
+                    }
+                });
+            });
+        }
+
         // Initialize on page load
         window.addEventListener('DOMContentLoaded', () => {
             initSplashScreen();
+            initializeAgentCards();
         });
     </script>
 </body>

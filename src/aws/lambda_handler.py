@@ -464,8 +464,10 @@ def invoke_supervisor_agent(
         if src_path not in sys.path:
             sys.path.insert(0, src_path)
         
-        # Use main supervisor agent (with specialist agents)
-        from agents.supervisor import supervisor_agent
+        # Use simple supervisor agent (direct responses, no delegation)
+        # The full supervisor with agent tools has a Strands framework issue where
+        # tools are identified but not executed - they just return the function call string
+        from agents.supervisor_simple import supervisor_simple_with_prices
         
         # If image is provided, use Bedrock directly for image analysis
         if image_bytes:
@@ -506,7 +508,7 @@ def invoke_supervisor_agent(
             else:
                 full_query = f"Image Analysis: {image_analysis}\n\nUser Question: {query}"
             
-            agent_response = supervisor_agent(full_query)
+            agent_response = supervisor_simple_with_prices(full_query)
             agent_used = 'agri-expert'
             metadata = {'image_analysis': image_analysis}
         else:
@@ -517,7 +519,7 @@ def invoke_supervisor_agent(
             else:
                 full_query = query
             
-            agent_response = supervisor_agent(full_query)
+            agent_response = supervisor_simple_with_prices(full_query)
             agent_used = 'supervisor'
             metadata = {}
         

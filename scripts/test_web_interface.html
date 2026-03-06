@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Web Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2e7d32;
+        }
+        h2 {
+            color: #388e3c;
+            margin-top: 0;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .error {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .info {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        button {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #388e3c;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🌾 GramSetu Web Interface Test</h1>
+    
+    <div class="test-section">
+        <h2>1. CloudFront Deployment Status</h2>
+        <div id="deployment-status" class="status info">Checking...</div>
+        <button onclick="checkDeployment()">Recheck Deployment</button>
+    </div>
+
+    <div class="test-section">
+        <h2>2. File Accessibility</h2>
+        <div id="file-status" class="status info">Checking...</div>
+        <button onclick="checkFiles()">Recheck Files</button>
+    </div>
+
+    <div class="test-section">
+        <h2>3. JavaScript Functionality</h2>
+        <div id="js-status" class="status info">Checking...</div>
+        <button onclick="checkJavaScript()">Recheck JavaScript</button>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Quick Actions</h2>
+        <button onclick="openCloudFront()">Open CloudFront URL</button>
+        <button onclick="openLocal()">Open Local File</button>
+        <button onclick="clearCache()">Clear Browser Cache</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Results</h2>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const CLOUDFRONT_URL = 'https://d3v7khazsfb4vd.cloudfront.net';
+        const LOCAL_FILE = '../src/web/v2/gramsetu-agents.html';
+
+        async function checkDeployment() {
+            const statusDiv = document.getElementById('deployment-status');
+            statusDiv.className = 'status info';
+            statusDiv.textContent = 'Checking deployment...';
+
+            try {
+                const response = await fetch(`${CLOUDFRONT_URL}/gramsetu-agents.html`, {
+                    method: 'HEAD',
+                    cache: 'no-cache'
+                });
+
+                if (response.ok) {
+                    const lastModified = response.headers.get('Last-Modified');
+                    statusDiv.className = 'status success';
+                    statusDiv.innerHTML = `✅ Deployment successful!<br>Last Modified: ${lastModified}`;
+                } else {
+                    statusDiv.className = 'status error';
+                    statusDiv.textContent = `❌ Error: ${response.status} ${response.statusText}`;
+                }
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = `❌ Error: ${error.message}`;
+            }
+        }
+
+        async function checkFiles() {
+            const statusDiv = document.getElementById('file-status');
+            statusDiv.className = 'status info';
+            statusDiv.textContent = 'Checking files...';
+
+            const files = [
+                'gramsetu-agents.html',
+                'config.js'
+            ];
+
+            let results = [];
+            for (const file of files) {
+                try {
+                    const response = await fetch(`${CLOUDFRONT_URL}/${file}`, {
+                        method: 'HEAD',
+                        cache: 'no-cache'
+                    });
+                    results.push(`${file}: ${response.ok ? '✅' : '❌'}`);
+                } catch (error) {
+                    results.push(`${file}: ❌ ${error.message}`);
+                }
+            }
+
+            const allOk = results.every(r => r.includes('✅'));
+            statusDiv.className = allOk ? 'status success' : 'status error';
+            statusDiv.innerHTML = results.join('<br>');
+        }
+
+        async function checkJavaScript() {
+            const statusDiv = document.getElementById('js-status');
+            statusDiv.className = 'status info';
+            statusDiv.textContent = 'Checking JavaScript...';
+
+            try {
+                const response = await fetch(`${CLOUDFRONT_URL}/gramsetu-agents.html`, {
+                    cache: 'no-cache'
+                });
+                const html = await response.text();
+
+                const checks = [
+                    { name: 'Agent click handlers', pattern: /initializeAgentCards/i },
+                    { name: 'Agent messages object', pattern: /agentMessages\s*=\s*{/ },
+                    { name: 'activateAgent function', pattern: /function activateAgent/ },
+                    { name: 'API integration', pattern: /CONFIG\.API_ENDPOINT/ },
+                    { name: 'Image upload handler', pattern: /imageInput\.addEventListener\('change'/ },
+                    { name: 'DOMContentLoaded', pattern: /DOMContentLoaded/ }
+                ];
+
+                let results = [];
+                for (const check of checks) {
+                    const found = check.pattern.test(html);
+                    results.push(`${check.name}: ${found ? '✅' : '❌'}`);
+                }
+
+                const allOk = results.every(r => r.includes('✅'));
+                statusDiv.className = allOk ? 'status success' : 'status error';
+                statusDiv.innerHTML = results.join('<br>');
+
+                if (allOk) {
+                    statusDiv.innerHTML += '<br><br><strong>All JavaScript features are present!</strong>';
+                }
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = `❌ Error: ${error.message}`;
+            }
+        }
+
+        function openCloudFront() {
+            window.open(CLOUDFRONT_URL, '_blank');
+        }
+
+        function openLocal() {
+            window.open(LOCAL_FILE, '_blank');
+        }
+
+        function clearCache() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `
+                <div class="status info">
+                    <strong>To clear browser cache:</strong><br>
+                    • Windows/Linux: Press <code>Ctrl + Shift + R</code><br>
+                    • Mac: Press <code>Cmd + Shift + R</code><br>
+                    • Or: Press <code>F12</code> → Network tab → Check "Disable cache"
+                </div>
+            `;
+        }
+
+        // Run all checks on load
+        window.addEventListener('DOMContentLoaded', () => {
+            checkDeployment();
+            checkFiles();
+            checkJavaScript();
+        });
+    </script>
+</body>
+</html>

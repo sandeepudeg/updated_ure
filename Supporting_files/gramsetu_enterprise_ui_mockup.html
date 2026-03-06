@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramSetu - Enterprise AI Assistant for Rural India</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #2E7D32;
+            --primary-green-dark: #1B5E20;
+            --primary-green-light: #4CAF50;
+            --accent-orange: #FF9800;
+            --accent-blue: #2196F3;
+            --bg-light: #F5F5F5;
+            --bg-white: #FFFFFF;
+            --text-dark: #212121;
+            --text-light: #757575;
+            --border-color: #E0E0E0;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --error: #F44336;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 8px rgba(0,0,0,0.15);
+            --shadow-lg: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-green-dark) 0%, var(--primary-green) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+        }
+
+        .logo-text h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .language-selector {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .user-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr 320px;
+            gap: 2rem;
+            min-height: calc(100vh - 200px);
+        }
+
+        /* Left Sidebar */
+        .sidebar-left {
+            background: var(--bg-white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-section h3 {
+            color: var(--primary-green-dark);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quick-action-btn {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary-green-light) 0%, var(--primary-green) 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .quick-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .location-card {
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .location-card h4 {
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .location-info {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        /* Main Chat Area */
+        .chat-container {
+            background: var(--bg-white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 200px);
+        }
+
+        .chat-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+            background: linear-gradient(135deg, #F1F8E9 0%, #DCEDC8 100%);
+            border-radius: 12px 12px 0 0;
+        }
+
+        .chat-header h2 {
+            color: var(--primary-green-dark);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .chat-stats {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            background: #FAFAFA;
+        }
+
+        .message {
+            margin-bottom: 1.5rem;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-user {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .message-user .message-content {
+            background: linear-gradient(135deg, var(--accent-blue) 0%, #1976D2 100%);
+            color: white;
+            max-width: 70%;
+            padding: 1rem 1.5rem;
+            border-radius: 18px 18px 4px 18px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .message-assistant {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .message-assistant .message-content {
+            background: white;
+            max-width: 70%;
+            padding: 1rem 1.5rem;
+            border-radius: 18px 18px 18px 4px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .agent-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-vision { background: #E1BEE7; color: #6A1B9A; }
+        .badge-agri { background: #C8E6C9; color: #2E7D32; }
+        .badge-policy { background: #BBDEFB; color: #1565C0; }
+        .badge-resource { background: #FFE0B2; color: #E65100; }
+
+        .message-actions {
+            margin-top: 0.8rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: var(--bg-light);
+            border-color: var(--primary-green);
+        }
+
+        /* Chat Input */
+        .chat-input-container {
+            padding: 1.5rem;
+            border-top: 2px solid var(--border-color);
+            background: white;
+            border-radius: 0 0 12px 12px;
+        }
+
+        .image-preview {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .image-preview img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: none;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary-green);
+        }
+
+        .input-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .icon-btn {
+            width: 48px;
+            height: 48px;
+            border: 2px solid var(--border-color);
+            background: white;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.2s;
+        }
+
+        .icon-btn:hover {
+            background: var(--bg-light);
+            border-color: var(--primary-green);
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
+            color: white;
+            border: none;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Right Sidebar */
+        .sidebar-right {
+            background: var(--bg-white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--accent-orange);
+        }
+
+        .info-card h4 {
+            color: var(--accent-orange);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-item {
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        .info-item strong {
+            color: var(--text-dark);
+        }
+
+        .weather-widget {
+            background: linear-gradient(135deg, #E1F5FE 0%, #B3E5FC 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .weather-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .weather-temp {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+
+        .market-prices {
+            background: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+
+        .market-prices h4 {
+            color: #6A1B9A;
+            margin-bottom: 1rem;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .price-item:last-child {
+            border-bottom: none;
+        }
+
+        .price-value {
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        /* Welcome Screen */
+        .welcome-screen {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .welcome-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-screen h3 {
+            color: var(--primary-green-dark);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-screen p {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card h4 {
+            color: var(--primary-green-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar-left, .sidebar-right {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+                margin: 1rem auto;
+            }
+
+            .message-content {
+                max-width: 90% !important;
+            }
+        }
+
+        /* Scrollbar Styling */
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--primary-green);
+            border-radius: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-green-dark);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🌾</div>
+                <div class="logo-text">
+                    <h1>GramSetu</h1>
+                    <p>AI-Powered Rural Assistant</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <select class="language-selector">
+                    <option>🇬🇧 English</option>
+                    <option>🇮🇳 हिंदी</option>
+                    <option>🇮🇳 मराठी</option>
+                </select>
+                <div class="user-badge">
+                    <span>👤</span>
+                    <span>Ramesh Kumar</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar-left">
+            <div class="sidebar-section">
+                <h3>🚀 Quick Actions</h3>
+                <button class="quick-action-btn">
+                    <span>🌱</span>
+                    <span>Crop Disease Help</span>
+                </button>
+                <button class="quick-action-btn">
+                    <span>📋</span>
+                    <span>Government Schemes</span>
+                </button>
+                <button class="quick-action-btn">
+                    <span>💰</span>
+                    <span>Market Prices</span>
+                </button>
+                <button class="quick-action-btn">
+                    <span>💧</span>
+                    <span>Irrigation Tips</span>
+                </button>
+                <button class="quick-action-btn">
+                    <span>🌤️</span>
+                    <span>Weather Forecast</span>
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>📍 Your Location</h3>
+                <div class="location-card">
+                    <h4>Auto-Detected</h4>
+                    <div class="location-info">
+                        <p><strong>District:</strong> Nashik</p>
+                        <p><strong>State:</strong> Maharashtra</p>
+                        <p><strong>Country:</strong> India</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>👤 Profile</h3>
+                <div class="info-item"><strong>Name:</strong> Ramesh Kumar</div>
+                <div class="info-item"><strong>Village:</strong> Pimpalgaon</div>
+                <div class="info-item"><strong>Crops:</strong> Wheat, Onion</div>
+                <div class="info-item"><strong>Land:</strong> 5 acres</div>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-container">
+            <div class="chat-header">
+                <h2>💬 Chat with GramSetu</h2>
+                <div class="chat-stats">
+                    <span>📊 3 conversations today</span>
+                    <span>⚡ Avg response: 2.3s</span>
+                    <span>✅ 98% satisfaction</span>
+                </div>
+            </div>
+
+            <div class="chat-messages">
+                <!-- Welcome Screen -->
+                <div class="welcome-screen">
+                    <div class="welcome-icon">🌾</div>
+                    <h3>Welcome to GramSetu!</h3>
+                    <p>Your AI-powered assistant for farming, market prices, government schemes, and more. Ask me anything or upload a crop image for disease identification.</p>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">🌱</div>
+                            <h4>Crop Diseases</h4>
+                            <p>Upload photos for instant disease identification</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">💰</div>
+                            <h4>Market Prices</h4>
+                            <p>Real-time prices in Indian Rupees</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">📋</div>
+                            <h4>Govt Schemes</h4>
+                            <p>PM-Kisan, PMFBY eligibility</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🌤️</div>
+                            <h4>Weather</h4>
+                            <p>Location-based forecasts</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sample Messages (Hidden by default, shown after interaction) -->
+                <div class="message message-user" style="display: none;">
+                    <div class="message-content">
+                        What are the current onion prices in Nashik?
+                    </div>
+                </div>
+
+                <div class="message message-assistant" style="display: none;">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        <span class="agent-badge badge-resource">📊 Market Expert</span>
+                        <p>Based on your location in <strong>Nashik, Maharashtra</strong>, here are the current onion prices:</p>
+                        <ul style="margin: 1rem 0;">
+                            <li><strong>Lasalgaon Market:</strong> ₹2,800 - ₹3,200 per quintal</li>
+                            <li><strong>Pimpalgaon Market:</strong> ₹2,750 - ₹3,100 per quintal</li>
+                            <li><strong>Average Retail:</strong> ₹35 - ₹40 per kg</li>
+                        </ul>
+                        <p>Prices are up 8% from last week due to reduced supply. Best time to sell is within the next 3-5 days.</p>
+                        <div class="message-actions">
+                            <button class="action-btn">👍 Helpful</button>
+                            <button class="action-btn">👎 Not Helpful</button>
+                            <button class="action-btn">🔄 More Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <!-- Image Preview (shown when image uploaded) -->
+                <div class="image-preview" style="display: none;">
+                    <img src="https://via.placeholder.com/80" alt="Uploaded crop">
+                    <div style="flex: 1;">
+                        <strong>tomato_leaf.jpg</strong>
+                        <p style="font-size: 0.85rem; color: var(--text-light);">Ready for analysis</p>
+                    </div>
+                    <button class="action-btn">🗑️ Remove</button>
+                </div>
+
+                <div class="input-wrapper">
+                    <textarea class="chat-input" rows="2" placeholder="Ask me anything about farming, schemes, or resources..."></textarea>
+                    <div class="input-actions">
+                        <button class="icon-btn" title="Upload Image">📷</button>
+                        <button class="icon-btn" title="Voice Input">🎤</button>
+                        <button class="icon-btn send-btn" title="Send Message">📤</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="sidebar-right">
+            <div class="weather-widget">
+                <div class="weather-icon">☀️</div>
+                <div class="weather-temp">28°C</div>
+                <p style="margin-top: 0.5rem; color: var(--text-light);">Sunny, Nashik</p>
+                <p style="font-size: 0.85rem; margin-top: 0.5rem;">
+                    <strong>Next 3 days:</strong> Clear skies<br>
+                    Good for irrigation
+                </p>
+            </div>
+
+            <div class="market-prices">
+                <h4>💰 Today's Prices (Nashik)</h4>
+                <div class="price-item">
+                    <span>Onion</span>
+                    <span class="price-value">₹3,000/q</span>
+                </div>
+                <div class="price-item">
+                    <span>Wheat</span>
+                    <span class="price-value">₹2,125/q</span>
+                </div>
+                <div class="price-item">
+                    <span>Tomato</span>
+                    <span class="price-value">₹1,800/q</span>
+                </div>
+                <div class="price-item">
+                    <span>Cotton</span>
+                    <span class="price-value">₹6,500/q</span>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h4>💡 Today's Tip</h4>
+                <p style="font-size: 0.9rem;">
+                    <strong>Irrigation Alert:</strong> With clear weather expected, plan your irrigation for early morning or evening to minimize water loss.
+                </p>
+            </div>
+
+            <div class="info-card" style="background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%); border-left-color: var(--success);">
+                <h4 style="color: var(--success);">📢 New Scheme</h4>
+                <p style="font-size: 0.9rem;">
+                    <strong>PM-Kisan 16th Installment</strong> is now available. Check your eligibility and apply today!
+                </p>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // Simple demo interactions
+        document.querySelector('.send-btn').addEventListener('click', function() {
+            alert('This is a static mockup. In the actual app, your message will be sent to the AI assistant.');
+        });
+
+        document.querySelectorAll('.quick-action-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                alert('Quick action: ' + this.textContent.trim() + '\n\nThis will populate the chat input in the actual app.');
+            });
+        });
+    </script>
+</body>
+</html>

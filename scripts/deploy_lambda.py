@@ -101,6 +101,20 @@ def create_deployment_package():
             dest_path.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(item, dest_path)
     
+    # Copy data folder (for CSV fallback)
+    data_dir = Path("data")
+    if data_dir.exists():
+        dest_data_dir = temp_dir / "data"
+        dest_data_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Copy mandi_prices CSV
+        mandi_csv = data_dir / "mandi_prices" / "Agriculture_price_dataset.csv"
+        if mandi_csv.exists():
+            dest_mandi_dir = dest_data_dir / "mandi_prices"
+            dest_mandi_dir.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(mandi_csv, dest_mandi_dir / "Agriculture_price_dataset.csv")
+            logger.info("✓ Copied market price CSV data")
+    
     # Copy .env file
     if Path(".env").exists():
         shutil.copy2(".env", temp_dir / ".env")
@@ -143,7 +157,8 @@ def deploy_lambda_function(role_arn, zip_path):
         'BEDROCK_KB_ID': os.getenv('BEDROCK_KB_ID', ''),
         'BEDROCK_MODEL_ID': os.getenv('BEDROCK_MODEL_ID', 'us.amazon.nova-pro-v1:0'),
         'BEDROCK_REGION': 'us-east-1',
-        'LOG_LEVEL': 'INFO'
+        'LOG_LEVEL': 'INFO',
+        'DATA_GOV_API_KEY': os.getenv('DATA_GOV_API_KEY', '579b464db66ec23bdd000001cdd3946e44ce4aad7209ff7b23ac571b')
     }
     
     # Determine deployment method based on file size

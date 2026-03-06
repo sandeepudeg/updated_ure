@@ -1,0 +1,716 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramSetu - Rural AI Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Source Sans Pro", sans-serif;
+            background: linear-gradient(135deg, #F5F9F3 0%, #E8F5E9 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Header - Warm agricultural green */
+        .top-header {
+            background: linear-gradient(135deg, #2E7D32 0%, #388E3C 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(46, 125, 50, 0.2);
+        }
+
+        .top-header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #FFFFFF;
+        }
+
+        .top-header .header-right {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .language-selector {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            cursor: pointer;
+            font-family: "Source Sans Pro", sans-serif;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .language-selector:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .user-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            font-weight: 500;
+        }
+
+        /* Main container */
+        .container {
+            display: flex;
+            flex: 1;
+            gap: 1rem;
+            overflow: hidden;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 1rem;
+        }
+
+        /* 3 vertical tiles - Warm earth tones */
+        .left-panel,
+        .center-panel,
+        .right-panel {
+            background: #FDFDF8;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .left-panel,
+        .right-panel {
+            width: 27%;
+            background: linear-gradient(180deg, #FFF9E6 0%, #FFF3D6 100%);
+            border: 1px solid #E8D5A8;
+        }
+
+        .center-panel {
+            width: 46%;
+            min-width: 420px;
+            background: #FFFFFF;
+            border: 1px solid #C8E6C9;
+        }
+
+        .panel-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2E7D32;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-card {
+            background: #FFFFFF;
+            border: 2px solid #E8D5A8;
+            border-left: 4px solid #F9A825;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: #424242;
+            line-height: 1.6;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .info-card strong {
+            color: #2E7D32;
+            font-weight: 700;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quick-action {
+            border: 2px solid #E8D5A8;
+            border-radius: 0.5rem;
+            background: linear-gradient(135deg, #FFFFFF 0%, #FFFEF8 100%);
+            padding: 0.85rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: #2E7D32;
+            text-align: left;
+            font-family: "Source Sans Pro", sans-serif;
+            transition: all 0.3s;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .quick-action:hover {
+            border-color: #F9A825;
+            background: linear-gradient(135deg, #FFF9E6 0%, #FFF3D6 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(46, 125, 50, 0.15);
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: #FFFFFF;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+            flex: 1;
+        }
+
+        .welcome-section h2 {
+            font-size: 1.6rem;
+            color: #2E7D32;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .tile-top {
+            border-bottom: 2px solid #C8E6C9;
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tile-bottom {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 280px;
+        }
+
+        /* Agent Cards Grid - Agricultural theme */
+        .agent-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .agent-card {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F1F8E9 100%);
+            border: 2px solid #C8E6C9;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        }
+
+        .agent-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(46, 125, 50, 0.2);
+            border-color: #66BB6A;
+            background: linear-gradient(135deg, #F1F8E9 0%, #DCEDC8 100%);
+        }
+
+        .agent-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .agent-card h3 {
+            font-size: 1.05rem;
+            color: #2E7D32;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+
+        .agent-card p {
+            font-size: 0.9rem;
+            color: #616161;
+            line-height: 1.5;
+        }
+
+        .chat-header h2 {
+            font-size: 1.5rem;
+            color: #2E7D32;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .history-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .chat-controls {
+            margin-top: 1rem;
+        }
+
+        .upload-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        #uploadImageButton {
+            padding: 0.65rem 1.25rem;
+            background: linear-gradient(135deg, #FFFFFF 0%, #FFF9E6 100%);
+            border: 2px solid #E8D5A8;
+            border-radius: 0.5rem;
+            color: #2E7D32;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: "Source Sans Pro", sans-serif;
+            transition: all 0.3s;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        #uploadImageButton:hover {
+            background: linear-gradient(135deg, #FFF9E6 0%, #FFF3D6 100%);
+            border-color: #F9A825;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(46, 125, 50, 0.15);
+        }
+
+        #selectedImageName {
+            font-size: 0.9rem;
+            color: #616161;
+            font-weight: 500;
+        }
+
+        .history-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #2E7D32;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Chat Container */
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.25rem;
+            background: linear-gradient(180deg, #FAFFF8 0%, #F5FFF3 100%);
+            border: 2px solid #C8E6C9;
+            border-radius: 0.75rem;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .older-chats {
+            background: linear-gradient(135deg, #FFFEF8 0%, #FFF9E6 100%);
+            border: 2px solid #E8D5A8;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .older-chat-item {
+            padding: 0.85rem;
+            border-radius: 0.5rem;
+            background: #FFFFFF;
+            margin-bottom: 0.6rem;
+            border: 1px solid #E8D5A8;
+            font-size: 0.9rem;
+            color: #424242;
+            transition: all 0.2s;
+        }
+
+        .older-chat-item:hover {
+            background: #FFF9E6;
+            border-color: #F9A825;
+            transform: translateX(4px);
+        }
+
+        .older-chat-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Chat messages */
+        .message {
+            margin-bottom: 1rem;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chat-message {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            color: #000000;
+        }
+
+        .user-message {
+            background-color: #E3F2FD;
+            border-left: 4px solid #1976D2;
+        }
+
+        .assistant-message {
+            background-color: #FFFFFF;
+            border: 1px solid #E0E0E0;
+            border-left: 4px solid #43A047;
+        }
+
+        .agent-badge {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            border-radius: 0.3rem;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .badge-supervisor {
+            background-color: #9C27B0;
+        }
+
+        .badge-agri-expert {
+            background-color: #4CAF50;
+        }
+
+        .badge-policy {
+            background-color: #2196F3;
+        }
+
+        .badge-resource {
+            background-color: #FF9800;
+        }
+
+        /* Input Container */
+        .input-container {
+            padding: 1.25rem;
+            background: linear-gradient(180deg, #FFFFFF 0%, #F5FFF3 100%);
+            border-top: 2px solid #C8E6C9;
+            border-radius: 0;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        #userInput {
+            flex: 1;
+            padding: 0.85rem 1.25rem;
+            border: 2px solid #C8E6C9;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-family: "Source Sans Pro", sans-serif;
+            outline: none;
+            transition: all 0.3s;
+            background: #FFFFFF;
+        }
+
+        #userInput:focus {
+            border-color: #66BB6A;
+            box-shadow: 0 0 0 0.25rem rgba(102, 187, 106, 0.15);
+            background: #FAFFF8;
+        }
+
+        #sendButton {
+            padding: 0.85rem 2.5rem;
+            background: linear-gradient(135deg, #43A047 0%, #2E7D32 100%);
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: "Source Sans Pro", sans-serif;
+            transition: all 0.3s;
+            box-shadow: 0 2px 6px rgba(46, 125, 50, 0.3);
+        }
+
+        #sendButton:hover:not(:disabled) {
+            background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.4);
+        }
+
+        #sendButton:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Loading indicator */
+        .loading {
+            display: flex;
+            gap: 5px;
+            padding: 1rem;
+        }
+
+        .loading span {
+            width: 8px;
+            height: 8px;
+            background: #2E9F46;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .loading span:nth-child(1) { animation-delay: -0.32s; }
+        .loading span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Error message */
+        .error {
+            background: #F8D7DA;
+            color: #721C24;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 2px solid #F5C6CB;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .left-panel,
+            .center-panel,
+            .right-panel {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .agent-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .agent-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .chat-container {
+                padding: 1rem;
+            }
+
+            .input-container {
+                padding: 1rem;
+            }
+        }
+
+        /* Scrollbar styling - Agricultural theme */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #F1F8E9;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #66BB6A 0%, #43A047 100%);
+            border-radius: 5px;
+            border: 2px solid #F1F8E9;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #43A047 0%, #2E7D32 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="top-header">
+        <h1>🌾 GramSetu</h1>
+        <div class="header-right">
+            <select class="language-selector" aria-label="Language selector">
+                <option>English</option>
+                <option>हिंदी</option>
+                <option>मराठी</option>
+            </select>
+            <div class="user-badge">👤 Guest User</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Left Tile -->
+        <div class="left-panel">
+            <h2 class="panel-title">🚀 Quick Actions</h2>
+            <div class="quick-actions">
+                <button class="quick-action" onclick="suggestQuery('What disease is affecting my tomato plant?')">🌱 Crop Disease Help</button>
+                <button class="quick-action" onclick="suggestQuery('Am I eligible for PM-Kisan?')">📋 Government Schemes</button>
+                <button class="quick-action" onclick="suggestQuery('What are current onion prices?')">💰 Market Prices</button>
+                <button class="quick-action" onclick="suggestQuery('Give me irrigation tips for this week')">💧 Irrigation Tips</button>
+                <button class="quick-action" onclick="suggestQuery('What is the weather forecast?')">🌤️ Weather Forecast</button>
+                <button class="quick-action" onclick="suggestQuery('How can I start rural tourism on my farm?')">🏞️ Rural Tourism</button>
+            </div>
+
+            <h2 class="panel-title">📍 Your Location</h2>
+            <div class="info-card">
+                <strong>Auto-Detected</strong><br>
+                District: Bengaluru<br>
+                State: Karnataka<br>
+                Country: India
+            </div>
+
+            <h2 class="panel-title">👤 User Profile</h2>
+            <div class="info-card">
+                Guest User<br>
+                <small>Use quick actions to start chatting</small>
+            </div>
+        </div>
+
+        <!-- Center Tile -->
+        <div class="center-panel">
+            <div class="welcome-section">
+                <div class="tile-top">
+                    <h2>Welcome to GramSetu!</h2>
+                    <div class="agent-cards">
+                        <div class="agent-card" onclick="suggestQuery('What disease is affecting my tomato plant?')">
+                            <div class="icon">🌱</div>
+                            <h3>Crop Diseases</h3>
+                            <p>Upload photos for instant disease identification</p>
+                        </div>
+                        <div class="agent-card" onclick="suggestQuery('What are current onion prices?')">
+                            <div class="icon">💰</div>
+                            <h3>Market Prices</h3>
+                            <p>Real-time prices in Indian Rupees</p>
+                        </div>
+                        <div class="agent-card" onclick="suggestQuery('Am I eligible for PM-Kisan?')">
+                            <div class="icon">📋</div>
+                            <h3>Govt Schemes</h3>
+                            <p>PM-Kisan, PMFBY eligibility</p>
+                        </div>
+                        <div class="agent-card" onclick="suggestQuery('What is the weather forecast?')">
+                            <div class="icon">🌤️</div>
+                            <h3>Weather</h3>
+                            <p>Location-based forecasts</p>
+                        </div>
+                        <div class="agent-card" onclick="suggestQuery('Give me irrigation tips for this week')">
+                            <div class="icon">💧</div>
+                            <h3>Irrigation Tips</h3>
+                            <p>Water planning for better crop health</p>
+                        </div>
+                        <div class="agent-card" onclick="suggestQuery('How can I start rural tourism on my farm?')">
+                            <div class="icon">🏞️</div>
+                            <h3>Rural Tourism</h3>
+                            <p>Homestay and farm-tour income ideas</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tile-bottom">
+                    <h2>Chat History</h2>
+                    <div class="history-group">
+                        <div class="history-title">Current Chat</div>
+                        <div class="chat-container" id="chatContainer">
+                            <!-- Current chat messages will appear here -->
+                        </div>
+
+                        <div class="chat-controls">
+                            <div class="input-container">
+                                <div class="input-wrapper">
+                                    <input
+                                        type="text"
+                                        id="userInput"
+                                        placeholder="Ask me anything about farming, schemes, or resources..."
+                                        autocomplete="off"
+                                    />
+                                    <button id="sendButton">📤 Send</button>
+                                </div>
+                                <div class="upload-controls">
+                                    <input type="file" id="imageInput" accept="image/*" style="display:none" />
+                                    <button id="uploadImageButton" type="button" onclick="document.getElementById('imageInput').click()">📷 Upload Image</button>
+                                    <span id="selectedImageName">No image selected</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="history-group">
+                        <div class="history-title">Older Chats</div>
+                        <div class="older-chats">
+                            <div class="older-chat-item">Yesterday: Fertilizer schedule for onions</div>
+                            <div class="older-chat-item">Mar 2: PM-Kisan eligibility check</div>
+                            <div class="older-chat-item">Feb 28: Pest control for tomato crop</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Tile -->
+        <div class="right-panel">
+            <div class="chat-header">
+                <h2>Chat with GramSetu</h2>
+            </div>
+
+            <div class="info-card">
+                <strong>☀️ 28C - Sunny, Nashik</strong><br>
+                Next 3 days: Clear skies, good for irrigation.
+            </div>
+
+            <div class="info-card">
+                <strong>💰 Today's Prices (Nashik)</strong><br>
+                Onion: Rs3000/q<br>
+                Wheat: Rs2125/q<br>
+                Tomato: Rs1800/q<br>
+                Cotton: Rs6500/q
+            </div>
+
+            <div class="info-card">
+                <strong>💡 Today's Tip</strong><br>
+                Plan irrigation in early morning or evening to reduce water loss.
+            </div>
+
+            <div class="info-card">
+                <strong>📢 New Scheme</strong><br>
+                PM-Kisan installment update is available. Check eligibility and apply.
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Suggest query when agent card is clicked
+        function suggestQuery(query) {
+            document.getElementById('userInput').value = query;
+            document.getElementById('userInput').focus();
+        }
+
+        const imageInput = document.getElementById('imageInput');
+        const selectedImageName = document.getElementById('selectedImageName');
+        if (imageInput && selectedImageName) {
+            imageInput.addEventListener('change', function () {
+                selectedImageName.textContent = imageInput.files && imageInput.files[0]
+                    ? imageInput.files[0].name
+                    : 'No image selected';
+            });
+        }
+
+        // Your existing app.js functionality will go here
+        // Or keep it in a separate app.js file
+    </script>
+    <script src="app.js"></script>
+</body>
+</html>

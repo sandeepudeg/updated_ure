@@ -735,3 +735,46 @@ AWS Account (Single Region: us-east-1)
 - **Data Breaches**: # of unauthorized access incidents (Target: 0)
 - **Audit Trail Completeness**: % of actions logged (Target: 100%)
 
+
+
+---
+
+### Requirement 16: Modern Web Interface (MVP Scope)
+
+**User Story:** As a farmer in the pilot village, I want an intuitive web interface with easy image upload, so that I can interact with the system without technical barriers.
+
+#### Acceptance Criteria
+
+1. WHEN a user visits the web application, THE System SHALL display a splash screen showcasing the 6 available features
+2. WHEN a user completes or skips onboarding, THE System SHALL display a 3-column layout with chat interface, location panel, and information hub
+3. WHEN a user wants to upload an image, THE System SHALL provide a camera icon button in the chat input area (between text box and send button)
+4. WHEN a user views the interface, THE System SHALL display 6 agent cards with Hindi names and flip animation
+5. WHEN a user profile is saved, THE System SHALL store it in browser localStorage and display in the interface
+
+**Technical Implementation (MVP)**:
+- File: `src/web/v2/gramsetu-agents.html` (standalone)
+- Config: `src/web/v2/config.js`
+- Deployment: S3 + CloudFront
+- URL: https://d3v7khazsfb4vd.cloudfront.net/
+
+_Requirements: 16.1, 16.2, 16.3, 16.4, 16.8_
+
+---
+
+### Requirement 17: Automated Deployment (MVP Scope)
+
+**User Story:** As a DevOps engineer, I want an automated deployment script, so that I can deploy updates quickly.
+
+#### Acceptance Criteria
+
+1. WHEN the deployment script is executed, THE System SHALL upload web files to S3 bucket
+2. WHEN files are uploaded, THE System SHALL set appropriate content types
+3. WHEN upload completes, THE System SHALL invalidate CloudFront cache
+4. WHEN deployment completes, THE System SHALL display the CloudFront URL
+
+**Technical Implementation (MVP)**:
+- Script: `scripts/deploy_web_interface.ps1`
+- S3 bucket: `ure-mvp-data-us-east-1-188238313375/web-ui/`
+- CloudFront: `d3v7khazsfb4vd.cloudfront.net`
+
+_Requirements: 17.1, 17.2, 17.4, 17.5_

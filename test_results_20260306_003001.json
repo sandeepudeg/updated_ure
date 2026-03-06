@@ -1,0 +1,438 @@
+{
+  "summary": {
+    "totalPassed": 18,
+    "totalFailed": 0,
+    "totalTests": 18
+  },
+  "agents": {
+    "bazaar-darshi": {
+      "failed": 0,
+      "passed": 3,
+      "testCases": [
+        {
+          "testNumber": 1,
+          "agentUsed": "supervisor",
+          "description": "Market price query",
+          "validation": {
+            "responseLength": 110,
+            "valid": true,
+            "keywordsFound": [
+              "price",
+              "onion",
+              "market",
+              "Nashik"
+            ],
+            "keywordsMissing": null
+          },
+          "responsePreview": "agri_expert_agent: [User Location: Nashik, Maharashtra] What is the current market price of onions in Nashik?\n...",
+          "responseTime": 1.46,
+          "success": true,
+          "query": "What is the current market price of onions in Nashik?"
+        },
+        {
+          "testNumber": 2,
+          "agentUsed": "supervisor",
+          "description": "Profit analysis",
+          "validation": {
+            "responseLength": 110,
+            "valid": true,
+            "keywordsFound": [
+              "profit",
+              "crop",
+              "margin",
+              "season"
+            ],
+            "keywordsMissing": null
+          },
+          "responsePreview": "agri_expert_agent: [User Location: Nashik, Maharashtra] Which crops have the best profit margins this season?\n...",
+          "responseTime": 1.33,
+          "success": true,
+          "query": "Which crops have the best profit margins this season?"
+        },
+        {
+          "testNumber": 3,
+          "agentUsed": "supervisor",
+          "description": "Market connection",
+          "validation": {
+            "responseLength": 110,
+            "valid": true,
+            "keywordsFound": [
+              "sell",
+              "wheat",
+              "price"
+            ],
+            "keywordsMissing": "market"
+          },
+          "responsePreview": "agri_expert_agent: [User Location: Nashik, Maharashtra] Where can I sell my wheat harvest for the best price?\n...",
+          "responseTime": 1.47,
+          "success": true,
+          "query": "Where can I sell my wheat harvest for the best price?"
+        }
+      ],
+      "totalTests": 3,
+      "agentName": "bazaar-darshi"
+    },
+    "krishak-mitra": {
+      "failed": 0,
+      "passed": 3,
+      "testCases": [
+        {
+          "testNumber": 1,
+          "agentUsed": "supervisor",
+          "description": "Crop timing advice",
+          "validation": {
+            "responseLength": 116,
+            "valid": true,
+            "keywordsFound": [
+              "wheat",
+              "plant",
+              "Maharashtra"
+            ],
+            "keywordsMissing": "season"
+          },
+          "responsePreview": "resource_optimizer_agent: [User Location: Nashik, Maharashtra] What is the best time to plant wheat in Maharashtra?\n...",
+          "responseTime": 1.78,
+          "success": true,
+          "query": "What is the best time to plant wheat in Maharashtra?"
+        },
+        {
+          "testNumber": 2,
+          "agentUsed": "supervisor",
+          "description": "Irrigation requirements",
+          "validation": {
+            "responseLength": 107,
+            "valid": true,
+            "keywordsFound": [
+              "rice",
+              "water"
+            ],
+            "keywordsMissing": "irrigation"
+          },
+          "responsePreview": "resource_optimizer_agent: [User Location: Nashik, Maharashtra] How much water does rice crop need per day?\n...",
+          "responseTime": 1.59,
+          "success": true,
+          "query": "How much water does rice crop need per day?"
+        },
+        {
+          "testNumber": 3,
+          "agentUsed": "supervisor",
+          "description": "Fertilizer recommendations",
+          "validation": {
+            "responseLength": 120,
+            "valid": true,
+            "keywordsFound": [
+              "organic",
+              "fertilizer",
+              "tomato"
+            ],
+            "keywordsMissing": null
+          },
+          "responsePreview": "resource_optimizer_agent: [User Location: Nashik, Maharashtra] What are the best organic fertilizers for tomato plants?\n...",
+          "responseTime": 1.56,
+          "success": true,
+          "query": "What are the best organic fertilizers for tomato plants?"
+        }
+      ],
+      "totalTests": 3,
+      "agentName": "krishak-mitra"
+    },
+    "krishi-bodh": {
+      "failed": 0,
+      "passed": 3,
+      "testCases": [
+        {
+          "testNumber": 1,
+          "agentUsed": "supervisor",
+          "description": "Modern techniques",
+          "validation": {
+            "responseLength": 126,
+            "valid": true,
+            "keywordsFound": [
+              "technique",
+              "water",
+              "conservation",
+              "farming"
+            ],
+            "keywordsMissing": null
+          },
+          "responsePreview": "resource_optimizer_agent: [User Location: Nashik, Maharashtra] What are the latest farming techniques for water conservation?\n...",
+          "responseTime": 1.69,
+          "success": true,
+          "query": "What are the latest farming techniques for water conservation?"
+        },
+        {
+          "testNumber": 2,
+          "agentUsed": "supervisor",
+          "description": "Soil management",
+          "validation": {
+            "responseLength": 106,
+            "valid": true,
+            "keywordsFound": [
+              "soil",
+              "health",
+              "organic",
+              "improve"
+            ],
+            "keywordsMissing": null
+          },
+          "responsePreview": "resource_optimizer_agent: [User Location: Nashik, Maharashtra] How can I improve soil health organically?\n...",
+          "responseTime": 1.5,
+          "success": true,
+          "query": "How can I improve soil health organically?"
+        },
+        {
+          "testNumber": 3,
+          "agentUsed": "supervisor",
+          "description": "Educational resources",
+          "validation": {
+            "responseLength": 113,
+            "valid": true,
+            "keywordsFound": [
+              "training",
+              "program",
+              "farmer"
+            ],
+            "keywordsMissing": "education"
+          },
+          "responsePreview": "resource_optimizer_agent: [User Location: Nashik, Maharashtra] What training programs are available for farmers?\n...",
+          "responseTime": 1.46,
+          "success": true,
+          "query": "What training programs are available for farmers?"
+        }
+      ],
+      "totalTests": 3,
+      "agentName": "krishi-bodh"
+    },
+    "mausam-gyaata": {
+      "failed": 0,
+      "passed": 3,
+      "testCases": [
+        {
+          "testNumber": 1,
+          "agentUsed": "supervisor",
+          "description": "Weather forecast",
+          "validation": {
+            "responseLength": 114,
+            "valid": true,
+            "keywordsFound": [
+              "weather",
+              "forecast",
+              "Nashik",
+              "week"
+            ],
+            "keywordsMissing": null
+          },
+          "responsePreview": "resource_optimizer_agent: [User Location: Nashik, Maharashtra] What is the weather forecast for Nashik this week?\n...",
+          "responseTime": 1.54,
+          "success": true,
+          "query": "What is the weather forecast for Nashik this week?"
+        },
+        {
+          "testNumber": 2,
+          "agentUsed": "supervisor",
+          "description": "Irrigation timing",
+          "validation": {
+            "responseLength": 122,
+            "valid": true,
+            "keywordsFound": [
+              "irrigate",
+              "weather",
+              "crop"
+            ],
+            "keywordsMissing": "water"
+          },
+          "responsePreview": "resource_optimizer_agent: [User Location: Nashik, Maharashtra] When should I irrigate my crops based on upcoming weather?\n...",
+          "responseTime": 1.58,
+          "success": true,
+          "query": "When should I irrigate my crops based on upcoming weather?"
+        },
+        {
+          "testNumber": 3,
+          "agentUsed": "supervisor",
+          "description": "Weather alert",
+          "validation": {
+            "responseLength": 110,
+            "valid": true,
+            "keywordsFound": [
+              "frost",
+              "risk"
+            ],
+            "keywordsMissing": [
+              "temperature",
+              "cold"
+            ]
+          },
+          "responsePreview": "resource_optimizer_agent: [User Location: Nashik, Maharashtra] Is there a risk of frost in the next few days?\n...",
+          "responseTime": 1.5,
+          "success": true,
+          "query": "Is there a risk of frost in the next few days?"
+        }
+      ],
+      "totalTests": 3,
+      "agentName": "mausam-gyaata"
+    },
+    "sarkar-sahayak": {
+      "failed": 0,
+      "passed": 3,
+      "testCases": [
+        {
+          "testNumber": 1,
+          "agentUsed": "supervisor",
+          "description": "Scheme information",
+          "validation": {
+            "responseLength": 104,
+            "valid": true,
+            "keywordsFound": [
+              "PM-KISAN",
+              "scheme",
+              "eligible"
+            ],
+            "keywordsMissing": "benefit"
+          },
+          "responsePreview": "policy_navigator_agent: [User Location: Nashik, Maharashtra] What is PM-KISAN scheme and am I eligible?\n...",
+          "responseTime": 1.44,
+          "success": true,
+          "query": "What is PM-KISAN scheme and am I eligible?"
+        },
+        {
+          "testNumber": 2,
+          "agentUsed": "supervisor",
+          "description": "Application process",
+          "validation": {
+            "responseLength": 106,
+            "valid": true,
+            "keywordsFound": [
+              "PMFBY",
+              "insurance",
+              "apply",
+              "crop"
+            ],
+            "keywordsMissing": null
+          },
+          "responsePreview": "policy_navigator_agent: [User Location: Nashik, Maharashtra] How to apply for crop insurance under PMFBY?\n...",
+          "responseTime": 1.72,
+          "success": true,
+          "query": "How to apply for crop insurance under PMFBY?"
+        },
+        {
+          "testNumber": 3,
+          "agentUsed": "supervisor",
+          "description": "Subsidy information",
+          "validation": {
+            "responseLength": 111,
+            "valid": true,
+            "keywordsFound": [
+              "drip",
+              "irrigation"
+            ],
+            "keywordsMissing": [
+              "subsidy",
+              "scheme"
+            ]
+          },
+          "responsePreview": "policy_navigator_agent: [User Location: Nashik, Maharashtra] What subsidies are available for drip irrigation?\n...",
+          "responseTime": 1.61,
+          "success": true,
+          "query": "What subsidies are available for drip irrigation?"
+        }
+      ],
+      "totalTests": 3,
+      "agentName": "sarkar-sahayak"
+    },
+    "rog-nivaarak": {
+      "failed": 0,
+      "passed": 3,
+      "testCases": [
+        {
+          "testNumber": 1,
+          "agentUsed": "supervisor",
+          "description": "Disease identification",
+          "validation": {
+            "responseLength": 113,
+            "valid": true,
+            "keywordsFound": [
+              "disease",
+              "tomato",
+              "spot"
+            ],
+            "keywordsMissing": "leaf"
+          },
+          "responsePreview": "agri_expert_agent: [User Location: Nashik, Maharashtra] My tomato leaves have brown spots. What disease is this?\n...",
+          "responseTime": 6.28,
+          "success": true,
+          "query": "My tomato leaves have brown spots. What disease is this?"
+        },
+        {
+          "testNumber": 2,
+          "agentUsed": "supervisor",
+          "description": "Organic treatment",
+          "validation": {
+            "responseLength": 107,
+            "valid": true,
+            "keywordsFound": [
+              "powdery mildew",
+              "grape",
+              "organic"
+            ],
+            "keywordsMissing": "treatment"
+          },
+          "responsePreview": "agri_expert_agent: [User Location: Nashik, Maharashtra] How to treat powdery mildew on grapes organically?\n...",
+          "responseTime": 1.42,
+          "success": true,
+          "query": "How to treat powdery mildew on grapes organically?"
+        },
+        {
+          "testNumber": 3,
+          "agentUsed": "supervisor",
+          "description": "Pest identification",
+          "validation": {
+            "responseLength": 102,
+            "valid": true,
+            "keywordsFound": [
+              "pest",
+              "cotton"
+            ],
+            "keywordsMissing": "insect"
+          },
+          "responsePreview": "agri_expert_agent: [User Location: Nashik, Maharashtra] What are common pests affecting cotton crops?\n...",
+          "responseTime": 1.37,
+          "success": true,
+          "query": "What are common pests affecting cotton crops?"
+        }
+      ],
+      "totalTests": 3,
+      "agentName": "rog-nivaarak"
+    }
+  },
+  "multilingual": {
+    "totalLanguages": 3,
+    "failed": 0,
+    "passed": 3,
+    "results": [
+      {
+        "responseTime": 2.04,
+        "success": true,
+        "responsePreview": "resource_optimizer_agent: [User Location: Nashik, Maharashtra] What is the best fertilizer for wheat?\n...",
+        "language": "हिंदी",
+        "languageCode": "hi",
+        "translated": true
+      },
+      {
+        "responseTime": 1.86,
+        "success": true,
+        "responsePreview": "resource_optimizer_agent: [User Location: Nashik, Maharashtra] What is the weather forecast for today?\n...",
+        "language": "मराठी",
+        "languageCode": "mr",
+        "translated": true
+      },
+      {
+        "responseTime": 1.61,
+        "success": true,
+        "responsePreview": "agri_expert_agent: [User Location: Nashik, Maharashtra] How to control pests in cotton?\n...",
+        "language": "English",
+        "languageCode": "en",
+        "translated": null
+      }
+    ]
+  }
+}

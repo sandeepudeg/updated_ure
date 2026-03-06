@@ -1122,3 +1122,82 @@ Weeks 7-9: Finalization
 - Each checkpoint should be validated before proceeding to the next phase.
 - Parallel execution is possible for independent tasks (e.g., agent implementations can run in parallel).
 - Timeline assumes 1-2 developers working full-time on the project.
+
+
+---
+
+## Phase 5: Web Interface Development (Week 7)
+
+### TASK-5.1: GramSetu Web Interface (MVP)
+**Objective**: Create simple web interface for pilot village
+**Acceptance Criteria**:
+- Standalone HTML file created
+- 3-column layout implemented
+- Splash screen and onboarding form working
+- Image upload icon in chat input
+- 6 agent cards with Hindi names
+
+**Sub-tasks**:
+1. Create `src/web/v2/gramsetu-agents.html`
+2. Implement splash screen (5 seconds)
+3. Create onboarding form with localStorage
+4. Build 3-column layout
+5. Add 6 agent flip cards
+6. Position camera icon in chat input
+7. Create `config.js` with API endpoint
+8. Style with green agricultural theme
+
+**[CHECKPOINT-5.1]**: Web interface functional locally
+
+---
+
+### TASK-5.2: Deployment Setup (MVP)
+**Objective**: Deploy web interface to S3 + CloudFront
+**Acceptance Criteria**:
+- S3 bucket configured
+- CloudFront distribution created
+- Deployment script working
+- URL accessible: https://d3v7khazsfb4vd.cloudfront.net/
+
+**Sub-tasks**:
+1. Configure S3 bucket `/web-ui/` path
+2. Set up CloudFront distribution
+3. Create `scripts/deploy_web_interface.ps1`
+4. Upload files to S3
+5. Set CloudFront default root object
+6. Test deployment
+
+**[CHECKPOINT-5.2]**: Web interface accessible via CloudFront
+
+---
+
+### TASK-5.3: API Integration (MVP)
+**Objective**: Connect web interface to Lambda backend
+**Acceptance Criteria**:
+- API calls working
+- Image upload to S3 functional
+- Chat messages sent and received
+- Error handling implemented
+
+**Sub-tasks**:
+1. Configure API endpoint in config.js
+2. Implement sendMessage() function
+3. Implement handleImageUpload() function
+4. Add error handling
+5. Test end-to-end flow
+
+**[CHECKPOINT-5.3]**: API integration working
+
+---
+
+## Task Summary: Web Interface (MVP)
+
+| Task | Description | Duration | Dependencies |
+|------|-------------|----------|--------------|
+| TASK-5.1 | GramSetu Web Interface (MVP) | 2 days | None |
+| TASK-5.2 | Deployment Setup (MVP) | 1 day | S3, CloudFront |
+| TASK-5.3 | API Integration (MVP) | 1 day | TASK-5.1, API Gateway |
+
+**Total Duration**: 4 days
+
+---
