@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2e7d32">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>GramSetu - AI Assistant for Rural India</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // Inline API configuration for mobile
+        const API_CONFIG = {
+            endpoint: 'https://8938dqxf33.execute-api.us-east-1.amazonaws.com/dev/query'
+        };
+    </script>
+    <style>
+        :root {
+            --primary: #4caf50;
+            --primary-dark: #388e3c;
+            --secondary: #ff9800;
+            --teal: #00695c;
+            --light: #f9f9f9;
+            --dark: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            color: var(--dark);
+            line-height: 1.5;
+            min-height: 100vh;
+            font-size: 14px;
+            overflow-x: hidden;
+        }
+
+        /* Mobile-First Header */
+        .header {
+            background: linear-gradient(to right, #2e7d32, var(--teal));
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            font-size: 1.8rem;
+            color: #ffeb3b;
+        }
+
+        .logo-text h1 {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .logo-text .tagline {
+            font-size: 0.65rem;
+            opacity: 0.9;
+        }
+
+        .language-selector {
+            padding: 0.5rem 0.75rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            font-size: 0.75rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .language-selector option {
+            background: #2e7d32;
+            color: white;
+        }
+
+        /* Mobile Controls */
+        .mobile-controls {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 100px;
+            justify-content: center;
+        }
+
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Agents Section - Mobile Optimized */
+        .agents-section {
+            padding: 1rem;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        .section-title h2 {
+            font-size: 1.2rem;
+            color: #2e7d32;
+            margin-bottom: 0.75rem;
+        }
+
+        .agents-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .agent-card {
+            aspect-ratio: 1;
+            cursor: pointer;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            width: 100%;
+        }
+
+        .agent-front {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            text-align: center;
+            color: white;
+        }
+
+        .agent-icon {
+            font-size: 2rem;
+            margin-bottom: 6px;
+        }
+
+        .agent-name {
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .agent-role {
+            font-size: 0.6rem;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        .agent-1 .agent-front { background: linear-gradient(135deg, #43A047, #66BB6A); }
+        .agent-2 .agent-front { background: linear-gradient(135deg, #E53935, #EF5350); }
+        .agent-3 .agent-front { background: linear-gradient(135deg, #FB8C00, #FFA726); }
+        .agent-4 .agent-front { background: linear-gradient(135deg, #1E88E5, #42A5F5); }
+        .agent-5 .agent-front { background: linear-gradient(135deg, #00ACC1, #26C6DA); }
+        .agent-6 .agent-front { background: linear-gradient(135deg, #8E24AA, #AB47BC); }
+
+        /* Mobile Layout - Single Column */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 1rem;
+            padding-bottom: 80px; /* Space for bottom nav */
+        }
+
+        .tile {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .tile-header {
+            background: linear-gradient(to right, #2e7d32, var(--teal));
+            color: white;
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tile-content {
+            padding: 1rem;
+        }
+
+        /* Collapsible Sections for Mobile */
+        .collapsible-section {
+            margin-bottom: 1rem;
+        }
+
+        .section-toggle {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            text-align: left;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .section-content.active {
+            max-height: 500px;
+            padding-top: 1rem;
+        }
+
+        /* Chat - Mobile Optimized */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background: #f5f9f5;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 400px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 10px 12px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            word-wrap: break-word;
+        }
+
+        .message.user {
+            background: #e3f2fd;
+            align-self: flex-end;
+        }
+
+        .message.bot {
+            background: #e8f5e9;
+            align-self: flex-start;
+        }
+
+        /* Mobile-Friendly Input */
+        .chat-input {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .chat-input input {
+            flex-grow: 1;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 24px;
+            font-size: 0.9rem;
+        }
+
+        .chat-input button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .chat-input .upload-icon-btn {
+            background: var(--primary);
+        }
+
+        .chat-input button:active {
+            transform: scale(0.95);
+        }
+
+        /* Info Cards - Mobile Stacked */
+        .info-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .info-card-header {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-dark);
+        }
+
+        .info-card-content {
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        /* Weather Widget - Mobile */
+        .weather-widget {
+            background: linear-gradient(135deg, #d6eaf8, #e3f2fd);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .weather-icon-large {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .temperature-large {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1565c0;
+        }
+
+        .location-text {
+            font-size: 0.9rem;
+            color: #424242;
+            margin-top: 0.5rem;
+        }
+
+        /* Bottom Navigation for Mobile */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.75rem 0;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: #666;
+            font-size: 0.7rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .nav-item i {
+            font-size: 1.5rem;
+        }
+
+        /* Hide desktop-only elements on mobile */
+        .desktop-only {
+            display: none;
+        }
+
+        /* Tablet Breakpoint */
+        @media (min-width: 768px) {
+            body {
+                font-size: 13px;
+            }
+
+            .agents-container {
+                grid-template-columns: repeat(6, 1fr);
+                gap: 15px;
+            }
+
+            .app-container {
+                display: grid;
+                grid-template-columns: 1fr 2fr;
+                gap: 1.5rem;
+                padding: 1.5rem 3%;
+            }
+
+            .chat-messages {
+                max-height: 500px;
+            }
+
+            .bottom-nav {
+                display: none;
+            }
+
+            .desktop-only {
+                display: block;
+            }
+        }
+
+        /* Desktop Breakpoint */
+        @media (min-width: 1024px) {
+            body {
+                font-size: 12px;
+            }
+
+            .app-container {
+                grid-template-columns: 1fr 2fr 1fr;
+                max-width: 1600px;
+                margin: 0 auto;
+                padding: 2rem 5%;
+            }
+
+            .header-content {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .mobile-controls {
+                flex-wrap: nowrap;
+            }
+        }
+
+        /* Touch-friendly sizing */
+        @media (hover: none) and (pointer: coarse) {
+            button, .control-btn, .agent-card {
+                min-height: 44px;
+                min-width: 44px;
+            }
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Image Preview */
+        .image-preview {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile-Optimized Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-top">
+                <div class="logo-container">
+                    <div class="logo-icon">🌾</div>
+                    <div class="logo-text">
+                        <h1>GramSetu</h1>
+                        <div class="tagline">AI for Rural India</div>
+                    </div>
+                </div>
+                <select class="language-selector" id="languageSelect">
+                    <option value="English">English</option>
+                    <option value="हिंदी">हिंदी</option>
+                    <option value="मराठी">मराठी</option>
+                </select>
+            </div>
+        </div>
+        <input type="file" id="imageUpload" accept="image/*" capture="environment" style="display: none;" onchange="handleImageUpload(event)">
+    </header>
+
+    <!-- Agents Section -->
+    <section class="agents-section">
+        <div class="section-title">
+            <h2>Choose Your Assistant</h2>
+        </div>
+        <div class="agents-container">
+            <div class="agent-card agent-1" onclick="selectAgent('agri-expert')">
+                <div class="agent-front">
+                    <div class="agent-icon">🌱</div>
+                    <div class="agent-name">Krishak Mitra</div>
+                    <div class="agent-role">Crop Expert</div>
+                </div>
+            </div>
+            <div class="agent-card agent-2" onclick="selectAgent('disease-expert')">
+                <div class="agent-front">
+                    <div class="agent-icon">🔬</div>
+                    <div class="agent-name">Rog Nivaarak</div>
+                    <div class="agent-role">Disease Doctor</div>
+                </div>
+            </div>
+            <div class="agent-card agent-3" onclick="selectAgent('market-expert')">
+                <div class="agent-front">
+                    <div class="agent-icon">💰</div>
+                    <div class="agent-name">Bazaar Darshi</div>
+                    <div class="agent-role">Market Guide</div>
+                </div>
+            </div>
+            <div class="agent-card agent-4" onclick="selectAgent('policy-expert')">
+                <div class="agent-front">
+                    <div class="agent-icon">📋</div>
+                    <div class="agent-name">Sarkar Sahayak</div>
+                    <div class="agent-role">Scheme Helper</div>
+                </div>
+            </div>
+            <div class="agent-card agent-5" onclick="selectAgent('weather-expert')">
+                <div class="agent-front">
+                    <div class="agent-icon">🌤️</div>
+                    <div class="agent-name">Mausam Gyaata</div>
+                    <div class="agent-role">Weather Guide</div>
+                </div>
+            </div>
+            <div class="agent-card agent-6" onclick="selectAgent('tourism-expert')">
+                <div class="agent-front">
+                    <div class="agent-icon">🏞️</div>
+                    <div class="agent-name">Krishi Bodh</div>
+                    <div class="agent-role">Tourism Guide</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="app-container">
+        <!-- Chat Section -->
+        <section class="tile">
+            <div class="tile-header">
+                <i class="fas fa-comments"></i>
+                <span>Chat with AI</span>
+            </div>
+            <div class="tile-content">
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message bot">
+                            Namaste! 🙏 I'm GramSetu, your AI assistant. How can I help you today?
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input 
+                            type="text" 
+                            id="userInput" 
+                            placeholder="Ask me anything..."
+                            onkeypress="if(event.key==='Enter') sendMessage()"
+                        />
+                        <button class="upload-icon-btn" onclick="document.getElementById('imageUpload').click()">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                        <button onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Info Section (Desktop/Tablet) -->
+        <aside class="tile desktop-only">
+            <div class="tile-header">
+                <i class="fas fa-info-circle"></i>
+                <span>Quick Info</span>
+            </div>
+            <div class="tile-content">
+                <div class="weather-widget">
+                    <div class="weather-icon-large">☀️</div>
+                    <div class="temperature-large">28°C</div>
+                    <div class="location-text">Nashik, Maharashtra</div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <i class="fas fa-chart-line"></i>
+                        Market Prices
+                    </div>
+                    <div class="info-card-content">
+                        <p><strong>Tomato:</strong> ₹25/kg</p>
+                        <p><strong>Onion:</strong> ₹40/kg</p>
+                        <p><strong>Wheat:</strong> ₹2,300/quintal</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Bottom Navigation (Mobile Only) -->
+    <nav class="bottom-nav">
+        <div class="nav-item" onclick="document.getElementById('imageUpload').click()">
+            <i class="fas fa-camera"></i>
+            <span>Photo</span>
+        </div>
+        <div class="nav-item" onclick="clearChat()">
+            <i class="fas fa-trash-alt"></i>
+            <span>Clear</span>
+        </div>
+        <div class="nav-item active" onclick="showSection('chat')">
+            <i class="fas fa-comments"></i>
+            <span>Chat</span>
+        </div>
+        <div class="nav-item" onclick="showSection('agents')">
+            <i class="fas fa-users"></i>
+            <span>Agents</span>
+        </div>
+        <div class="nav-item" onclick="showSection('info')">
+            <i class="fas fa-info-circle"></i>
+            <span>Info</span>
+        </div>
+    </nav>
+
+    <script>
+        let currentAgent = null;
+        let uploadedImage = null;
+
+        function selectAgent(agentId) {
+            currentAgent = agentId;
+            const agentNames = {
+                'agri-expert': 'Krishak Mitra',
+                'disease-expert': 'Rog Nivaarak',
+                'market-expert': 'Bazaar Darshi',
+                'policy-expert': 'Sarkar Sahayak',
+                'weather-expert': 'Mausam Gyaata',
+                'tourism-expert': 'Krishi Bodh'
+            };
+            addMessage(`Hello! I'm ${agentNames[agentId]}. How can I assist you?`, 'bot');
+        }
+
+        function addMessage(text, sender) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.textContent = text;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            
+            if (!message && !uploadedImage) return;
+            
+            if (message) {
+                addMessage(message, 'user');
+            }
+            
+            input.value = '';
+            
+            // Show loading
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message bot';
+            loadingDiv.innerHTML = '<div class="loading"></div>';
+            document.getElementById('chatMessages').appendChild(loadingDiv);
+            
+            try {
+                const response = await fetch(API_CONFIG.endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: 'mobile_user_' + Date.now(),
+                        query: message,
+                        language: document.getElementById('languageSelect').value,
+                        image: uploadedImage
+                    })
+                });
+                
+                const data = await response.json();
+                loadingDiv.remove();
+                addMessage(data.response || 'Sorry, I could not process your request.', 'bot');
+            } catch (error) {
+                loadingDiv.remove();
+                addMessage('Sorry, there was an error. Please try again.', 'bot');
+            }
+            
+            uploadedImage = null;
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedImage = e.target.result.split(',')[1];
+                addMessage('📷 Image uploaded. Ask me about it!', 'bot');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearChat() {
+            const messagesDiv = document.getElementById('chatMessages');
+            messagesDiv.innerHTML = '<div class="message bot">Chat cleared. How can I help you?</div>';
+        }
+
+        function showSection(section) {
+            // Update active nav item
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Show/hide sections (implement as needed)
+            console.log('Showing section:', section);
+        }
+    </script>
+</body>
+</html>
