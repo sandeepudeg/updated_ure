@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Mobile UI</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #2e7d32;
+        }
+        .device-frame {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+            margin: 20px auto;
+        }
+        .mobile-frame {
+            width: 375px;
+            height: 667px;
+        }
+        .tablet-frame {
+            width: 768px;
+            height: 1024px;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #388e3c;
+        }
+        .info {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌾 GramSetu Mobile UI Test</h1>
+        
+        <div class="info">
+            <strong>Testing Instructions:</strong>
+            <ul>
+                <li>Click buttons below to test different screen sizes</li>
+                <li>Mobile view: 375x667 (iPhone SE)</li>
+                <li>Tablet view: 768x1024 (iPad)</li>
+                <li>Desktop: Full width</li>
+            </ul>
+        </div>
+
+        <div class="controls">
+            <button onclick="setView('mobile')">📱 Mobile View</button>
+            <button onclick="setView('tablet')">📱 Tablet View</button>
+            <button onclick="setView('desktop')">💻 Desktop View</button>
+        </div>
+
+        <div id="deviceFrame" class="device-frame mobile-frame">
+            <iframe src="src/web/v2/gramsetu-mobile.html"></iframe>
+        </div>
+    </div>
+
+    <script>
+        function setView(type) {
+            const frame = document.getElementById('deviceFrame');
+            frame.className = 'device-frame';
+            
+            if (type === 'mobile') {
+                frame.classList.add('mobile-frame');
+            } else if (type === 'tablet') {
+                frame.classList.add('tablet-frame');
+            } else {
+                frame.style.width = '100%';
+                frame.style.height = '800px';
+            }
+        }
+    </script>
+</body>
+</html>
