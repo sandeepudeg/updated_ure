@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramSetu Live Interface Wireframe - Accurate Representation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #e0e0e0;
+            padding: 20px;
+        }
+
+        .wireframe-container {
+            max-width: 1920px;
+            height: 1080px;
+            margin: 0 auto;
+            background: white;
+            border: 4px solid #000;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .wireframe-title {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000;
+            color: #ffeb3b;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            z-index: 10000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        /* Splash Screen Indicator */
+        .splash-indicator {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background: #2e7d32;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: bold;
+            z-index: 9999;
+            border: 2px solid #000;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(to right, #2e7d32, #00695c);
+            padding: 12px 5%;
+            border-bottom: 3px solid #000;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .header-left {
+            flex: 1;
+        }
+
+        .logo-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: white;
+        }
+
+        .logo-icon {
+            font-size: 36px;
+            color: #ffeb3b;
+        }
+
+        .logo-text h1 {
+            font-size: 26px;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .logo-text .tagline {
+            font-size: 10px;
+            opacity: 0.9;
+        }
+
+        .header-right {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .language-selector {
+            padding: 8px 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-tagline {
+            color: white;
+            font-size: 11px;
+            text-align: center;
+            opacity: 0.95;
+        }
+
+        /* Agents Section */
+        .agents-section {
+            padding: 18px 5%;
+            text-align: center;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-bottom: 2px solid #ddd;
+        }
+
+        .section-title {
+            font-size: 22px;
+            color: #2e7d32;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+
+        .agents-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .agent-card {
+            width: 140px;
+            height: 140px;
+            background: white;
+            border: 3px solid #000;
+            border-radius: 15px;
+            padding: 12px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .agent-card::before {
+            content: 'FLIP';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 8px;
+            padding: 2px 5px;
+            background: #ffeb3b;
+            border: 1px solid #000;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .agent-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 12px;
+            opacity: 0.15;
+        }
+
+        .agent-card:nth-child(1) .agent-gradient { background: linear-gradient(135deg, #43A047, #66BB6A); }
+        .agent-card:nth-child(2) .agent-gradient { background: linear-gradient(135deg, #E53935, #EF5350); }
+        .agent-card:nth-child(3) .agent-gradient { background: linear-gradient(135deg, #FB8C00, #FFA726); }
+        .agent-card:nth-child(4) .agent-gradient { background: linear-gradient(135deg, #1E88E5, #42A5F5); }
+        .agent-card:nth-child(5) .agent-gradient { background: linear-gradient(135deg, #00ACC1, #26C6DA); }
+        .agent-card:nth-child(6) .agent-gradient { background: linear-gradient(135deg, #8E24AA, #AB47BC); }
+
+        .agent-icon {
+            font-size: 36px;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .agent-name {
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
+        }
+
+        .agent-role {
+            font-size: 10px;
+            color: #666;
+            margin-top: 3px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 20px;
+            padding: 0 5%;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            height: calc(100% - 300px);
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        .panel {
+            background: white;
+            border: 3px solid #000;
+            border-radius: 15px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .panel-header {
+            background: linear-gradient(to right, #2e7d32, #00695c);
+            color: white;
+            padding: 10px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            border-bottom: 3px solid #000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-content {
+            padding: 15px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        /* Left Panel - Location & Profile */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        .location-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border: 2px solid #2196f3;
+            border-left: 5px solid #2196f3;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 18px;
+        }
+
+        .location-badge {
+            font-size: 10px;
+            font-weight: bold;
+            color: #1976d2;
+            margin-bottom: 8px;
+        }
+
+        .location-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .location-item:last-child {
+            border-bottom: none;
+        }
+
+        .location-label {
+            font-weight: 600;
+            color: #424242;
+        }
+
+        .location-value {
+            color: #616161;
+        }
+
+        .profile-form {
+            margin-top: 15px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #4caf50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .btn-save {
+            width: 100%;
+            padding: 10px;
+            background: #4caf50;
+            color: white;
+            border: 2px solid #000;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-save:hover {
+            background: #388e3c;
+            transform: translateY(-2px);
+        }
+
+        /* Middle Panel - Chat */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .chat-messages {
+            flex: 1;
+            background: #f5f9f5;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 12px;
+            overflow-y: auto;
+            min-height: 250px;
+        }
+
+        .message {
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 11px;
+            margin-bottom: 10px;
+            max-width: 80%;
+            line-height: 1.5;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .message.bot {
+            background: #e8f5e9;
+            align-self: flex-start;
+            border-left: 3px solid #4caf50;
+        }
+
+        .message.user {
+            background: #e3f2fd;
+            margin-left: auto;
+            border-right: 3px solid #2196f3;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 11px;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #4caf50;
+        }
+
+        .chat-btn {
+            width: 45px;
+            height: 45px;
+            border: 2px solid #000;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .upload-btn {
+            background: #4caf50;
+        }
+
+        .send-btn {
+            background: #ff9800;
+        }
+
+        .chat-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Right Panel - Info Hub */
+        .weather-widget {
+            background: linear-gradient(135deg, #d6eaf8, #e3f2fd);
+            border: 2px solid #1565c0;
+            border-radius: 12px;
+            padding: 18px 15px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .weather-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .temperature {
+            font-size: 32px;
+            font-weight: 800;
+            color: #1565c0;
+        }
+
+        .weather-location {
+            font-size: 11px;
+            color: #424242;
+            margin: 8px 0;
+        }
+
+        .weather-forecast {
+            font-size: 10px;
+            color: #616161;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        .info-card {
+            border: 2px solid #000;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            transition: transform 0.2s;
+        }
+
+        .info-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .info-card.market {
+            background: linear-gradient(135deg, #f3e5f5, #fce4ec);
+            border-left: 4px solid #7b1fa2;
+        }
+
+        .info-card.tip {
+            background: linear-gradient(135deg, #fff9c4, #fff8e1);
+            border-left: 4px solid #f57c00;
+        }
+
+        .info-card.scheme {
+            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+            border-left: 4px solid #388e3c;
+        }
+
+        .info-card.tourism {
+            background: linear-gradient(135deg, #fff9c4, #fffde7);
+            border-left: 4px solid #f57c00;
+        }
+
+        .info-card-header {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .info-card.market .info-card-header { color: #7b1fa2; }
+        .info-card.tip .info-card-header { color: #f57c00; }
+        .info-card.scheme .info-card-header { color: #388e3c; }
+        .info-card.tourism .info-card-header { color: #f57c00; }
+
+        .info-card-content {
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            padding: 4px 0;
+        }
+
+        .price-item span:first-child {
+            color: #616161;
+            font-weight: 500;
+        }
+
+        .price-value {
+            color: #2e7d32;
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        .highlight {
+            font-weight: 700;
+            color: #d84315;
+        }
+
+        .income-highlight {
+            color: #2e7d32;
+            font-weight: 700;
+            font-size: 10px;
+            margin-top: 6px;
+            display: block;
+        }
+
+        /* Annotations */
+        .annotation {
+            position: absolute;
+            background: #ffeb3b;
+            border: 3px solid #000;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .annotation::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            background: #000;
+        }
+
+        .ann-splash {
+            top: 100px;
+            left: 20px;
+        }
+
+        .ann-splash::after {
+            height: 40px;
+            top: 100%;
+            left: 50%;
+        }
+
+        .ann-onboarding {
+            top: 100px;
+            right: 20px;
+        }
+
+        .ann-onboarding::after {
+            height: 40px;
+            top: 100%;
+            right: 50%;
+        }
+
+        .ann-agents {
+            top: 240px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .ann-agents::after {
+            height: 30px;
+            top: 100%;
+            left: 50%;
+        }
+
+        .ann-3col {
+            bottom: 180px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .ann-3col::after {
+            height: 40px;
+            bottom: 100%;
+            left: 50%;
+        }
+
+        .ann-chat {
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .ann-chat::after {
+            height: 30px;
+            bottom: 100%;
+            left: 50%;
+        }
+
+        /* Feature Callouts */
+        .feature-badge {
+            position: absolute;
+            background: #2e7d32;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: bold;
+            border: 2px solid #000;
+            z-index: 999;
+        }
+
+        .badge-1 { top: 145px; left: 100px; }
+        .badge-2 { top: 145px; right: 100px; }
+        .badge-3 { top: 320px; left: 80px; }
+        .badge-4 { top: 320px; right: 80px; }
+    </style>
+</head>
+<body>
+    <div class="wireframe-container">
+        <div class="wireframe-title">🎨 GramSetu Live Interface Wireframe - Accurate UI Representation (1920x1080)</div>
+        
+        <!-- Feature Indicators -->
+        <div class="splash-indicator">🌟 Splash Screen (5s auto-hide)</div>
+        
+        <!-- Annotations -->
+        <div class="annotation ann-splash">Welcome Splash<br>6 Feature Cards<br>Auto-hide after 5s</div>
+        <div class="annotation ann-onboarding">Onboarding Form<br>Name, State, District<br>Language, Crops</div>
+        <div class="annotation ann-agents">6 AI Agent Cards<br>Flip Animation on Hover<br>Click to Activate</div>
+        <div class="annotation ann-3col">3-Column Grid Layout<br>Location | Chat | Info Hub</div>
+        <div class="annotation ann-chat">Chat with Image Upload<br>Camera Button + Send Button</div>
+
+        <!-- Feature Badges -->
+        <div class="feature-badge badge-1">📱 Mobile Responsive</div>
+        <div class="feature-badge badge-2">🌐 Multi-Language</div>
+        <div class="feature-badge badge-3">🔄 Real-time Updates</div>
+        <div class="feature-badge badge-4">☁️ Cloud-Native</div>
+
+        <!-- Header -->
+        <div class="header">
+            <div class="header-top">
+                <div class="header-left"></div>
+                <div class="logo-section">
+                    <div class="logo-icon">🚜</div>
+                    <div class="logo-text">
+                        <h1>GramSetu</h1>
+                        <p class="tagline">Bridging Technology and Rural India</p>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="language-selector">English ▼</div>
+                </div>
+            </div>
+            <p class="header-tagline">Empowering farmers with AI-driven solutions for agriculture, market access, and rural development</p>
+        </div>
+
+        <!-- Agents Section -->
+        <div class="agents-section">
+            <div class="section-title">Our Digital Assistants</div>
+            <div class="agents-grid">
+                <div class="agent-card">
+                    <div class="agent-gradient"></div>
+                    <div class="agent-icon">🌱</div>
+                    <div class="agent-name">Krishak Mitra</div>
+                    <div class="agent-role">Crop Specialist</div>
+                </div>
+                <div class="agent-card">
+                    <div class="agent-gradient"></div>
+                    <div class="agent-icon">🐛</div>
+                    <div class="agent-name">Rog Nivaarak</div>
+                    <div class="agent-role">Disease Expert</div>
+                </div>
+                <div class="agent-card">
+                    <div class="agent-gradient"></div>
+                    <div class="agent-icon">📈</div>
+                    <div class="agent-name">Bazaar Darshi</div>
+                    <div class="agent-role">Market Analyst</div>
+                </div>
+                <div class="agent-card">
+                    <div class="agent-gradient"></div>
+                    <div class="agent-icon">📋</div>
+                    <div class="agent-name">Sarkar Sahayak</div>
+                    <div class="agent-role">Scheme Advisor</div>
+                </div>
+                <div class="agent-card">
+                    <div class="agent-gradient"></div>
+                    <div class="agent-icon">🌤️</div>
+                    <div class="agent-name">Mausam Gyaata</div>
+                    <div class="agent-role">Weather Expert</div>
+                </div>
+                <div class="agent-card">
+                    <div class="agent-gradient"></div>
+                    <div class="agent-icon">📚</div>
+                    <div class="agent-name">Krishi Bodh</div>
+                    <div class="agent-role">Knowledge Guide</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Left Panel - Location & Profile -->
+            <div class="panel">
+                <div class="panel-content">
+                    <div class="section-header">
+                        <span>📍</span>
+                        <span>Your Location</span>
+                    </div>
+                    <div class="location-box">
+                        <div class="location-badge">Auto-Detected</div>
+                        <div class="location-item">
+                            <span class="location-label">District:</span>
+                            <span class="location-value">Nashik</span>
+                        </div>
+                        <div class="location-item">
+                            <span class="location-label">State:</span>
+                            <span class="location-value">Maharashtra</span>
+                        </div>
+                        <div class="location-item">
+                            <span class="location-label">Country:</span>
+                            <span class="location-value">India</span>
+                        </div>
+                    </div>
+
+                    <div class="section-header">
+                        <span>👤</span>
+                        <span>User Profile</span>
+                    </div>
+                    <div class="profile-form">
+                        <input type="text" class="form-input" placeholder="Name / नाव" />
+                        <input type="text" class="form-input" placeholder="Village / गाव" />
+                        <select class="form-input">
+                            <option>Nashik</option>
+                            <option>Pune</option>
+                            <option>Ahmednagar</option>
+                        </select>
+                        <input type="text" class="form-input" placeholder="Phone / फोन (+91XXXXXXXXXX)" />
+                        <input type="text" class="form-input" placeholder="Crops (comma separated)" />
+                        <input type="text" class="form-input" placeholder="Land Size (acres)" />
+                        <button class="btn-save">
+                            <span>💾</span>
+                            <span>Save Profile</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Middle Panel - Chat -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span>💬</span>
+                    <span>GramSetu Assistant</span>
+                </div>
+                <div class="panel-content chat-container">
+                    <div class="chat-messages">
+                        <div class="message bot">
+                            Hello! I'm GramSetu, your AI farming assistant. How can I help you today?
+                        </div>
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="text" class="chat-input" placeholder="Ask anything about farming..." />
+                        <button class="chat-btn upload-btn" title="Upload Image">
+                            📷
+                        </button>
+                        <button class="chat-btn send-btn" title="Send Message">
+                            ✈️
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Info Hub -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span>ℹ️</span>
+                    <span>Information Hub</span>
+                </div>
+                <div class="panel-content">
+                    <!-- Weather Widget -->
+                    <div class="weather-widget">
+                        <div class="weather-icon">☀️</div>
+                        <div class="temperature">28°C</div>
+                        <div class="weather-location">Sunny, Nashik</div>
+                        <div class="weather-forecast">
+                            <strong>Next 3 days:</strong> Clear skies<br>Good for irrigation
+                        </div>
+                    </div>
+
+                    <!-- Market Prices -->
+                    <div class="info-card market">
+                        <div class="info-card-header">
+                            <span>🔥</span>
+                            <span>Today's Prices (Nashik)</span>
+                        </div>
+                        <div class="info-card-content">
+                            <div class="price-item">
+                                <span>Onion</span>
+                                <span class="price-value">₹3,000/q</span>
+                            </div>
+                            <div class="price-item">
+                                <span>Wheat</span>
+                                <span class="price-value">₹2,125/q</span>
+                            </div>
+                            <div class="price-item">
+                                <span>Tomato</span>
+                                <span class="price-value">₹1,800/q</span>
+                            </div>
+                            <div class="price-item">
+                                <span>Cotton</span>
+                                <span class="price-value">₹6,500/q</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Today's Tip -->
+                    <div class="info-card tip">
+                        <div class="info-card-header">
+                            <span>💡</span>
+                            <span>Today's Tip</span>
+                        </div>
+                        <div class="info-card-content">
+                            <span class="highlight">Irrigation Alert:</span> With clear weather expected, plan your irrigation for early morning or evening to minimize water loss.
+                        </div>
+                    </div>
+
+                    <!-- New Scheme -->
+                    <div class="info-card scheme">
+                        <div class="info-card-header">
+                            <span>📢</span>
+                            <span>New Scheme</span>
+                        </div>
+                        <div class="info-card-content">
+                            <span class="highlight">PM-Kisan 16th Installment</span> is now available. Check your eligibility and apply today!
+                        </div>
+                    </div>
+
+                    <!-- Rural Tourism -->
+                    <div class="info-card tourism">
+                        <div class="info-card-header">
+                            <span>🏞️</span>
+                            <span>Rural Tourism</span>
+                        </div>
+                        <div class="info-card-content">
+                            <strong>Earn Extra Income!</strong> Turn your farm into a tourist destination. Offer homestays, farm tours, or cooking classes.
+                            <span class="income-highlight">💰 Potential: ₹15,000-₹50,000/month</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  lambda:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ure-lambda-privacy:latest
+    container_name: ure-lambda-privacy
+    environment:
+      # AWS Configuration
+      - AWS_REGION=us-east-1
+      - AWS_DEFAULT_REGION=us-east-1
+      
+      # DynamoDB Tables
+      - DYNAMODB_TABLE_NAME=ure-conversations
+      - DYNAMODB_USER_TABLE=ure-user-profiles
+      - MIGRATIONS_TABLE=ure-user-migrations
+      
+      # S3 Configuration
+      - S3_BUCKET_NAME=ure-mvp-data-us-east-1-188238313375
+      
+      # Privacy Configuration
+      - IP_HASH_SALT=${IP_HASH_SALT:-default_salt_change_in_production}
+      
+      # Bedrock Configuration
+      - BEDROCK_REGION=us-east-1
+      
+      # Logging
+      - LOG_LEVEL=INFO
+      
+      # Python Path
+      - PYTHONPATH=/var/task:/var/task/src
+    
+    # For local testing with AWS credentials
+    volumes:
+      - ~/.aws:/root/.aws:ro
+    
+    # Expose port for local testing (optional)
+    ports:
+      - "9000:8080"
+    
+    # Health check
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/2015-03-31/functions/function/invocations || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Privacy audit service (optional - for running audits)
+  privacy-audit:
+    build:
+      context: .
+      dockerfile: Dockerfile.audit
+    image: ure-privacy-audit:latest
+    container_name: ure-privacy-audit
+    environment:
+      - AWS_REGION=us-east-1
+      - DYNAMODB_TABLE_NAME=ure-conversations
+      - DYNAMODB_USER_TABLE=ure-user-profiles
+    volumes:
+      - ~/.aws:/root/.aws:ro
+      - ./audit-reports:/app/reports
+    profiles:
+      - audit

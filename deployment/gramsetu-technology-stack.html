@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramSetu - Technology Stack</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .slide {
+            width: 1920px;
+            height: 1080px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
+            padding: 18px 40px;
+            color: white;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 46px;
+            margin-bottom: 3px;
+        }
+        
+        .header p {
+            font-size: 19px;
+            opacity: 0.95;
+        }
+        
+        /* Main Content */
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 18px;
+            padding: 22px;
+            flex: 1;
+            background: #f5f7fa;
+        }
+        
+        /* Category Box */
+        .tech-category {
+            background: white;
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 13px;
+            padding-bottom: 9px;
+            border-bottom: 3px solid;
+        }
+        
+        .category-icon {
+            font-size: 30px;
+        }
+        
+        .category-title {
+            font-size: 23px;
+            font-weight: bold;
+        }
+        
+        .tech-category.backend .category-header { border-bottom-color: #667eea; }
+        .tech-category.backend .category-title { color: #667eea; }
+        
+        .tech-category.frontend .category-header { border-bottom-color: #43A047; }
+        .tech-category.frontend .category-title { color: #43A047; }
+        
+        .tech-category.cloud .category-header { border-bottom-color: #F9A825; }
+        .tech-category.cloud .category-title { color: #F9A825; }
+        
+        .tech-category.data .category-header { border-bottom-color: #E91E63; }
+        .tech-category.data .category-title { color: #E91E63; }
+        
+        /* Tech Items */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 9px;
+            flex: 1;
+        }
+        
+        /* Single column layout for backend and frontend */
+        .tech-category.backend .tech-grid,
+        .tech-category.frontend .tech-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .tech-item {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
+            padding: 10px;
+            border-radius: 9px;
+            border-left: 4px solid;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            transition: transform 0.3s ease;
+        }
+        
+        /* Horizontal layout for backend and frontend items */
+        .tech-category.backend .tech-item,
+        .tech-category.frontend .tech-item {
+            flex-direction: row;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .tech-item:hover {
+            transform: translateY(-2px);
+        }
+        
+        .tech-category.backend .tech-item { border-left-color: #667eea; }
+        .tech-category.frontend .tech-item { border-left-color: #43A047; }
+        .tech-category.cloud .tech-item { border-left-color: #F9A825; }
+        .tech-category.data .tech-item { border-left-color: #E91E63; }
+        
+        .tech-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .tech-name {
+            font-size: 15px;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .tech-logo {
+            font-size: 19px;
+        }
+        
+        /* Larger logo for backend and frontend */
+        .tech-category.backend .tech-logo,
+        .tech-category.frontend .tech-logo {
+            font-size: 36px;
+            flex-shrink: 0;
+        }
+        
+        .tech-desc {
+            font-size: 11px;
+            color: #666;
+            line-height: 1.3;
+        }
+        
+        .tech-version {
+            font-size: 9px;
+            color: #999;
+            font-style: italic;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #2E7D32;
+            color: white;
+            padding: 11px 40px;
+            text-align: center;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <!-- Header -->
+        <div class="header">
+            <h1>💻 GramSetu Technology Stack</h1>
+            <p>Complete Technology Architecture & Tools</p>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Backend Technologies -->
+            <div class="tech-category backend">
+                <div class="category-header">
+                    <div class="category-icon">⚙️</div>
+                    <div class="category-title">Backend & AI</div>
+                </div>
+                
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <div class="tech-content">
+                            <div class="tech-name">
+                                <span>Python</span>
+                            </div>
+                            <div class="tech-desc">Core programming language for backend logic, agent orchestration, and data processing</div>
+                            <div class="tech-version">Version 3.11</div>
+                        </div>
+                        <span class="tech-logo">🐍</span>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <div class="tech-content">
+                            <div class="tech-name">
+                                <span>AWS Bedrock</span>
+                            </div>
+                            <div class="tech-desc">Managed AI service providing foundation models for conversational AI and image analysis</div>
+                            <div class="tech-version">Nova Lite v1.0</div>
+                        </div>
+                        <span class="tech-logo">🧠</span>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <div class="tech-content">
+                            <div class="tech-name">
+                                <span>Strands AI</span>
+                            </div>
+                            <div class="tech-desc">Multi-agent framework coordinating specialized agents for agriculture, weather, and schemes</div>
+                            <div class="tech-version">Latest</div>
+                        </div>
+                        <span class="tech-logo">🤖</span>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <div class="tech-content">
+                            <div class="tech-name">
+                                <span>Docker</span>
+                            </div>
+                            <div class="tech-desc">Containerization platform packaging application with dependencies for Lambda deployment</div>
+                            <div class="tech-version">Latest</div>
+                        </div>
+                        <span class="tech-logo">🐳</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Frontend Technologies -->
+            <div class="tech-category frontend">
+                <div class="category-header">
+                    <div class="category-icon">🎨</div>
+                    <div class="category-title">Frontend & UI</div>
+                </div>
+                
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <div class="tech-content">
+                            <div class="tech-name">
+                                <span>HTML5</span>
+                            </div>
+                            <div class="tech-desc">Modern semantic markup for accessible web interface structure and content</div>
+                            <div class="tech-version">HTML5</div>
+                        </div>
+                        <span class="tech-logo">📄</span>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <div class="tech-content">
+                            <div class="tech-name">
+                                <span>CSS3</span>
+                            </div>
+                            <div class="tech-desc">Responsive styling with agricultural theme using Grid and Flexbox layouts</div>
+                            <div class="tech-version">Grid/Flexbox</div>
+                        </div>
+                        <span class="tech-logo">🎨</span>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <div class="tech-content">
+                            <div class="tech-name">
+                                <span>JavaScript</span>
+                            </div>
+                            <div class="tech-desc">Client-side logic for chat interface, API integration, and real-time interactions</div>
+                            <div class="tech-version">ES6+</div>
+                        </div>
+                        <span class="tech-logo">⚡</span>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <div class="tech-content">
+                            <div class="tech-name">
+                                <span>Responsive Design</span>
+                            </div>
+                            <div class="tech-desc">Mobile-first adaptive layouts optimized for rural users on various devices</div>
+                            <div class="tech-version">Adaptive</div>
+                        </div>
+                        <span class="tech-logo">📱</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cloud & Infrastructure -->
+            <div class="tech-category cloud">
+                <div class="category-header">
+                    <div class="category-icon">☁️</div>
+                    <div class="category-title">Cloud & Infrastructure</div>
+                </div>
+                
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <div class="tech-name">
+                            <span class="tech-logo">⚡</span>
+                            <span>AWS Lambda</span>
+                        </div>
+                        <div class="tech-desc">Serverless compute running containerized AI agents with auto-scaling capabilities</div>
+                        <div class="tech-version">Docker Runtime</div>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <div class="tech-name">
+                            <span class="tech-logo">🚪</span>
+                            <span>API Gateway</span>
+                        </div>
+                        <div class="tech-desc">HTTP API providing secure endpoints for Lambda invocation with CORS support</div>
+                        <div class="tech-version">HTTP API v2</div>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <div class="tech-name">
+                            <span class="tech-logo">💾</span>
+                            <span>Amazon S3</span>
+                        </div>
+                        <div class="tech-desc">Object storage for static website hosting and agricultural data files</div>
+                        <div class="tech-version">Standard</div>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <div class="tech-name">
+                            <span class="tech-logo">🌐</span>
+                            <span>CloudFront</span>
+                        </div>
+                        <div class="tech-desc">Global CDN delivering web content with low latency to rural areas</div>
+                        <div class="tech-version">Global Edge</div>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <div class="tech-name">
+                            <span class="tech-logo">📦</span>
+                            <span>Amazon ECR</span>
+                        </div>
+                        <div class="tech-desc">Private container registry storing and versioning Docker images for Lambda</div>
+                        <div class="tech-version">Private</div>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <div class="tech-name">
+                            <span class="tech-logo">📊</span>
+                            <span>CloudWatch</span>
+                        </div>
+                        <div class="tech-desc">Monitoring service tracking logs, metrics, and performance of all AWS resources</div>
+                        <div class="tech-version">Logs + Metrics</div>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <div class="tech-name">
+                            <span class="tech-logo">🔐</span>
+                            <span>AWS IAM</span>
+                        </div>
+                        <div class="tech-desc">Identity and access management controlling permissions and security policies</div>
+                        <div class="tech-version">Policies</div>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <div class="tech-name">
+                            <span class="tech-logo">👤</span>
+                            <span>AWS Cognito</span>
+                        </div>
+                        <div class="tech-desc">User authentication and authorization service with user pools and identity federation</div>
+                        <div class="tech-version">User Pools</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Data & APIs -->
+            <div class="tech-category data">
+                <div class="category-header">
+                    <div class="category-icon">📊</div>
+                    <div class="category-title">Data & APIs</div>
+                </div>
+                
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <div class="tech-name">
+                            <span class="tech-logo">🌾</span>
+                            <span>Agmarknet API</span>
+                        </div>
+                        <div class="tech-desc">Government API providing real-time mandi prices across India for crop trading</div>
+                        <div class="tech-version">Government API</div>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <div class="tech-name">
+                            <span class="tech-logo">🌤️</span>
+                            <span>Weather API</span>
+                        </div>
+                        <div class="tech-desc">Location-based weather forecasts helping farmers plan agricultural activities</div>
+                        <div class="tech-version">OpenWeather</div>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <div class="tech-name">
+                            <span class="tech-logo">📈</span>
+                            <span>CSV Datasets</span>
+                        </div>
+                        <div class="tech-desc">Historical agricultural price data for trend analysis and market predictions</div>
+                        <div class="tech-version">Agriculture CSV</div>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <div class="tech-name">
+                            <span class="tech-logo">📄</span>
+                            <span>PDF Documents</span>
+                        </div>
+                        <div class="tech-desc">Government scheme guidelines including PMFBY, PMKSY, and other farmer benefits</div>
+                        <div class="tech-version">8+ PDFs</div>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <div class="tech-name">
+                            <span class="tech-logo">🌱</span>
+                            <span>PlantVillage</span>
+                        </div>
+                        <div class="tech-desc">Comprehensive plant disease image dataset for ML-based crop disease detection</div>
+                        <div class="tech-version">38 Classes</div>
+                    </div>
+                    
+                    <div class="tech-item">
+                        <div class="tech-name">
+                            <span class="tech-logo">🗺️</span>
+                            <span>Tourism Data</span>
+                        </div>
+                        <div class="tech-desc">Local tourism information promoting agri-tourism and rural economic development</div>
+                        <div class="tech-version">Maharashtra</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            🌾 GramSetu - Empowering Rural India with Modern Technology | Built on AWS Cloud Infrastructure
+        </div>
+    </div>
+</body>
+</html>

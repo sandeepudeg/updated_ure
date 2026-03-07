@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramSetu - Features List with Visual Illustrations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .slide {
+            width: 1920px;
+            height: 1080px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
+            padding: 25px 40px;
+            color: white;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 52px;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 22px;
+            opacity: 0.95;
+        }
+        
+        /* Main Content */
+        .content {
+            flex: 1;
+            background: #f5f7fa;
+            padding: 35px 40px;
+            overflow-y: auto;
+        }
+        
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+        
+        /* Feature Card */
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid #43A047;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, rgba(67, 160, 71, 0.1), transparent);
+            border-radius: 0 15px 0 100%;
+        }
+        
+        /* Feature Header */
+        .feature-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .feature-icon {
+            font-size: 42px;
+            min-width: 50px;
+            text-align: center;
+        }
+        
+        .feature-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2E7D32;
+            line-height: 1.2;
+        }
+        
+        /* Feature Description */
+        .feature-description {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+        
+        /* Feature Illustration */
+        .feature-illustration {
+            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        /* SVG Illustrations */
+        .illustration-svg {
+            width: 100%;
+            height: 100px;
+        }
+        
+        /* Feature Details */
+        .feature-details {
+            font-size: 11px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .feature-details ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .feature-details li {
+            padding: 4px 0;
+            padding-left: 18px;
+            position: relative;
+        }
+        
+        .feature-details li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #43A047;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        
+        /* Color Variations */
+        .feature-card.primary { border-left-color: #43A047; }
+        .feature-card.secondary { border-left-color: #FB8C00; }
+        .feature-card.tertiary { border-left-color: #1E88E5; }
+        .feature-card.quaternary { border-left-color: #E53935; }
+        .feature-card.quinary { border-left-color: #8E24AA; }
+        .feature-card.senary { border-left-color: #00ACC1; }
+        
+        /* Footer */
+        .footer {
+            background: #2E7D32;
+            color: white;
+            padding: 15px 40px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .footer-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 8px;
+        }
+        
+        .footer-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .footer-stat-icon {
+            font-size: 20px;
+        }
+        
+        .footer-stat-text {
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <!-- Header -->
+        <div class="header">
+            <h1>🌾 GramSetu - Complete Features List</h1>
+            <p>AI-Powered Agricultural Assistant for Rural India</p>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <div class="features-grid">
+                <!-- Feature 1: Multi-Agent AI System -->
+                <div class="feature-card primary">
+                    <div class="feature-header">
+                        <div class="feature-icon">🤖</div>
+                        <div class="feature-title">Multi-Agent AI System</div>
+                    </div>
+                    <div class="feature-description">
+                        6 specialized AI agents working together to provide comprehensive farming support
+                    </div>
+                    <div class="feature-illustration">
+                        <svg class="illustration-svg" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Central Supervisor -->
+                            <circle cx="100" cy="50" r="15" fill="#43A047" opacity="0.9"/>
+                            <text x="100" y="55" text-anchor="middle" fill="white" font-size="16" font-weight="bold">S</text>
+                            
+                            <!-- Agent 1 -->
+                            <circle cx="40" cy="30" r="12" fill="#66BB6A" opacity="0.8"/>
+                            <text x="40" y="34" text-anchor="middle" fill="white" font-size="12">A1</text>
+                            <line x1="52" y1="35" x2="85" y2="45" stroke="#43A047" stroke-width="2"/>
+                            
+                            <!-- Agent 2 -->
+                            <circle cx="40" cy="70" r="12" fill="#66BB6A" opacity="0.8"/>
+                            <text x="40" y="74" text-anchor="middle" fill="white" font-size="12">A2</text>
+                            <line x1="52" y1="65" x2="85" y2="55" stroke="#43A047" stroke-width="2"/>
+                            
+                            <!-- Agent 3 -->
+                            <circle cx="160" cy="30" r="12" fill="#66BB6A" opacity="0.8"/>
+                            <text x="160" y="34" text-anchor="middle" fill="white" font-size="12">A3</text>
+                            <line x1="148" y1="35" x2="115" y2="45" stroke="#43A047" stroke-width="2"/>
+                            
+                            <!-- Agent 4 -->
+                            <circle cx="160" cy="70" r="12" fill="#66BB6A" opacity="0.8"/>
+                            <text x="160" y="74" text-anchor="middle" fill="white" font-size="12">A4</text>
+                            <line x1="148" y1="65" x2="115" y2="55" stroke="#43A047" stroke-width="2"/>
+                            
+                            <!-- Agent 5 -->
+                            <circle cx="100" cy="10" r="12" fill="#66BB6A" opacity="0.8"/>
+                            <text x="100" y="14" text-anchor="middle" fill="white" font-size="12">A5</text>
+                            <line x1="100" y1="22" x2="100" y2="35" stroke="#43A047" stroke-width="2"/>
+                            
+                            <!-- Agent 6 -->
+                            <circle cx="100" cy="90" r="12" fill="#66BB6A" opacity="0.8"/>
+                            <text x="100" y="94" text-anchor="middle" fill="white" font-size="12">A6</text>
+                            <line x1="100" y1="78" x2="100" y2="65" stroke="#43A047" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <div class="feature-details">
+                        <ul>
+                            <li>Supervisor Agent - Query orchestration</li>
+                            <li>Agri Expert - Crop advice & diagnosis</li>
+                            <li>Market Expert - Price analysis</li>
+                            <li>Weather Expert - Climate insights</li>
+                            <li>Policy Expert - Govt schemes</li>
+                            <li>Tourism Expert - Rural opportunities</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Feature 2: Live Market Prices -->
+                <div class="feature-card secondary">
+                    <div class="feature-header">
+                        <div class="feature-icon">💰</div>
+                        <div class="feature-title">Live Market Prices</div>
+                    </div>
+                    <div class="feature-description">
+                        Real-time mandi prices from Agmarknet API with automatic fallback to historical data
+                    </div>
+                    <div class="feature-illustration">
+                        <svg class="illustration-svg" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Price Chart -->
+                            <rect x="20" y="20" width="160" height="60" fill="white" stroke="#FB8C00" stroke-width="2" rx="5"/>
+                            
+                            <!-- Chart Bars -->
+                            <rect x="35" y="50" width="20" height="25" fill="#FFA726" opacity="0.8"/>
+                            <rect x="65" y="40" width="20" height="35" fill="#FFA726" opacity="0.8"/>
+                            <rect x="95" y="35" width="20" height="40" fill="#FB8C00" opacity="0.9"/>
+                            <rect x="125" y="45" width="20" height="30" fill="#FFA726" opacity="0.8"/>
+                            <rect x="155" y="38" width="20" height="37" fill="#FFA726" opacity="0.8"/>
+                            
+                            <!-- Rupee Symbol -->
+                            <text x="100" y="25" text-anchor="middle" fill="#FB8C00" font-size="14" font-weight="bold">₹</text>
+                            
+                            <!-- Trend Arrow -->
+                            <path d="M 150 15 L 170 15 L 165 10 M 170 15 L 165 20" stroke="#43A047" stroke-width="2" fill="none"/>
+                        </svg>
+                    </div>
+                    <div class="feature-details">
+                        <ul>
+                            <li>Integration with data.gov.in Agmarknet</li>
+                            <li>District-wise price comparison</li>
+                            <li>Modal, min, and max price ranges</li>
+                            <li>Nearby mandi locations</li>
+                            <li>Historical price trends</li>
+                            <li>All prices in Indian Rupees (₹)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Feature 3: Crop Disease Detection -->
+                <div class="feature-card quaternary">
+                    <div class="feature-header">
+                        <div class="feature-icon">🔬</div>
+                        <div class="feature-title">Crop Disease Detection</div>
+                    </div>
+                    <div class="feature-description">
+                        AI-powered image analysis using AWS Bedrock for instant disease diagnosis
+                    </div>
+                    <div class="feature-illustration">
+                        <svg class="illustration-svg" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Camera/Upload Icon -->
+                            <rect x="60" y="30" width="50" height="40" fill="#FFCDD2" stroke="#E53935" stroke-width="2" rx="5"/>
+                            <circle cx="85" cy="50" r="12" fill="#E53935" opacity="0.7"/>
+                            <rect x="95" y="35" width="8" height="8" fill="#E53935" opacity="0.5" rx="2"/>
+                            
+                            <!-- Arrow -->
+                            <path d="M 115 50 L 135 50" stroke="#E53935" stroke-width="3" marker-end="url(#arrowhead-red)"/>
+                            <defs>
+                                <marker id="arrowhead-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#E53935" />
+                                </marker>
+                            </defs>
+                            
+                            <!-- AI Analysis Result -->
+                            <rect x="140" y="30" width="45" height="40" fill="#C8E6C9" stroke="#43A047" stroke-width="2" rx="5"/>
+                            <text x="162" y="48" text-anchor="middle" fill="#2E7D32" font-size="12" font-weight="bold">AI</text>
+                            <text x="162" y="62" text-anchor="middle" fill="#2E7D32" font-size="10">✓</text>
+                        </svg>
+                    </div>
+                    <div class="feature-details">
+                        <ul>
+                            <li>Upload crop photos for analysis</li>
+                            <li>Instant disease identification</li>
+                            <li>Organic treatment recommendations</li>
+                            <li>Chemical treatment options</li>
+                            <li>Specific product names & costs</li>
+                            <li>Prevention strategies</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Feature 4: Government Schemes -->
+                <div class="feature-card tertiary">
+                    <div class="feature-header">
+                        <div class="feature-icon">📋</div>
+                        <div class="feature-title">Government Schemes</div>
+                    </div>
+                    <div class="feature-description">
+                        Comprehensive information about agricultural subsidies and support programs
+                    </div>
+                    <div class="feature-illustration">
+                        <svg class="illustration-svg" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Document -->
+                            <rect x="60" y="20" width="80" height="60" fill="white" stroke="#1E88E5" stroke-width="2" rx="3"/>
+                            
+                            <!-- Document Lines -->
+                            <line x1="70" y1="32" x2="130" y2="32" stroke="#1E88E5" stroke-width="2" opacity="0.6"/>
+                            <line x1="70" y1="42" x2="120" y2="42" stroke="#1E88E5" stroke-width="2" opacity="0.6"/>
+                            <line x1="70" y1="52" x2="125" y2="52" stroke="#1E88E5" stroke-width="2" opacity="0.6"/>
+                            <line x1="70" y1="62" x2="115" y2="62" stroke="#1E88E5" stroke-width="2" opacity="0.6"/>
+                            
+                            <!-- Government Seal -->
+                            <circle cx="100" cy="50" r="18" fill="#BBDEFB" opacity="0.7"/>
+                            <text x="100" y="55" text-anchor="middle" fill="#1E88E5" font-size="16" font-weight="bold">🏛️</text>
+                        </svg>
+                    </div>
+                    <div class="feature-details">
+                        <ul>
+                            <li>PM-Kisan Samman Nidhi</li>
+                            <li>PMFBY (Crop Insurance)</li>
+                            <li>PMKSY (Irrigation)</li>
+                            <li>PKVY (Organic Farming)</li>
+                            <li>eNAM (Online Trading)</li>
+                            <li>Eligibility & application process</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Feature 5: Multi-Language Support -->
+                <div class="feature-card quinary">
+                    <div class="feature-header">
+                        <div class="feature-icon">🌐</div>
+                        <div class="feature-title">Multi-Language Support</div>
+                    </div>
+                    <div class="feature-description">
+                        Communicate in your preferred language for better understanding
+                    </div>
+                    <div class="feature-illustration">
+                        <svg class="illustration-svg" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Globe -->
+                            <circle cx="100" cy="50" r="30" fill="#E1BEE7" stroke="#8E24AA" stroke-width="2"/>
+                            
+                            <!-- Latitude Lines -->
+                            <ellipse cx="100" cy="50" rx="30" ry="10" fill="none" stroke="#8E24AA" stroke-width="1" opacity="0.5"/>
+                            <ellipse cx="100" cy="50" rx="30" ry="20" fill="none" stroke="#8E24AA" stroke-width="1" opacity="0.5"/>
+                            
+                            <!-- Longitude Line -->
+                            <ellipse cx="100" cy="50" rx="10" ry="30" fill="none" stroke="#8E24AA" stroke-width="1" opacity="0.5"/>
+                            
+                            <!-- Language Labels -->
+                            <text x="70" y="35" fill="#8E24AA" font-size="12" font-weight="bold">EN</text>
+                            <text x="115" y="45" fill="#8E24AA" font-size="12" font-weight="bold">हिं</text>
+                            <text x="80" y="70" fill="#8E24AA" font-size="12" font-weight="bold">मरा</text>
+                        </svg>
+                    </div>
+                    <div class="feature-details">
+                        <ul>
+                            <li>English</li>
+                            <li>Hindi (हिंदी)</li>
+                            <li>Marathi (मराठी)</li>
+                            <li>More languages coming soon</li>
+                            <li>Natural language processing</li>
+                            <li>Context-aware responses</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Feature 6: Mobile-First Design -->
+                <div class="feature-card senary">
+                    <div class="feature-header">
+                        <div class="feature-icon">📱</div>
+                        <div class="feature-title">Mobile-First Design</div>
+                    </div>
+                    <div class="feature-description">
+                        Responsive interface optimized for rural users with limited connectivity
+                    </div>
+                    <div class="feature-illustration">
+                        <svg class="illustration-svg" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Mobile Phone -->
+                            <rect x="75" y="15" width="50" height="70" fill="white" stroke="#00ACC1" stroke-width="3" rx="8"/>
+                            
+                            <!-- Screen -->
+                            <rect x="80" y="22" width="40" height="56" fill="#B2EBF2" rx="3"/>
+                            
+                            <!-- Home Button -->
+                            <circle cx="100" cy="83" r="3" fill="#00ACC1"/>
+                            
+                            <!-- Screen Content -->
+                            <rect x="85" y="27" width="30" height="8" fill="#00ACC1" opacity="0.6" rx="2"/>
+                            <rect x="85" y="38" width="25" height="5" fill="#00ACC1" opacity="0.4" rx="1"/>
+                            <rect x="85" y="46" width="28" height="5" fill="#00ACC1" opacity="0.4" rx="1"/>
+                            <rect x="85" y="54" width="22" height="5" fill="#00ACC1" opacity="0.4" rx="1"/>
+                            
+                            <!-- Touch Icon -->
+                            <circle cx="145" cy="50" r="8" fill="#00ACC1" opacity="0.3"/>
+                            <text x="145" y="54" text-anchor="middle" fill="#00ACC1" font-size="10">👆</text>
+                        </svg>
+                    </div>
+                    <div class="feature-details">
+                        <ul>
+                            <li>Touch-optimized controls</li>
+                            <li>Bottom navigation for easy reach</li>
+                            <li>Large buttons & readable fonts</li>
+                            <li>Works on 2G/3G networks</li>
+                            <li>Lightweight & fast loading</li>
+                            <li>Desktop version available</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Feature 7: Weather Forecasting -->
+                <div class="feature-card primary">
+                    <div class="feature-header">
+                        <div class="feature-icon">🌤️</div>
+                        <div class="feature-title">Weather Forecasting</div>
+                    </div>
+                    <div class="feature-description">
+                        Location-based weather forecasts and climate insights for farming decisions
+                    </div>
+                    <div class="feature-illustration">
+                        <svg class="illustration-svg" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Sun -->
+                            <circle cx="60" cy="40" r="15" fill="#FDD835" opacity="0.8"/>
+                            <line x1="60" y1="20" x2="60" y2="15" stroke="#FDD835" stroke-width="2"/>
+                            <line x1="60" y1="65" x2="60" y2="70" stroke="#FDD835" stroke-width="2"/>
+                            <line x1="40" y1="40" x2="35" y2="40" stroke="#FDD835" stroke-width="2"/>
+                            <line x1="80" y1="40" x2="85" y2="40" stroke="#FDD835" stroke-width="2"/>
+                            
+                            <!-- Cloud -->
+                            <ellipse cx="120" cy="45" rx="25" ry="15" fill="#90CAF9" opacity="0.7"/>
+                            <ellipse cx="140" cy="45" rx="20" ry="12" fill="#90CAF9" opacity="0.7"/>
+                            
+                            <!-- Rain Drops -->
+                            <line x1="115" y1="58" x2="112" y2="68" stroke="#42A5F5" stroke-width="2"/>
+                            <line x1="125" y1="58" x2="122" y2="68" stroke="#42A5F5" stroke-width="2"/>
+                            <line x1="135" y1="58" x2="132" y2="68" stroke="#42A5F5" stroke-width="2"/>
+                            
+                            <!-- Temperature -->
+                            <text x="170" y="50" fill="#E53935" font-size="20" font-weight="bold">28°</text>
+                        </svg>
+                    </div>
+                    <div class="feature-details">
+                        <ul>
+                            <li>Real-time weather updates</li>
+                            <li>7-day forecast</li>
+                            <li>Rainfall predictions</li>
+                            <li>Temperature & humidity</li>
+                            <li>Farming activity recommendations</li>
+                            <li>Location-based alerts</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Feature 8: Cloud-Native Architecture -->
+                <div class="feature-card secondary">
+                    <div class="feature-header">
+                        <div class="feature-icon">☁️</div>
+                        <div class="feature-title">Cloud-Native Architecture</div>
+                    </div>
+                    <div class="feature-description">
+                        Built on AWS for scalability, reliability, and global reach
+                    </div>
+                    <div class="feature-illustration">
+                        <svg class="illustration-svg" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Cloud Layers -->
+                            <ellipse cx="100" cy="35" rx="35" ry="18" fill="#FFE0B2" opacity="0.6"/>
+                            <ellipse cx="100" cy="50" rx="40" ry="20" fill="#FFCC80" opacity="0.7"/>
+                            <ellipse cx="100" cy="65" rx="45" ry="22" fill="#FFA726" opacity="0.8"/>
+                            
+                            <!-- Server Icons -->
+                            <rect x="85" y="42" width="8" height="10" fill="white" opacity="0.9" rx="1"/>
+                            <rect x="95" y="42" width="8" height="10" fill="white" opacity="0.9" rx="1"/>
+                            <rect x="105" y="42" width="8" height="10" fill="white" opacity="0.9" rx="1"/>
+                            
+                            <!-- AWS Logo Representation -->
+                            <text x="100" y="78" text-anchor="middle" fill="#FF9800" font-size="12" font-weight="bold">AWS</text>
+                        </svg>
+                    </div>
+                    <div class="feature-details">
+                        <ul>
+                            <li>Serverless Lambda functions</li>
+                            <li>Auto-scaling infrastructure</li>
+                            <li>99.9% uptime SLA</li>
+                            <li>Global CDN delivery</li>
+                            <li>S3 storage for data</li>
+                            <li>CloudWatch monitoring</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Feature 9: Security & Privacy -->
+                <div class="feature-card quaternary">
+                    <div class="feature-header">
+                        <div class="feature-icon">🔒</div>
+                        <div class="feature-title">Security & Privacy</div>
+                    </div>
+                    <div class="feature-description">
+                        Enterprise-grade security protecting farmer data
+                    </div>
+                    <div class="feature-illustration">
+                        <svg class="illustration-svg" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Shield -->
+                            <path d="M 100 20 L 130 30 L 130 55 Q 130 75 100 85 Q 70 75 70 55 L 70 30 Z" 
+                                  fill="#FFCDD2" stroke="#E53935" stroke-width="3"/>
+                            
+                            <!-- Lock Icon -->
+                            <rect x="92" y="48" width="16" height="18" fill="#E53935" opacity="0.7" rx="2"/>
+                            <path d="M 95 48 L 95 42 Q 95 38 100 38 Q 105 38 105 42 L 105 48" 
+                                  fill="none" stroke="#E53935" stroke-width="3"/>
+                            
+                            <!-- Checkmark -->
+                            <path d="M 85 45 L 92 52 L 108 36" fill="none" stroke="#43A047" stroke-width="3"/>
+                        </svg>
+                    </div>
+                    <div class="feature-details">
+                        <ul>
+                            <li>HTTPS encryption</li>
+                            <li>Data encryption at rest</li>
+                            <li>IAM access controls</li>
+                            <li>Privacy-first design</li>
+                            <li>Secure API endpoints</li>
+                            <li>Regular security audits</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Feature 10: High Performance -->
+                <div class="feature-card tertiary">
+                    <div class="feature-header">
+                        <div class="feature-icon">⚡</div>
+                        <div class="feature-title">High Performance</div>
+                    </div>
+                    <div class="feature-description">
+                        Optimized for speed and efficiency with sub-second response times
+                    </div>
+                    <div class="feature-illustration">
+                        <svg class="illustration-svg" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Speedometer -->
+                            <path d="M 60 70 Q 60 30 100 30 Q 140 30 140 70" 
+                                  fill="none" stroke="#1E88E5" stroke-width="3"/>
+                            
+                            <!-- Speedometer Ticks -->
+                            <line x1="65" y1="65" x2="70" y2="60" stroke="#1E88E5" stroke-width="2"/>
+                            <line x1="75" y1="45" x2="80" y2="48" stroke="#1E88E5" stroke-width="2"/>
+                            <line x1="100" y1="35" x2="100" y2="40" stroke="#1E88E5" stroke-width="2"/>
+                            <line x1="125" y1="45" x2="120" y2="48" stroke="#1E88E5" stroke-width="2"/>
+                            <line x1="135" y1="65" x2="130" y2="60" stroke="#1E88E5" stroke-width="2"/>
+                            
+                            <!-- Needle -->
+                            <line x1="100" y1="70" x2="125" y2="48" stroke="#E53935" stroke-width="3"/>
+                            <circle cx="100" cy="70" r="5" fill="#E53935"/>
+                            
+                            <!-- Speed Text -->
+                            <text x="100" y="88" text-anchor="middle" fill="#1E88E5" font-size="14" font-weight="bold">&lt;2s</text>
+                        </svg>
+                    </div>
+                    <div class="feature-details">
+                        <ul>
+                            <li>Sub-second response times</li>
+                            <li>CDN-cached static assets</li>
+                            <li>Efficient AI model (Nova Lite)</li>
+                            <li>Optimized image processing</li>
+                            <li>Lambda warm-up strategies</li>
+                            <li>Load tested for 8,000 requests</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Feature 11: Rural Tourism -->
+                <div class="feature-card quinary">
+                    <div class="feature-header">
+                        <div class="feature-icon">🏞️</div>
+                        <div class="feature-title">Rural Tourism Guidance</div>
+                    </div>
+                    <div class="feature-description">
+                        Opportunities for additional income through agri-tourism and rural experiences
+                    </div>
+                    <div class="feature-illustration">
+                        <svg class="illustration-svg" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Mountains -->
+                            <path d="M 20 70 L 50 30 L 80 70" fill="#CE93D8" opacity="0.6"/>
+                            <path d="M 60 70 L 100 20 L 140 70" fill="#BA68C8" opacity="0.7"/>
+                            <path d="M 120 70 L 160 35 L 180 70" fill="#CE93D8" opacity="0.6"/>
+                            
+                            <!-- Sun -->
+                            <circle cx="160" cy="30" r="12" fill="#FDD835" opacity="0.7"/>
+                            
+                            <!-- House/Farm -->
+                            <rect x="85" y="55" width="30" height="15" fill="#8E24AA" opacity="0.6"/>
+                            <path d="M 80 55 L 100 45 L 120 55" fill="#AB47BC" opacity="0.7"/>
+                            
+                            <!-- Trees -->
+                            <circle cx="70" cy="62" r="5" fill="#66BB6A" opacity="0.6"/>
+                            <rect x="68" y="62" width="4" height="8" fill="#795548" opacity="0.6"/>
+                        </svg>
+                    </div>
+                    <div class="feature-details">
+                        <ul>
+                            <li>Farm stay opportunities</li>
+                            <li>Agri-tourism packages</li>
+                            <li>Local experience hosting</li>
+                            <li>Additional income streams</li>
+                            <li>Marketing support</li>
+                            <li>Guest management tips</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Feature 12: 24/7 Availability -->
+                <div class="feature-card senary">
+                    <div class="feature-header">
+                        <div class="feature-icon">🕐</div>
+                        <div class="feature-title">24/7 Availability</div>
+                    </div>
+                    <div class="feature-description">
+                        Always-on AI assistant available anytime, anywhere
+                    </div>
+                    <div class="feature-illustration">
+                        <svg class="illustration-svg" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Clock -->
+                            <circle cx="100" cy="50" r="30" fill="#B2EBF2" stroke="#00ACC1" stroke-width="3"/>
+                            
+                            <!-- Clock Numbers -->
+                            <text x="100" y="28" text-anchor="middle" fill="#00ACC1" font-size="12" font-weight="bold">12</text>
+                            <text x="122" y="54" text-anchor="middle" fill="#00ACC1" font-size="12" font-weight="bold">3</text>
+                            <text x="100" y="76" text-anchor="middle" fill="#00ACC1" font-size="12" font-weight="bold">6</text>
+                            <text x="78" y="54" text-anchor="middle" fill="#00ACC1" font-size="12" font-weight="bold">9</text>
+                            
+                            <!-- Clock Hands -->
+                            <line x1="100" y1="50" x2="100" y2="35" stroke="#00ACC1" stroke-width="3"/>
+                            <line x1="100" y1="50" x2="115" y2="50" stroke="#00ACC1" stroke-width="2"/>
+                            <circle cx="100" cy="50" r="3" fill="#00ACC1"/>
+                            
+                            <!-- 24/7 Text -->
+                            <text x="150" y="55" fill="#00ACC1" font-size="16" font-weight="bold">24/7</text>
+                        </svg>
+                    </div>
+                    <div class="feature-details">
+                        <ul>
+                            <li>No waiting for office hours</li>
+                            <li>Instant responses anytime</li>
+                            <li>Works on holidays & weekends</li>
+                            <li>Global accessibility</li>
+                            <li>No appointment needed</li>
+                            <li>Always ready to help</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <strong>🌾 GramSetu - Empowering Indian Farmers with AI Technology</strong>
+            <div class="footer-stats">
+                <div class="footer-stat">
+                    <div class="footer-stat-icon">🤖</div>
+                    <div class="footer-stat-text">6 AI Agents</div>
+                </div>
+                <div class="footer-stat">
+                    <div class="footer-stat-icon">🌐</div>
+                    <div class="footer-stat-text">3 Languages</div>
+                </div>
+                <div class="footer-stat">
+                    <div class="footer-stat-icon">⚡</div>
+                    <div class="footer-stat-text">&lt;2s Response</div>
+                </div>
+                <div class="footer-stat">
+                    <div class="footer-stat-icon">☁️</div>
+                    <div class="footer-stat-text">99.9% Uptime</div>
+                </div>
+                <div class="footer-stat">
+                    <div class="footer-stat-icon">💰</div>
+                    <div class="footer-stat-text">₹20-42/month</div>
+                </div>
+                <div class="footer-stat">
+                    <div class="footer-stat-icon">📱</div>
+                    <div class="footer-stat-text">Mobile-First</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

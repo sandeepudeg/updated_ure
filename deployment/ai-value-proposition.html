@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramSetu - AI Layer Value Proposition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .slide {
+            width: 1920px;
+            height: 1080px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
+            padding: 30px 50px;
+            color: white;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 56px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 24px;
+            opacity: 0.95;
+        }
+        
+        /* Main Content */
+        .content {
+            flex: 1;
+            background: #f5f7fa;
+            padding: 40px 50px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        /* Comparison Section */
+        .comparison-section {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .comparison-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-card.without-ai {
+            border: 3px solid #E53935;
+        }
+        
+        .comparison-card.with-ai {
+            border: 3px solid #43A047;
+        }
+        
+        .comparison-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 3px solid;
+        }
+        
+        .comparison-card.without-ai .comparison-title {
+            color: #E53935;
+            border-bottom-color: #E53935;
+        }
+        
+        .comparison-card.with-ai .comparison-title {
+            color: #43A047;
+            border-bottom-color: #43A047;
+        }
+        
+        .comparison-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .comparison-icon {
+            font-size: 24px;
+            min-width: 30px;
+        }
+        
+        .comparison-text {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
+        }
+        
+        .vs-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .vs-circle {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #FF9800, #F57C00);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4);
+        }
+        
+        /* Value Cards Section */
+        .value-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .value-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-left: 5px solid #43A047;
+            transition: transform 0.3s ease;
+        }
+        
+        .value-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .value-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .value-icon {
+            font-size: 36px;
+        }
+        
+        .value-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2E7D32;
+        }
+        
+        .value-description {
+            font-size: 15px;
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #2E7D32;
+            color: white;
+            padding: 20px 50px;
+            text-align: center;
+        }
+        
+        .footer-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .footer-stats {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            font-size: 16px;
+        }
+        
+        .footer-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <!-- Header -->
+        <div class="header">
+            <h1>🤖 AI Layer Value Proposition</h1>
+            <p>How AI Transforms the Farmer Experience in GramSetu</p>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Comparison Section -->
+            <div class="comparison-section">
+                <!-- Without AI -->
+                <div class="comparison-card without-ai">
+                    <div class="comparison-title">❌ Without AI Layer</div>
+                    
+                    <div class="comparison-item">
+                        <div class="comparison-icon">⏰</div>
+                        <div class="comparison-text">
+                            <strong>Wait for Extension Officers:</strong> Days or weeks for expert advice
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <div class="comparison-icon">📞</div>
+                        <div class="comparison-text">
+                            <strong>Limited Availability:</strong> Only during office hours (9 AM - 5 PM)
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <div class="comparison-icon">🗺️</div>
+                        <div class="comparison-text">
+                            <strong>Travel Required:</strong> Visit offices for information
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <div class="comparison-icon">📚</div>
+                        <div class="comparison-text">
+                            <strong>Generic Advice:</strong> One-size-fits-all recommendations
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <div class="comparison-icon">💸</div>
+                        <div class="comparison-text">
+                            <strong>Middleman Exploitation:</strong> No direct access to market prices
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <div class="comparison-icon">🌾</div>
+                        <div class="comparison-text">
+                            <strong>Crop Loss:</strong> Late disease detection leads to major losses
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- VS Divider -->
+                <div class="vs-divider">
+                    <div class="vs-circle">VS</div>
+                </div>
+                
+                <!-- With AI -->
+                <div class="comparison-card with-ai">
+                    <div class="comparison-title">✅ With AI Layer</div>
+                    
+                    <div class="comparison-item">
+                        <div class="comparison-icon">⚡</div>
+                        <div class="comparison-text">
+                            <strong>Instant Expert Advice:</strong> Get answers in seconds, not days
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <div class="comparison-icon">🕐</div>
+                        <div class="comparison-text">
+                            <strong>24/7 Availability:</strong> Help anytime, anywhere, even at midnight
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <div class="comparison-icon">📱</div>
+                        <div class="comparison-text">
+                            <strong>Mobile Access:</strong> All information at your fingertips
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <div class="comparison-icon">🎯</div>
+                        <div class="comparison-text">
+                            <strong>Personalized Guidance:</strong> Context-aware, crop-specific advice
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <div class="comparison-icon">💰</div>
+                        <div class="comparison-text">
+                            <strong>Fair Pricing:</strong> Real-time mandi prices for better negotiation
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <div class="comparison-icon">🔬</div>
+                        <div class="comparison-text">
+                            <strong>Early Detection:</strong> AI identifies diseases from photos instantly
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Value Cards -->
+            <div class="value-cards">
+                <div class="value-card">
+                    <div class="value-header">
+                        <div class="value-icon">🧠</div>
+                        <div class="value-title">Intelligent Understanding</div>
+                    </div>
+                    <div class="value-description">
+                        AI understands natural language queries in Hindi, Marathi, and English. Farmers can ask questions the way they naturally speak, without technical jargon.
+                    </div>
+                </div>
+                
+                <div class="value-card">
+                    <div class="value-header">
+                        <div class="value-icon">🎯</div>
+                        <div class="value-title">Context-Aware Responses</div>
+                    </div>
+                    <div class="value-description">
+                        AI remembers conversation history and provides relevant follow-up answers. It considers location, season, and crop type for personalized advice.
+                    </div>
+                </div>
+                
+                <div class="value-card">
+                    <div class="value-header">
+                        <div class="value-icon">🔍</div>
+                        <div class="value-title">Multi-Source Intelligence</div>
+                    </div>
+                    <div class="value-description">
+                        AI combines data from government schemes, market prices, weather forecasts, and disease databases to provide comprehensive answers.
+                    </div>
+                </div>
+                
+                <div class="value-card">
+                    <div class="value-header">
+                        <div class="value-icon">👁️</div>
+                        <div class="value-title">Visual Recognition</div>
+                    </div>
+                    <div class="value-description">
+                        AI analyzes crop photos to identify diseases, pests, and nutrient deficiencies. Provides specific treatment recommendations with product names and costs.
+                    </div>
+                </div>
+                
+                <div class="value-card">
+                    <div class="value-header">
+                        <div class="value-icon">📊</div>
+                        <div class="value-title">Data-Driven Insights</div>
+                    </div>
+                    <div class="value-description">
+                        AI analyzes historical price trends, weather patterns, and market demand to help farmers make informed decisions about planting and selling.
+                    </div>
+                </div>
+                
+                <div class="value-card">
+                    <div class="value-header">
+                        <div class="value-icon">🚀</div>
+                        <div class="value-title">Continuous Learning</div>
+                    </div>
+                    <div class="value-description">
+                        AI improves over time by learning from interactions, new data sources, and farmer feedback. Gets smarter with every conversation.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-title">🌾 AI-Powered Impact: Transforming Rural Agriculture</div>
+            <div class="footer-stats">
+                <div class="footer-stat">⚡ Instant responses vs days of waiting</div>
+                <div class="footer-stat">💰 Better prices through market transparency</div>
+                <div class="footer-stat">🌾 Reduced crop losses with early detection</div>
+                <div class="footer-stat">📱 Accessible 24/7 from anywhere</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramSetu - Implementation Cost Estimate</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .slide {
+            width: 1920px;
+            height: 1080px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
+            padding: 25px 40px;
+            color: white;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 52px;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 22px;
+            opacity: 0.95;
+        }
+        
+        /* Main Content */
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 40px;
+            flex: 1;
+            background: #f5f7fa;
+        }
+        
+        /* Left Column - Cost Breakdown */
+        .cost-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .section-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2E7D32;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .cost-item {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid;
+            animation: slideIn 0.6s ease-out forwards;
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        
+        .cost-item:nth-child(2) { animation-delay: 0.2s; border-left-color: #667eea; }
+        .cost-item:nth-child(3) { animation-delay: 0.4s; border-left-color: #43A047; }
+        .cost-item:nth-child(4) { animation-delay: 0.6s; border-left-color: #F9A825; }
+        .cost-item:nth-child(5) { animation-delay: 0.8s; border-left-color: #E91E63; }
+        .cost-item:nth-child(6) { animation-delay: 1.0s; border-left-color: #9C27B0; }
+        .cost-item:nth-child(7) { animation-delay: 1.2s; border-left-color: #FF5722; }
+        
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .cost-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .cost-icon {
+            font-size: 32px;
+        }
+        
+        .cost-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .cost-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .cost-desc {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .cost-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2E7D32;
+            animation: countUp 1.5s ease-out forwards;
+        }
+        
+        /* Right Column - Summary */
+        .cost-summary {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        /* Total Cost Card */
+        .total-card {
+            background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(46, 125, 50, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .total-label {
+            font-size: 28px;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        
+        .total-amount {
+            font-size: 72px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .total-period {
+            font-size: 20px;
+            opacity: 0.85;
+        }
+        
+        /* Chart Visualization */
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            flex: 1;
+        }
+        
+        .chart-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .bar-label {
+            width: 120px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .bar-container {
+            flex: 1;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .bar-fill {
+            height: 100%;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            animation: fillBar 1.5s ease-out forwards;
+            width: 0;
+        }
+        
+        @keyframes fillBar {
+            to { width: var(--width); }
+        }
+        
+        .bar-fill.lambda { background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); }
+        .bar-fill.bedrock { background: linear-gradient(90deg, #43A047 0%, #66BB6A 100%); }
+        .bar-fill.storage { background: linear-gradient(90deg, #F9A825 0%, #FBC02D 100%); }
+        .bar-fill.network { background: linear-gradient(90deg, #E91E63 0%, #F06292 100%); }
+        .bar-fill.other { background: linear-gradient(90deg, #9C27B0 0%, #BA68C8 100%); }
+        
+        /* Notes Section */
+        .notes {
+            background: #fff3cd;
+            border-left: 5px solid #F9A825;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 10px;
+        }
+        
+        .notes-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .notes-list {
+            font-size: 14px;
+            color: #856404;
+            line-height: 1.6;
+            padding-left: 20px;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #2E7D32;
+            color: white;
+            padding: 15px 40px;
+            text-align: center;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <!-- Header -->
+        <div class="header">
+            <h1>💰 Implementation Cost Estimate</h1>
+            <p>AWS Infrastructure Monthly Operating Costs</p>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Left Column - Cost Breakdown -->
+            <div class="cost-breakdown">
+                <div class="section-title">
+                    <span>📊</span>
+                    <span>Service-wise Breakdown</span>
+                </div>
+                
+                <div class="cost-item">
+                    <div class="cost-label">
+                        <span class="cost-icon">⚡</span>
+                        <div class="cost-info">
+                            <div class="cost-name">AWS Lambda</div>
+                            <div class="cost-desc">Serverless compute (1000 req/day)</div>
+                        </div>
+                    </div>
+                    <div class="cost-amount">$5-10</div>
+                </div>
+                
+                <div class="cost-item">
+                    <div class="cost-label">
+                        <span class="cost-icon">🧠</span>
+                        <div class="cost-info">
+                            <div class="cost-name">AWS Bedrock</div>
+                            <div class="cost-desc">AI/ML foundation models</div>
+                        </div>
+                    </div>
+                    <div class="cost-amount">$10-20</div>
+                </div>
+                
+                <div class="cost-item">
+                    <div class="cost-label">
+                        <span class="cost-icon">💾</span>
+                        <div class="cost-info">
+                            <div class="cost-name">S3 + ECR</div>
+                            <div class="cost-desc">Storage & container registry</div>
+                        </div>
+                    </div>
+                    <div class="cost-amount">$1-2</div>
+                </div>
+                
+                <div class="cost-item">
+                    <div class="cost-label">
+                        <span class="cost-icon">🌐</span>
+                        <div class="cost-info">
+                            <div class="cost-name">CloudFront + API Gateway</div>
+                            <div class="cost-desc">CDN & API endpoints</div>
+                        </div>
+                    </div>
+                    <div class="cost-amount">$3-8</div>
+                </div>
+                
+                <div class="cost-item">
+                    <div class="cost-label">
+                        <span class="cost-icon">📊</span>
+                        <div class="cost-info">
+                            <div class="cost-name">CloudWatch</div>
+                            <div class="cost-desc">Monitoring & logging</div>
+                        </div>
+                    </div>
+                    <div class="cost-amount">$1-2</div>
+                </div>
+                
+                <div class="cost-item">
+                    <div class="cost-label">
+                        <span class="cost-icon">🔐</span>
+                        <div class="cost-info">
+                            <div class="cost-name">IAM + Cognito</div>
+                            <div class="cost-desc">Security & authentication</div>
+                        </div>
+                    </div>
+                    <div class="cost-amount">Free</div>
+                </div>
+            </div>
+            
+            <!-- Right Column - Summary -->
+            <div class="cost-summary">
+                <!-- Total Cost Card -->
+                <div class="total-card">
+                    <div class="total-label">💵 Estimated Monthly Cost</div>
+                    <div class="total-amount">$20-42</div>
+                    <div class="total-period">per month (moderate usage)</div>
+                </div>
+                
+                <!-- Chart Visualization -->
+                <div class="chart-container">
+                    <div class="chart-title">Cost Distribution</div>
+                    <div class="bar-chart">
+                        <div class="bar-item">
+                            <div class="bar-label">Lambda</div>
+                            <div class="bar-container">
+                                <div class="bar-fill lambda" style="--width: 25%;">25%</div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Bedrock AI</div>
+                            <div class="bar-container">
+                                <div class="bar-fill bedrock" style="--width: 50%;">50%</div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Storage</div>
+                            <div class="bar-container">
+                                <div class="bar-fill storage" style="--width: 5%;">5%</div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Network</div>
+                            <div class="bar-container">
+                                <div class="bar-fill network" style="--width: 15%;">15%</div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Monitoring</div>
+                            <div class="bar-container">
+                                <div class="bar-fill other" style="--width: 5%;">5%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Notes -->
+                <div class="notes">
+                    <div class="notes-title">
+                        <span>💡</span>
+                        <span>Important Notes</span>
+                    </div>
+                    <ul class="notes-list">
+                        <li>AWS Free Tier active for first 12 months</li>
+                        <li>Costs scale with usage (pay-as-you-go)</li>
+                        <li>Serverless architecture = no idle costs</li>
+                        <li>Estimated for 1000 requests/day</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            🌾 GramSetu - Cost-Effective Solution for Rural India | Powered by AWS Serverless Architecture
+        </div>
+    </div>
+</body>
+</html>

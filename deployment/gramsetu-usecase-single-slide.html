@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramSetu - Use Case Diagram (Single Slide)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .slide {
+            width: 1920px;
+            height: 1080px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
+            padding: 20px 40px;
+            color: white;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 20px;
+            opacity: 0.95;
+        }
+        
+        /* Main Diagram Area */
+        .diagram-area {
+            flex: 1;
+            position: relative;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
+            padding: 30px;
+        }
+        
+        /* System Boundary */
+        .system-boundary {
+            position: absolute;
+            left: 280px;
+            top: 40px;
+            right: 280px;
+            bottom: 40px;
+            border: 4px dashed #43A047;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.8);
+        }
+        
+        .system-label {
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2E7D32;
+            color: white;
+            padding: 8px 30px;
+            border-radius: 25px;
+            font-size: 22px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        /* Actor Styles */
+        .actor {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            z-index: 10;
+        }
+        
+        .actor-circle {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            border: 4px solid white;
+        }
+        
+        .actor-circle.external {
+            background: linear-gradient(135deg, #E91E63 0%, #C2185B 100%);
+        }
+        
+        .actor-label {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            background: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Use Case Styles */
+        .usecase {
+            position: absolute;
+            background: linear-gradient(135deg, #43A047 0%, #2E7D32 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            min-width: 180px;
+            border: 3px solid white;
+            z-index: 5;
+        }
+        
+        /* SVG for connection lines */
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .connection-line {
+            stroke: #999;
+            stroke-width: 2;
+            stroke-dasharray: 8, 4;
+            opacity: 0.6;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #2E7D32;
+            color: white;
+            padding: 12px 40px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <!-- Header -->
+        <div class="header">
+            <h1>🌾 GramSetu Use Case Diagram</h1>
+            <p>System Actors & User Interactions</p>
+        </div>
+        
+        <!-- Main Diagram Area -->
+        <div class="diagram-area">
+            <!-- SVG for connection lines -->
+            <svg>
+                <!-- Farmer to Use Cases -->
+                <line x1="180" y1="200" x2="450" y2="120" class="connection-line"/>
+                <line x1="180" y1="200" x2="450" y2="220" class="connection-line"/>
+                <line x1="180" y1="200" x2="450" y2="320" class="connection-line"/>
+                <line x1="180" y1="200" x2="450" y2="420" class="connection-line"/>
+                <line x1="180" y1="200" x2="450" y2="520" class="connection-line"/>
+                <line x1="180" y1="200" x2="450" y2="620" class="connection-line"/>
+                <line x1="180" y1="200" x2="450" y2="720" class="connection-line"/>
+                <line x1="180" y1="200" x2="450" y2="820" class="connection-line"/>
+                
+                <!-- External Systems to Use Cases -->
+                <line x1="1640" y1="150" x2="1200" y2="120" class="connection-line"/>
+                <line x1="1640" y1="350" x2="1200" y2="220" class="connection-line"/>
+                <line x1="1640" y1="550" x2="1200" y2="420" class="connection-line"/>
+                <line x1="1640" y1="750" x2="1200" y2="720" class="connection-line"/>
+            </svg>
+            
+            <!-- System Boundary -->
+            <div class="system-boundary">
+                <div class="system-label">GramSetu System</div>
+            </div>
+            
+            <!-- Primary Actor: Farmer (Left) -->
+            <div class="actor" style="left: 80px; top: 130px;">
+                <div class="actor-circle">👨‍🌾</div>
+                <div class="actor-label">Farmer<br>(Primary User)</div>
+            </div>
+            
+            <!-- Use Cases (Center) -->
+            <div class="usecase" style="left: 450px; top: 100px;">
+                🔬 Diagnose Crop Disease
+            </div>
+            
+            <div class="usecase" style="left: 450px; top: 200px;">
+                💰 Check Market Prices
+            </div>
+            
+            <div class="usecase" style="left: 450px; top: 300px;">
+                🌤️ Get Weather Forecast
+            </div>
+            
+            <div class="usecase" style="left: 450px; top: 400px;">
+                📋 Learn About Schemes
+            </div>
+            
+            <div class="usecase" style="left: 450px; top: 500px;">
+                🌱 Get Farming Advice
+            </div>
+            
+            <div class="usecase" style="left: 450px; top: 600px;">
+                💧 Plan Irrigation
+            </div>
+            
+            <div class="usecase" style="left: 450px; top: 700px;">
+                🏛️ Find Tourism Info
+            </div>
+            
+            <div class="usecase" style="left: 450px; top: 800px;">
+                📱 Access via Mobile/Web
+            </div>
+            
+            <!-- Secondary Use Cases (Right Center) -->
+            <div class="usecase" style="left: 1000px; top: 100px; background: linear-gradient(135deg, #00ACC1 0%, #0097A7 100%); font-size: 14px; min-width: 160px;">
+                📸 Upload Image
+            </div>
+            
+            <div class="usecase" style="left: 1000px; top: 200px; background: linear-gradient(135deg, #00ACC1 0%, #0097A7 100%); font-size: 14px; min-width: 160px;">
+                📊 Compare Prices
+            </div>
+            
+            <div class="usecase" style="left: 1000px; top: 300px; background: linear-gradient(135deg, #00ACC1 0%, #0097A7 100%); font-size: 14px; min-width: 160px;">
+                🌡️ View Forecast
+            </div>
+            
+            <div class="usecase" style="left: 1000px; top: 400px; background: linear-gradient(135deg, #00ACC1 0%, #0097A7 100%); font-size: 14px; min-width: 160px;">
+                📄 Download PDFs
+            </div>
+            
+            <div class="usecase" style="left: 1000px; top: 500px; background: linear-gradient(135deg, #00ACC1 0%, #0097A7 100%); font-size: 14px; min-width: 160px;">
+                🧪 Get Treatment
+            </div>
+            
+            <div class="usecase" style="left: 1000px; top: 600px; background: linear-gradient(135deg, #00ACC1 0%, #0097A7 100%); font-size: 14px; min-width: 160px;">
+                💬 Chat with AI
+            </div>
+            
+            <div class="usecase" style="left: 1000px; top: 700px; background: linear-gradient(135deg, #00ACC1 0%, #0097A7 100%); font-size: 14px; min-width: 160px;">
+                🌐 Switch Language
+            </div>
+            
+            <div class="usecase" style="left: 1000px; top: 800px; background: linear-gradient(135deg, #00ACC1 0%, #0097A7 100%); font-size: 14px; min-width: 160px;">
+                📜 View History
+            </div>
+            
+            <!-- External Actors (Right) -->
+            <div class="actor" style="right: 80px; top: 80px;">
+                <div class="actor-circle external">🧠</div>
+                <div class="actor-label">AWS Bedrock<br>(AI Service)</div>
+            </div>
+            
+            <div class="actor" style="right: 80px; top: 280px;">
+                <div class="actor-circle external">📊</div>
+                <div class="actor-label">Agmarknet<br>(Price API)</div>
+            </div>
+            
+            <div class="actor" style="right: 80px; top: 480px;">
+                <div class="actor-circle external">☁️</div>
+                <div class="actor-label">Weather<br>Service</div>
+            </div>
+            
+            <div class="actor" style="right: 80px; top: 680px;">
+                <div class="actor-circle external">💾</div>
+                <div class="actor-label">S3 Storage<br>(Data)</div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <strong>🌟 GramSetu Use Case Diagram</strong> | 
+            Primary Actor: Farmer | 8 Core Use Cases | 8 Extended Features | 4 External Systems
+        </div>
+    </div>
+</body>
+</html>

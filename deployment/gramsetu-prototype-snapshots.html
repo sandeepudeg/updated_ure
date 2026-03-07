@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramSetu - Prototype Snapshots</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .slide {
+            width: 1920px;
+            height: 1080px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
+            padding: 20px 40px;
+            color: white;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 20px;
+            opacity: 0.95;
+        }
+        
+        /* Main Content */
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 25px;
+            padding: 25px;
+            flex: 1;
+            background: #f5f7fa;
+        }
+        
+        /* Snapshot Container */
+        .snapshot-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .snapshot-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2E7D32;
+            margin-bottom: 10px;
+            padding-bottom: 6px;
+            border-bottom: 3px solid #43A047;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .snapshot-description {
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        
+        /* Mockup Frame */
+        .mockup-frame {
+            flex: 1;
+            background: #f9f9f9;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        /* Browser Bar */
+        .browser-bar {
+            background: #e0e0e0;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .browser-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+        
+        .url-bar {
+            flex: 1;
+            background: white;
+            padding: 4px 12px;
+            border-radius: 5px;
+            font-size: 11px;
+            color: #666;
+        }
+        
+        /* Interface Content */
+        .interface-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        }
+        
+        /* Top Bar */
+        .top-bar {
+            background: linear-gradient(to right, #2e7d32, #00695c);
+            color: white;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logo-icon {
+            font-size: 24px;
+        }
+        
+        .logo-text {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .language-selector {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        /* Agents Section */
+        .agents-section {
+            padding: 12px 15px;
+            text-align: center;
+        }
+        
+        .agents-title {
+            font-size: 14px;
+            color: #2e7d32;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+        }
+        
+        .agent-card {
+            background: linear-gradient(135deg, #43A047, #66BB6A);
+            color: white;
+            padding: 8px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+        
+        .agent-card.disease { background: linear-gradient(135deg, #E53935, #EF5350); }
+        .agent-card.market { background: linear-gradient(135deg, #FB8C00, #FFA726); }
+        .agent-card.policy { background: linear-gradient(135deg, #1E88E5, #42A5F5); }
+        .agent-card.weather { background: linear-gradient(135deg, #00ACC1, #26C6DA); }
+        .agent-card.tourism { background: linear-gradient(135deg, #8E24AA, #AB47BC); }
+        
+        .agent-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        .agent-name {
+            font-weight: bold;
+            font-size: 9px;
+        }
+        
+        /* Chat Area */
+        .chat-area {
+            flex: 1;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            background: white;
+            border-radius: 10px;
+            padding: 12px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .message {
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            max-width: 80%;
+            line-height: 1.4;
+        }
+        
+        .message.user {
+            background: #e3f2fd;
+            margin-left: auto;
+            text-align: right;
+        }
+        
+        .message.bot {
+            background: #e8f5e9;
+        }
+        
+        .message-label {
+            font-weight: bold;
+            margin-bottom: 3px;
+            font-size: 10px;
+            opacity: 0.8;
+        }
+        
+        .message-text {
+            color: #333;
+        }
+        
+        .chat-input-area {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .chat-input {
+            flex: 1;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 11px;
+            color: #999;
+        }
+        
+        .send-button {
+            background: #ff9800;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .upload-button {
+            background: #43A047;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+        }
+        
+        /* Annotation Arrows and Labels */
+        .annotation {
+            position: absolute;
+            background: #FFD700;
+            color: #333;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            z-index: 10;
+            border: 2px solid #FFA500;
+        }
+        
+        .annotation::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+        
+        .annotation.top::after {
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px 6px 0 6px;
+            border-color: #FFA500 transparent transparent transparent;
+        }
+        
+        .annotation.left::after {
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 6px 0 6px 8px;
+            border-color: transparent transparent transparent #FFA500;
+        }
+        
+        .annotation.right::after {
+            left: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 6px 8px 6px 0;
+            border-color: transparent #FFA500 transparent transparent;
+        }
+        
+        /* Mobile Mockup */
+        .mobile-mockup {
+            background: #333;
+            border-radius: 25px;
+            padding: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            max-width: 300px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .mobile-screen {
+            flex: 1;
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .mobile-header {
+            background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
+            color: white;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        .mobile-header h3 {
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        
+        .mobile-header p {
+            font-size: 9px;
+            opacity: 0.9;
+        }
+        
+        .mobile-content {
+            flex: 1;
+            background: #E8F5E9;
+            padding: 10px;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+        
+        .action-btn {
+            background: white;
+            padding: 8px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 9px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            border: 2px solid #43A047;
+        }
+        
+        .action-icon {
+            font-size: 18px;
+            margin-bottom: 3px;
+        }
+        
+        .mobile-chat {
+            background: white;
+            border-radius: 10px;
+            padding: 8px;
+            height: 150px;
+            overflow: hidden;
+        }
+        
+        .mobile-message {
+            background: #f0f0f0;
+            padding: 6px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+            font-size: 9px;
+        }
+        
+        .mobile-message.user {
+            background: #E8F5E9;
+            margin-left: 15px;
+        }
+        
+        .mobile-input {
+            background: white;
+            padding: 8px;
+            display: flex;
+            gap: 6px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .mobile-input-box {
+            flex: 1;
+            background: #f0f0f0;
+            border-radius: 15px;
+            padding: 6px 10px;
+            font-size: 9px;
+            color: #999;
+        }
+        
+        .mobile-send {
+            background: #43A047;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #2E7D32;
+            color: white;
+            padding: 12px 40px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <!-- Header -->
+        <div class="header">
+            <h1>🌾 GramSetu - Extended Prototype Snapshots</h1>
+            <p>6 Real-World Scenarios Showing What the AI Assistant Does for Farmers</p>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Snapshot 1: Main Chat Interface -->
+            <div class="snapshot-container">
+                <div class="snapshot-title">
+                    <span>💬</span>
+                    <span>Main Chat Interface - Mandi Price Query</span>
+                </div>
+                <div class="snapshot-description">
+                    Farmer asks about tomato prices in Nashik. The Market Expert agent provides real-time prices from multiple mandis with modal, min, and max values.
+                </div>
+                
+                <div class="mockup-frame">
+                    <div class="browser-bar">
+                        <div class="browser-dot dot-red"></div>
+                        <div class="browser-dot dot-yellow"></div>
+                        <div class="browser-dot dot-green"></div>
+                        <div class="url-bar">https://d3v7khazsfb4vd.cloudfront.net/gramsetu-agents.html</div>
+                    </div>
+                    
+                    <div class="interface-content">
+                        <div class="top-bar">
+                            <div class="logo-section">
+                                <div class="logo-icon">🌾</div>
+                                <div class="logo-text">GramSetu</div>
+                            </div>
+                            <div class="language-selector">English | हिंदी | मराठी</div>
+                        </div>
+                        
+                        <div class="agents-section">
+                            <div class="agents-title">Choose Your AI Assistant</div>
+                            <div class="agents-grid">
+                                <div class="agent-card">
+                                    <div class="agent-icon">🌱</div>
+                                    <div class="agent-name">Krishak Mitra</div>
+                                </div>
+                                <div class="agent-card disease">
+                                    <div class="agent-icon">🔬</div>
+                                    <div class="agent-name">Rog Nivaarak</div>
+                                </div>
+                                <div class="agent-card market">
+                                    <div class="agent-icon">💰</div>
+                                    <div class="agent-name">Bazaar Darshi</div>
+                                </div>
+                                <div class="agent-card policy">
+                                    <div class="agent-icon">📋</div>
+                                    <div class="agent-name">Sarkar Sahayak</div>
+                                </div>
+                                <div class="agent-card weather">
+                                    <div class="agent-icon">🌤️</div>
+                                    <div class="agent-name">Mausam Gyaata</div>
+                                </div>
+                                <div class="agent-card tourism">
+                                    <div class="agent-icon">🏞️</div>
+                                    <div class="agent-name">Krishi Bodh</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-area">
+                            <div class="chat-messages">
+                                <div class="message bot">
+                                    <div class="message-label">🤖 GramSetu</div>
+                                    <div class="message-text">Namaste! 🙏 I'm GramSetu, your AI assistant. How can I help you today?</div>
+                                </div>
+                                <div class="message user">
+                                    <div class="message-label">👨‍🌾 You</div>
+                                    <div class="message-text">What is the current price of tomato in Nashik?</div>
+                                </div>
+                                <div class="message bot">
+                                    <div class="message-label">💰 Bazaar Darshi (Market Expert)</div>
+                                    <div class="message-text">
+                                        <strong>Live Market Prices for Tomato in Nashik:</strong><br><br>
+                                        📍 <strong>Nashik Market</strong><br>
+                                        Modal Price: ₹2,100/quintal<br>
+                                        Min: ₹1,950/quintal | Max: ₹2,250/quintal<br><br>
+                                        📍 <strong>Lasalgaon Market</strong><br>
+                                        Modal Price: ₹2,050/quintal<br>
+                                        Min: ₹1,900/quintal | Max: ₹2,200/quintal<br><br>
+                                        📊 Source: Agmarknet (Live data)<br>
+                                        🕐 Updated: Today, 10:30 AM
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-input-area">
+                                <div class="upload-button">📷 Upload</div>
+                                <div class="chat-input">Type your question here...</div>
+                                <div class="send-button">📤 Send</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Annotations -->
+                    <div class="annotation top" style="top: 80px; left: 50%; transform: translateX(-50%);">
+                        6 Specialized AI Agents
+                    </div>
+                    <div class="annotation left" style="top: 280px; right: 10px;">
+                        Real-time Market Prices
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Snapshot 2: Disease Detection -->
+            <div class="snapshot-container">
+                <div class="snapshot-title">
+                    <span>🔬</span>
+                    <span>Crop Disease Detection with Image Upload</span>
+                </div>
+                <div class="snapshot-description">
+                    Farmer uploads a photo of diseased tomato plant. The AI analyzes the image and provides diagnosis with specific treatment recommendations and costs.
+                </div>
+                
+                <div class="mockup-frame">
+                    <div class="browser-bar">
+                        <div class="browser-dot dot-red"></div>
+                        <div class="browser-dot dot-yellow"></div>
+                        <div class="browser-dot dot-green"></div>
+                        <div class="url-bar">https://d3v7khazsfb4vd.cloudfront.net/gramsetu-agents.html</div>
+                    </div>
+                    
+                    <div class="interface-content">
+                        <div class="top-bar">
+                            <div class="logo-section">
+                                <div class="logo-icon">🌾</div>
+                                <div class="logo-text">GramSetu</div>
+                            </div>
+                            <div class="language-selector">English | हिंदी | मराठी</div>
+                        </div>
+                        
+                        <div class="agents-section">
+                            <div class="agents-title">Choose Your AI Assistant</div>
+                            <div class="agents-grid">
+                                <div class="agent-card">
+                                    <div class="agent-icon">🌱</div>
+                                    <div class="agent-name">Krishak Mitra</div>
+                                </div>
+                                <div class="agent-card disease">
+                                    <div class="agent-icon">🔬</div>
+                                    <div class="agent-name">Rog Nivaarak</div>
+                                </div>
+                                <div class="agent-card market">
+                                    <div class="agent-icon">💰</div>
+                                    <div class="agent-name">Bazaar Darshi</div>
+                                </div>
+                                <div class="agent-card policy">
+                                    <div class="agent-icon">📋</div>
+                                    <div class="agent-name">Sarkar Sahayak</div>
+                                </div>
+                                <div class="agent-card weather">
+                                    <div class="agent-icon">🌤️</div>
+                                    <div class="agent-name">Mausam Gyaata</div>
+                                </div>
+                                <div class="agent-card tourism">
+                                    <div class="agent-icon">🏞️</div>
+                                    <div class="agent-name">Krishi Bodh</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-area">
+                            <div class="chat-messages">
+                                <div class="message bot">
+                                    <div class="message-label">🤖 GramSetu</div>
+                                    <div class="message-text">Namaste! Upload a photo of your crop to check for diseases.</div>
+                                </div>
+                                <div class="message user">
+                                    <div class="message-label">👨‍🌾 You</div>
+                                    <div class="message-text">📷 [Image uploaded: tomato_plant.jpg]<br>What disease is this on my tomato plant?</div>
+                                </div>
+                                <div class="message bot">
+                                    <div class="message-label">🔬 Rog Nivaarak (Disease Expert)</div>
+                                    <div class="message-text">
+                                        <strong>🔍 Disease Identified: Early Blight</strong><br><br>
+                                        <strong>📋 Symptoms Detected:</strong><br>
+                                        • Dark brown spots with concentric rings<br>
+                                        • Yellowing around spots<br>
+                                        • Lower leaves affected<br><br>
+                                        <strong>🌿 Organic Treatment:</strong><br>
+                                        • Neem Oil 1500 ppm spray<br>
+                                        • Product: Neem Gold<br>
+                                        • Cost: ₹150-250 per bottle<br>
+                                        • Apply every 7 days<br><br>
+                                        <strong>⚗️ Chemical Treatment:</strong><br>
+                                        • Mancozeb 75% WP<br>
+                                        • Product: Dithane M-45<br>
+                                        • Cost: ₹180-300 per 500g<br>
+                                        • Dosage: 2g per liter<br><br>
+                                        <strong>🛡️ Prevention:</strong><br>
+                                        • Remove infected leaves<br>
+                                        • Improve air circulation<br>
+                                        • Avoid overhead watering
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-input-area">
+                                <div class="upload-button">📷 Upload</div>
+                                <div class="chat-input">Type your question here...</div>
+                                <div class="send-button">📤 Send</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Annotations -->
+                    <div class="annotation top" style="top: 200px; left: 20px;">
+                        Upload Crop Photo
+                    </div>
+                    <div class="annotation right" style="top: 320px; left: 10px;">
+                        AI-Powered Diagnosis
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Snapshot 3: Government Scheme Information -->
+            <div class="snapshot-container">
+                <div class="snapshot-title">
+                    <span>📋</span>
+                    <span>Government Scheme Eligibility & Benefits</span>
+                </div>
+                <div class="snapshot-description">
+                    Farmer inquires about PM-KISAN scheme. The Policy Expert provides detailed eligibility criteria, benefits, and application process.
+                </div>
+                
+                <div class="mockup-frame">
+                    <div class="browser-bar">
+                        <div class="browser-dot dot-red"></div>
+                        <div class="browser-dot dot-yellow"></div>
+                        <div class="browser-dot dot-green"></div>
+                        <div class="url-bar">https://d3v7khazsfb4vd.cloudfront.net/gramsetu-agents.html</div>
+                    </div>
+                    
+                    <div class="interface-content">
+                        <div class="top-bar">
+                            <div class="logo-section">
+                                <div class="logo-icon">🌾</div>
+                                <div class="logo-text">GramSetu</div>
+                            </div>
+                            <div class="language-selector">English | हिंदी | मराठी</div>
+                        </div>
+                        
+                        <div class="agents-section">
+                            <div class="agents-title">Choose Your AI Assistant</div>
+                            <div class="agents-grid">
+                                <div class="agent-card">
+                                    <div class="agent-icon">🌱</div>
+                                    <div class="agent-name">Krishak Mitra</div>
+                                </div>
+                                <div class="agent-card disease">
+                                    <div class="agent-icon">🔬</div>
+                                    <div class="agent-name">Rog Nivaarak</div>
+                                </div>
+                                <div class="agent-card market">
+                                    <div class="agent-icon">💰</div>
+                                    <div class="agent-name">Bazaar Darshi</div>
+                                </div>
+                                <div class="agent-card policy">
+                                    <div class="agent-icon">📋</div>
+                                    <div class="agent-name">Sarkar Sahayak</div>
+                                </div>
+                                <div class="agent-card weather">
+                                    <div class="agent-icon">🌤️</div>
+                                    <div class="agent-name">Mausam Gyaata</div>
+                                </div>
+                                <div class="agent-card tourism">
+                                    <div class="agent-icon">🏞️</div>
+                                    <div class="agent-name">Krishi Bodh</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-area">
+                            <div class="chat-messages">
+                                <div class="message user">
+                                    <div class="message-label">👨‍🌾 You</div>
+                                    <div class="message-text">Tell me about PM-KISAN scheme. Am I eligible?</div>
+                                </div>
+                                <div class="message bot">
+                                    <div class="message-label">📋 Sarkar Sahayak (Policy Expert)</div>
+                                    <div class="message-text">
+                                        <strong>🏛️ PM-KISAN Samman Nidhi Scheme</strong><br><br>
+                                        <strong>💰 Benefits:</strong><br>
+                                        • ₹6,000 per year direct to bank<br>
+                                        • Paid in 3 installments of ₹2,000<br>
+                                        • Every 4 months<br><br>
+                                        <strong>✅ Eligibility:</strong><br>
+                                        • Small & marginal farmers<br>
+                                        • Land holding up to 2 hectares<br>
+                                        • All farmer families eligible<br>
+                                        • No income limit<br><br>
+                                        <strong>📄 Required Documents:</strong><br>
+                                        • Aadhaar Card<br>
+                                        • Bank Account (Aadhaar linked)<br>
+                                        • Land ownership documents<br>
+                                        • Mobile number<br><br>
+                                        <strong>📝 How to Apply:</strong><br>
+                                        1. Visit pmkisan.gov.in<br>
+                                        2. Click "Farmer Corner"<br>
+                                        3. Select "New Farmer Registration"<br>
+                                        4. Enter Aadhaar & details<br>
+                                        5. Submit land records<br><br>
+                                        <strong>📞 Helpline:</strong> 155261 / 011-24300606
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-input-area">
+                                <div class="upload-button">📷 Upload</div>
+                                <div class="chat-input">Type your question here...</div>
+                                <div class="send-button">📤 Send</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Annotations -->
+                    <div class="annotation left" style="top: 280px; right: 10px;">
+                        Complete Scheme Details
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Snapshot 4: Mobile Interface -->
+            <div class="snapshot-container">
+                <div class="snapshot-title">
+                    <span>📱</span>
+                    <span>Mobile Interface - Touch-Optimized Design</span>
+                </div>
+                <div class="snapshot-description">
+                    Mobile-first design with bottom navigation, quick action buttons, and large touch targets for easy use in rural areas with limited connectivity.
+                </div>
+                
+                <div class="mockup-frame" style="background: #e0e0e0; display: flex; align-items: center; justify-content: center;">
+                    <div class="mobile-mockup">
+                        <div class="mobile-screen">
+                            <div class="mobile-header">
+                                <h3>🌾 GramSetu</h3>
+                                <p>AI-Powered Farming Assistant</p>
+                            </div>
+                            
+                            <div class="mobile-content">
+                                <div class="quick-actions">
+                                    <div class="action-btn">
+                                        <div class="action-icon">🔬</div>
+                                        <div>Disease Check</div>
+                                    </div>
+                                    <div class="action-btn">
+                                        <div class="action-icon">💰</div>
+                                        <div>Market Price</div>
+                                    </div>
+                                    <div class="action-btn">
+                                        <div class="action-icon">🌤️</div>
+                                        <div>Weather</div>
+                                    </div>
+                                    <div class="action-btn">
+                                        <div class="action-icon">📋</div>
+                                        <div>Schemes</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mobile-chat">
+                                    <div class="mobile-message">
+                                        <strong>🤖 GramSetu:</strong><br>
+                                        Namaste! How can I help?
+                                    </div>
+                                    <div class="mobile-message user">
+                                        <strong>You:</strong><br>
+                                        Tomato price in Nashik?
+                                    </div>
+                                    <div class="mobile-message">
+                                        <strong>💰 Market:</strong><br>
+                                        Nashik: ₹2,100/quintal<br>
+                                        Lasalgaon: ₹2,050/q
+                                    </div>
+                                    <div class="mobile-message user">
+                                        <strong>You:</strong><br>
+                                        [Image uploaded]
+                                    </div>
+                                    <div class="mobile-message">
+                                        <strong>🔬 Disease:</strong><br>
+                                        Early Blight detected<br>
+                                        Use Neem oil ₹150-250
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mobile-input">
+                                <div class="mobile-input-box">Type message...</div>
+                                <div class="mobile-send">📤</div>
+                            </div>
+                            
+                            <div style="background: #2E7D32; padding: 8px; display: flex; justify-content: space-around; color: white;">
+                                <div style="text-align: center; font-size: 9px;">
+                                    <div style="font-size: 16px;">🏠</div>
+                                    <div>Home</div>
+                                </div>
+                                <div style="text-align: center; font-size: 9px;">
+                                    <div style="font-size: 16px;">💬</div>
+                                    <div>Chat</div>
+                                </div>
+                                <div style="text-align: center; font-size: 9px;">
+                                    <div style="font-size: 16px;">📊</div>
+                                    <div>Prices</div>
+                                </div>
+                                <div style="text-align: center; font-size: 9px;">
+                                    <div style="font-size: 16px;">⚙️</div>
+                                    <div>Settings</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Annotations -->
+                    <div class="annotation top" style="top: 120px; left: 50%; transform: translateX(-50%);">
+                        Quick Action Buttons
+                    </div>
+                    <div class="annotation top" style="bottom: 80px; left: 50%; transform: translateX(-50%);">
+                        Bottom Navigation
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Snapshot 5: Weather Forecasting & Irrigation Advice -->
+            <div class="snapshot-container">
+                <div class="snapshot-title">
+                    <span>🌤️</span>
+                    <span>Weather Forecast & Irrigation Planning</span>
+                </div>
+                <div class="snapshot-description">
+                    Farmer checks weather forecast for next 7 days. Weather Expert provides detailed forecast with irrigation recommendations and alerts.
+                </div>
+                
+                <div class="mockup-frame">
+                    <div class="browser-bar">
+                        <div class="browser-dot dot-red"></div>
+                        <div class="browser-dot dot-yellow"></div>
+                        <div class="browser-dot dot-green"></div>
+                        <div class="url-bar">https://d3v7khazsfb4vd.cloudfront.net/gramsetu-agents.html</div>
+                    </div>
+                    
+                    <div class="interface-content">
+                        <div class="top-bar">
+                            <div class="logo-section">
+                                <div class="logo-icon">🌾</div>
+                                <div class="logo-text">GramSetu</div>
+                            </div>
+                            <div class="language-selector">English | हिंदी | मराठी</div>
+                        </div>
+                        
+                        <div class="agents-section">
+                            <div class="agents-title">Choose Your AI Assistant</div>
+                            <div class="agents-grid">
+                                <div class="agent-card">
+                                    <div class="agent-icon">🌱</div>
+                                    <div class="agent-name">Krishak Mitra</div>
+                                </div>
+                                <div class="agent-card disease">
+                                    <div class="agent-icon">🔬</div>
+                                    <div class="agent-name">Rog Nivaarak</div>
+                                </div>
+                                <div class="agent-card market">
+                                    <div class="agent-icon">💰</div>
+                                    <div class="agent-name">Bazaar Darshi</div>
+                                </div>
+                                <div class="agent-card policy">
+                                    <div class="agent-icon">📋</div>
+                                    <div class="agent-name">Sarkar Sahayak</div>
+                                </div>
+                                <div class="agent-card weather">
+                                    <div class="agent-icon">🌤️</div>
+                                    <div class="agent-name">Mausam Gyaata</div>
+                                </div>
+                                <div class="agent-card tourism">
+                                    <div class="agent-icon">🏞️</div>
+                                    <div class="agent-name">Krishi Bodh</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-area">
+                            <div class="chat-messages">
+                                <div class="message user">
+                                    <div class="message-label">👨‍🌾 You</div>
+                                    <div class="message-text">What's the weather forecast for next week in Nashik?</div>
+                                </div>
+                                <div class="message bot">
+                                    <div class="message-label">🌤️ Mausam Gyaata (Weather Expert)</div>
+                                    <div class="message-text">
+                                        <strong>📅 7-Day Weather Forecast - Nashik</strong><br><br>
+                                        <strong>Today:</strong> ☀️ Sunny, 32°C | Rain: 0%<br>
+                                        <strong>Tomorrow:</strong> ⛅ Partly Cloudy, 30°C | Rain: 10%<br>
+                                        <strong>Day 3-4:</strong> 🌧️ Rain Expected, 28°C | Rain: 70%<br>
+                                        <strong>Day 5-7:</strong> ☀️ Clear, 31°C | Rain: 5%<br><br>
+                                        <strong>💧 Irrigation Advice:</strong><br>
+                                        • Irrigate today or tomorrow morning<br>
+                                        • Skip irrigation on Day 3-4 (rain expected)<br>
+                                        • Resume irrigation on Day 5<br>
+                                        • Best time: 6-8 AM or 5-7 PM<br><br>
+                                        <strong>⚠️ Alerts:</strong><br>
+                                        • Heavy rain alert for Day 3<br>
+                                        • Avoid spraying pesticides Day 2-4<br>
+                                        • Good for sowing after Day 4
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-input-area">
+                                <div class="upload-button">📷 Upload</div>
+                                <div class="chat-input">Type your question here...</div>
+                                <div class="send-button">📤 Send</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Annotations -->
+                    <div class="annotation left" style="top: 280px; right: 10px;">
+                        7-Day Forecast + Irrigation Tips
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Snapshot 6: Rural Tourism Income Opportunity -->
+            <div class="snapshot-container">
+                <div class="snapshot-title">
+                    <span>🏞️</span>
+                    <span>Rural Tourism - Extra Income Opportunity</span>
+                </div>
+                <div class="snapshot-description">
+                    Farmer explores rural tourism opportunities. Tourism Expert provides guidance on starting agri-tourism, homestays, and potential earnings.
+                </div>
+                
+                <div class="mockup-frame">
+                    <div class="browser-bar">
+                        <div class="browser-dot dot-red"></div>
+                        <div class="browser-dot dot-yellow"></div>
+                        <div class="browser-dot dot-green"></div>
+                        <div class="url-bar">https://d3v7khazsfb4vd.cloudfront.net/gramsetu-agents.html</div>
+                    </div>
+                    
+                    <div class="interface-content">
+                        <div class="top-bar">
+                            <div class="logo-section">
+                                <div class="logo-icon">🌾</div>
+                                <div class="logo-text">GramSetu</div>
+                            </div>
+                            <div class="language-selector">English | हिंदी | मराठी</div>
+                        </div>
+                        
+                        <div class="agents-section">
+                            <div class="agents-title">Choose Your AI Assistant</div>
+                            <div class="agents-grid">
+                                <div class="agent-card">
+                                    <div class="agent-icon">🌱</div>
+                                    <div class="agent-name">Krishak Mitra</div>
+                                </div>
+                                <div class="agent-card disease">
+                                    <div class="agent-icon">🔬</div>
+                                    <div class="agent-name">Rog Nivaarak</div>
+                                </div>
+                                <div class="agent-card market">
+                                    <div class="agent-icon">💰</div>
+                                    <div class="agent-name">Bazaar Darshi</div>
+                                </div>
+                                <div class="agent-card policy">
+                                    <div class="agent-icon">📋</div>
+                                    <div class="agent-name">Sarkar Sahayak</div>
+                                </div>
+                                <div class="agent-card weather">
+                                    <div class="agent-icon">🌤️</div>
+                                    <div class="agent-name">Mausam Gyaata</div>
+                                </div>
+                                <div class="agent-card tourism">
+                                    <div class="agent-icon">🏞️</div>
+                                    <div class="agent-name">Krishi Bodh</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-area">
+                            <div class="chat-messages">
+                                <div class="message user">
+                                    <div class="message-label">👨‍🌾 You</div>
+                                    <div class="message-text">How can I earn extra income from my farm through tourism?</div>
+                                </div>
+                                <div class="message bot">
+                                    <div class="message-label">🏞️ Krishi Bodh (Tourism Expert)</div>
+                                    <div class="message-text">
+                                        <strong>🌟 Rural Tourism Opportunities</strong><br><br>
+                                        <strong>💰 Income Potential:</strong><br>
+                                        • Homestay: ₹15,000-₹40,000/month<br>
+                                        • Farm Tours: ₹500-₹1,000 per visitor<br>
+                                        • Organic Food Sales: ₹10,000-₹25,000/month<br>
+                                        • Cooking Classes: ₹2,000-₹5,000 per session<br><br>
+                                        <strong>🏡 What You Can Offer:</strong><br>
+                                        • Farm stay accommodation<br>
+                                        • Bullock cart rides<br>
+                                        • Traditional cooking experiences<br>
+                                        • Organic farming workshops<br>
+                                        • Village cultural tours<br><br>
+                                        <strong>📋 Getting Started:</strong><br>
+                                        1. Register with Maharashtra Tourism<br>
+                                        2. Basic amenities: Clean rooms, toilets<br>
+                                        3. List on Airbnb, Agri Tourism sites<br>
+                                        4. Initial investment: ₹50,000-₹1,50,000<br><br>
+                                        <strong>📞 Support:</strong> Agri Tourism Development Corp<br>
+                                        Phone: 022-22024627
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-input-area">
+                                <div class="upload-button">📷 Upload</div>
+                                <div class="chat-input">Type your question here...</div>
+                                <div class="send-button">📤 Send</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Annotations -->
+                    <div class="annotation left" style="top: 280px; right: 10px;">
+                        Income Diversification Guide
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <strong>🎯 GramSetu - 6 Prototype Snapshots</strong> | 
+            Live Demo: https://d3v7khazsfb4vd.cloudfront.net | 
+            API: https://8938dqxf33.execute-api.us-east-1.amazonaws.com/dev/query | 
+            Multi-Language: English, हिंदी, मराठी | 
+            6 AI Agents: Market, Disease, Policy, Weather, Agri, Tourism
+        </div>
+    </div>
+</body>
+</html>

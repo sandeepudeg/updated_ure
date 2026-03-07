@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramSetu - UI Wireframes & Mockups</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .slide {
+            width: 1920px;
+            height: 1080px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
+            padding: 20px 40px;
+            color: white;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 20px;
+            opacity: 0.95;
+        }
+        
+        /* Main Content */
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+            flex: 1;
+            background: #f5f7fa;
+        }
+        
+        /* Mockup Container */
+        .mockup-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .mockup-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2E7D32;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #43A047;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Desktop Mockup */
+        .desktop-mockup {
+            flex: 1;
+            background: #f9f9f9;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .browser-bar {
+            background: #e0e0e0;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .browser-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+        
+        .url-bar {
+            flex: 1;
+            background: white;
+            padding: 4px 12px;
+            border-radius: 5px;
+            font-size: 11px;
+            color: #666;
+        }
+        
+        .desktop-content {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 200px 1fr 200px;
+            background: #E8F5E9;
+        }
+        
+        .sidebar {
+            background: #2E7D32;
+            color: white;
+            padding: 15px 10px;
+        }
+        
+        .sidebar-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .agent-item {
+            background: rgba(255,255,255,0.1);
+            padding: 8px;
+            margin-bottom: 6px;
+            border-radius: 6px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .chat-area {
+            background: white;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+        }
+        
+        .chat-header {
+            background: #43A047;
+            color: white;
+            padding: 10px;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            background: #f9f9f9;
+            padding: 10px;
+            overflow: hidden;
+        }
+        
+        .message {
+            background: white;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            border-left: 3px solid #43A047;
+        }
+        
+        .message.user {
+            background: #E8F5E9;
+            border-left-color: #2E7D32;
+            margin-left: 20px;
+        }
+        
+        .chat-input {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 0 0 8px 8px;
+            display: flex;
+            gap: 8px;
+        }
+        
+        .input-box {
+            flex: 1;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 11px;
+            color: #999;
+        }
+        
+        .send-btn {
+            background: #43A047;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        
+        .info-panel {
+            background: #FFF9E6;
+            padding: 15px 10px;
+        }
+        
+        .info-section {
+            margin-bottom: 12px;
+        }
+        
+        .info-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #F57F17;
+            margin-bottom: 6px;
+        }
+        
+        .info-item {
+            background: white;
+            padding: 6px;
+            margin-bottom: 4px;
+            border-radius: 4px;
+            font-size: 10px;
+            color: #666;
+        }
+        
+        /* Mobile Mockup */
+        .mobile-mockup {
+            flex: 1;
+            background: #333;
+            border-radius: 30px;
+            padding: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            max-width: 350px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .mobile-screen {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .mobile-header {
+            background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .mobile-header h3 {
+            font-size: 16px;
+            margin-bottom: 3px;
+        }
+        
+        .mobile-header p {
+            font-size: 10px;
+            opacity: 0.9;
+        }
+        
+        .mobile-content {
+            flex: 1;
+            background: #E8F5E9;
+            padding: 12px;
+            overflow: hidden;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .action-btn {
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 2px solid #43A047;
+        }
+        
+        .action-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        .mobile-chat {
+            background: white;
+            border-radius: 12px;
+            padding: 10px;
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .mobile-message {
+            background: #f0f0f0;
+            padding: 8px;
+            margin-bottom: 6px;
+            border-radius: 8px;
+            font-size: 10px;
+        }
+        
+        .mobile-message.user {
+            background: #E8F5E9;
+            margin-left: 20px;
+        }
+        
+        .mobile-input {
+            background: white;
+            padding: 10px;
+            display: flex;
+            gap: 8px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .mobile-input-box {
+            flex: 1;
+            background: #f0f0f0;
+            border-radius: 20px;
+            padding: 8px 12px;
+            font-size: 10px;
+            color: #999;
+        }
+        
+        .mobile-send {
+            background: #43A047;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        
+        .mobile-nav {
+            background: #2E7D32;
+            padding: 10px;
+            display: flex;
+            justify-content: space-around;
+        }
+        
+        .nav-item {
+            color: white;
+            text-align: center;
+            font-size: 10px;
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #2E7D32;
+            color: white;
+            padding: 12px 40px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <!-- Header -->
+        <div class="header">
+            <h1>🌾 GramSetu UI Wireframes & Mockups</h1>
+            <p>Desktop & Mobile Interface Design</p>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Desktop Mockup -->
+            <div class="mockup-container">
+                <div class="mockup-title">
+                    <span>🖥️</span>
+                    <span>Desktop Interface (3-Column Layout)</span>
+                </div>
+                
+                <div class="desktop-mockup">
+                    <!-- Browser Bar -->
+                    <div class="browser-bar">
+                        <div class="browser-dot dot-red"></div>
+                        <div class="browser-dot dot-yellow"></div>
+                        <div class="browser-dot dot-green"></div>
+                        <div class="url-bar">https://d3v7khazsfb4vd.cloudfront.net/gramsetu-agents.html</div>
+                    </div>
+                    
+                    <!-- Desktop Content -->
+                    <div class="desktop-content">
+                        <!-- Left Sidebar -->
+                        <div class="sidebar">
+                            <div class="sidebar-title">🤖 AI Agents</div>
+                            <div class="agent-item">🌱 Agri Expert</div>
+                            <div class="agent-item">💰 Market Expert</div>
+                            <div class="agent-item">🌤️ Weather Expert</div>
+                            <div class="agent-item">📋 Policy Expert</div>
+                            <div class="agent-item">🏛️ Tourism Expert</div>
+                            
+                            <div class="sidebar-title" style="margin-top: 15px;">⚡ Quick Actions</div>
+                            <div class="agent-item">🔬 Disease Check</div>
+                            <div class="agent-item">💵 Price Check</div>
+                            <div class="agent-item">🌡️ Weather</div>
+                        </div>
+                        
+                        <!-- Center Chat Area -->
+                        <div class="chat-area">
+                            <div class="chat-header">
+                                💬 Chat with GramSetu AI Assistant
+                            </div>
+                            <div class="chat-messages">
+                                <div class="message">
+                                    <strong>🤖 GramSetu:</strong> Namaste! How can I help you today?
+                                </div>
+                                <div class="message user">
+                                    <strong>👨‍🌾 You:</strong> What is the price of tomato in Nashik?
+                                </div>
+                                <div class="message">
+                                    <strong>💰 Market Expert:</strong> Live Market Prices for Tomato in Nashik:<br>
+                                    1. Nashik Market: ₹2,100/quintal<br>
+                                    2. Lasalgaon Market: ₹2,050/quintal<br>
+                                    Source: Agmarknet (Live data)
+                                </div>
+                                <div class="message user">
+                                    <strong>👨‍🌾 You:</strong> Show me disease on my tomato plant [image]
+                                </div>
+                                <div class="message">
+                                    <strong>🌱 Agri Expert:</strong> Based on the image analysis:<br>
+                                    Problem: Early Blight detected<br>
+                                    Treatment: Neem oil 1500 ppm<br>
+                                    Cost: ₹150-250 per bottle
+                                </div>
+                            </div>
+                            <div class="chat-input">
+                                <div class="input-box">Type your question here...</div>
+                                <div class="send-btn">📤 Send</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Info Panel -->
+                        <div class="info-panel">
+                            <div class="info-section">
+                                <div class="info-title">📍 Location</div>
+                                <div class="info-item">Nashik, Maharashtra</div>
+                            </div>
+                            
+                            <div class="info-section">
+                                <div class="info-title">🌤️ Weather</div>
+                                <div class="info-item">28°C, Partly Cloudy</div>
+                                <div class="info-item">Rain: 20% chance</div>
+                            </div>
+                            
+                            <div class="info-section">
+                                <div class="info-title">💰 Top Prices</div>
+                                <div class="info-item">Tomato: ₹2,100/q</div>
+                                <div class="info-item">Onion: ₹1,800/q</div>
+                                <div class="info-item">Wheat: ₹2,500/q</div>
+                            </div>
+                            
+                            <div class="info-section">
+                                <div class="info-title">🌐 Language</div>
+                                <div class="info-item">English | हिंदी | मराठी</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile Mockup -->
+            <div class="mockup-container">
+                <div class="mockup-title">
+                    <span>📱</span>
+                    <span>Mobile Interface (Touch-Optimized)</span>
+                </div>
+                
+                <div class="mobile-mockup">
+                    <div class="mobile-screen">
+                        <!-- Mobile Header -->
+                        <div class="mobile-header">
+                            <h3>🌾 GramSetu</h3>
+                            <p>AI-Powered Farming Assistant</p>
+                        </div>
+                        
+                        <!-- Mobile Content -->
+                        <div class="mobile-content">
+                            <!-- Quick Actions -->
+                            <div class="quick-actions">
+                                <div class="action-btn">
+                                    <div class="action-icon">🔬</div>
+                                    <div>Disease Check</div>
+                                </div>
+                                <div class="action-btn">
+                                    <div class="action-icon">💰</div>
+                                    <div>Market Price</div>
+                                </div>
+                                <div class="action-btn">
+                                    <div class="action-icon">🌤️</div>
+                                    <div>Weather</div>
+                                </div>
+                                <div class="action-btn">
+                                    <div class="action-icon">📋</div>
+                                    <div>Schemes</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Mobile Chat -->
+                            <div class="mobile-chat">
+                                <div class="mobile-message">
+                                    <strong>🤖 GramSetu:</strong><br>
+                                    Namaste! How can I help?
+                                </div>
+                                <div class="mobile-message user">
+                                    <strong>You:</strong><br>
+                                    Tomato price in Nashik?
+                                </div>
+                                <div class="mobile-message">
+                                    <strong>💰 Market:</strong><br>
+                                    Nashik: ₹2,100/quintal<br>
+                                    Lasalgaon: ₹2,050/q
+                                </div>
+                                <div class="mobile-message user">
+                                    <strong>You:</strong><br>
+                                    [Image uploaded]
+                                </div>
+                                <div class="mobile-message">
+                                    <strong>🌱 Agri:</strong><br>
+                                    Early Blight detected<br>
+                                    Use Neem oil ₹150-250
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Mobile Input -->
+                        <div class="mobile-input">
+                            <div class="mobile-input-box">Type message...</div>
+                            <div class="mobile-send">📤</div>
+                        </div>
+                        
+                        <!-- Mobile Navigation -->
+                        <div class="mobile-nav">
+                            <div class="nav-item">
+                                <div class="nav-icon">🏠</div>
+                                <div>Home</div>
+                            </div>
+                            <div class="nav-item">
+                                <div class="nav-icon">💬</div>
+                                <div>Chat</div>
+                            </div>
+                            <div class="nav-item">
+                                <div class="nav-icon">📊</div>
+                                <div>Prices</div>
+                            </div>
+                            <div class="nav-item">
+                                <div class="nav-icon">⚙️</div>
+                                <div>Settings</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <strong>🎨 GramSetu UI Design</strong> | 
+            Desktop: 3-Column Layout with Sidebar Navigation | 
+            Mobile: Bottom Navigation with Quick Actions | 
+            Responsive & Touch-Optimized
+        </div>
+    </div>
+</body>
+</html>

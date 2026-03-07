@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramSetu - Detailed Architecture Diagram</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .diagram-container {
+            width: 1800px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 48px;
+            color: #2E7D32;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 24px;
+            color: #666;
+        }
+        
+        .architecture {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .layer {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 6px solid #43A047;
+        }
+        
+        .layer-title {
+            font-size: 28px;
+            color: #2E7D32;
+            margin-bottom: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .layer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .component {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 2px solid #e0e0e0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .component:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .component-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .component-icon {
+            font-size: 32px;
+        }
+        
+        .component-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .component-desc {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        
+        .component-details {
+            background: #f5f7fa;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+        
+        .component-details div {
+            margin: 5px 0;
+            color: #555;
+        }
+        
+        .component-details strong {
+            color: #2E7D32;
+        }
+        
+        .flow-arrows {
+            text-align: center;
+            font-size: 36px;
+            color: #43A047;
+            margin: -10px 0;
+        }
+        
+        .layer.presentation { border-left-color: #667eea; }
+        .layer.application { border-left-color: #43A047; }
+        .layer.compute { border-left-color: #E91E63; }
+        .layer.ai-agents { border-left-color: #9C27B0; }
+        .layer.services { border-left-color: #00ACC1; }
+        .layer.data { border-left-color: #F9A825; }
+    </style>
+</head>
+<body>
+    <div class="diagram-container">
+        <div class="header">
+            <h1>🏗️ GramSetu Architecture Diagram</h1>
+            <p>Complete System Architecture - Layered View</p>
+        </div>
+        
+        <div class="architecture">
+            <!-- Layer 1: Presentation Layer -->
+            <div class="layer presentation">
+                <div class="layer-title">
+                    <span>📱</span>
+                    <span>Layer 1: Presentation Layer (Client Side)</span>
+                </div>
+                <div class="layer-content">
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">🖥️</div>
+                            <div class="component-title">Desktop Web UI</div>
+                        </div>
+                        <div class="component-desc">
+                            Full-featured interface with sidebar, agent cards, and chat
+                        </div>
+                        <div class="component-details">
+                            <div><strong>File:</strong> gramsetu-agents.html</div>
+                            <div><strong>Features:</strong> 3-column layout, agent discovery</div>
+                            <div><strong>Tech:</strong> HTML5, CSS3, JavaScript</div>
+                        </div>
+                    </div>
+                    
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">📱</div>
+                            <div class="component-title">Mobile Web UI</div>
+                        </div>
+                        <div class="component-desc">
+                            Mobile-first responsive design optimized for rural connectivity
+                        </div>
+                        <div class="component-details">
+                            <div><strong>File:</strong> gramsetu-mobile.html</div>
+                            <div><strong>Features:</strong> Bottom nav, touch-optimized</div>
+                            <div><strong>Network:</strong> Works on 2G/3G</div>
+                        </div>
+                    </div>
+                    
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">🌐</div>
+                            <div class="component-title">Language Support</div>
+                        </div>
+                        <div class="component-desc">
+                            Multi-language interface for better accessibility
+                        </div>
+                        <div class="component-details">
+                            <div><strong>Languages:</strong> English, Hindi, Marathi</div>
+                            <div><strong>Processing:</strong> Natural Language</div>
+                            <div><strong>Context:</strong> Location-aware</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrows">↓ HTTPS Request ↓</div>
+            
+            <!-- Layer 2: CDN & API Gateway -->
+            <div class="layer application">
+                <div class="layer-title">
+                    <span>🚪</span>
+                    <span>Layer 2: Application Gateway Layer</span>
+                </div>
+                <div class="layer-content">
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">☁️</div>
+                            <div class="component-title">CloudFront CDN</div>
+                        </div>
+                        <div class="component-desc">
+                            Global content delivery network for fast UI loading
+                        </div>
+                        <div class="component-details">
+                            <div><strong>Distribution:</strong> E354ZTACSUHKWS</div>
+                            <div><strong>Origin:</strong> S3 Bucket</div>
+                            <div><strong>Cache:</strong> 24-hour TTL</div>
+                            <div><strong>Protocol:</strong> HTTPS only</div>
+                        </div>
+                    </div>
+                    
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">🚪</div>
+                            <div class="component-title">API Gateway</div>
+                        </div>
+                        <div class="component-desc">
+                            HTTP API for Lambda function invocation
+                        </div>
+                        <div class="component-details">
+                            <div><strong>Type:</strong> HTTP API (v2)</div>
+                            <div><strong>Endpoint:</strong> /dev/query</div>
+                            <div><strong>Method:</strong> POST</div>
+                            <div><strong>CORS:</strong> Enabled</div>
+                        </div>
+                    </div>
+                    
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">💾</div>
+                            <div class="component-title">S3 Storage</div>
+                        </div>
+                        <div class="component-desc">
+                            Static website hosting and data storage
+                        </div>
+                        <div class="component-details">
+                            <div><strong>Bucket:</strong> ure-mvp-data</div>
+                            <div><strong>Content:</strong> Web UI, PDFs, CSVs</div>
+                            <div><strong>Encryption:</strong> AES256</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrows">↓ Lambda Invocation ↓</div>
+            
+            <!-- Layer 3: Compute Layer -->
+            <div class="layer compute">
+                <div class="layer-title">
+                    <span>⚡</span>
+                    <span>Layer 3: Compute Layer (Serverless)</span>
+                </div>
+                <div class="layer-content">
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">⚡</div>
+                            <div class="component-title">AWS Lambda</div>
+                        </div>
+                        <div class="component-desc">
+                            Serverless compute running Docker container
+                        </div>
+                        <div class="component-details">
+                            <div><strong>Function:</strong> ure-mvp-handler-docker</div>
+                            <div><strong>Runtime:</strong> Docker (Python 3.11)</div>
+                            <div><strong>Memory:</strong> 1024 MB</div>
+                            <div><strong>Timeout:</strong> 300 seconds</div>
+                        </div>
+                    </div>
+                    
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">🐳</div>
+                            <div class="component-title">Docker Container</div>
+                        </div>
+                        <div class="component-desc">
+                            Containerized application with all dependencies
+                        </div>
+                        <div class="component-details">
+                            <div><strong>Base:</strong> AWS Lambda Python 3.11</div>
+                            <div><strong>Size:</strong> ~500 MB</div>
+                            <div><strong>Registry:</strong> ECR</div>
+                            <div><strong>Framework:</strong> Strands AI</div>
+                        </div>
+                    </div>
+                    
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">📊</div>
+                            <div class="component-title">CloudWatch</div>
+                        </div>
+                        <div class="component-desc">
+                            Logging, monitoring, and metrics collection
+                        </div>
+                        <div class="component-details">
+                            <div><strong>Logs:</strong> /aws/lambda/ure-mvp</div>
+                            <div><strong>Retention:</strong> 7 days</div>
+                            <div><strong>Metrics:</strong> Duration, Errors, Invocations</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrows">↓ Agent Routing ↓</div>
+            
+            <!-- Layer 4: AI Agents Layer -->
+            <div class="layer ai-agents">
+                <div class="layer-title">
+                    <span>🤖</span>
+                    <span>Layer 4: AI Agents Layer (Multi-Agent System)</span>
+                </div>
+                <div class="layer-content">
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">🎯</div>
+                            <div class="component-title">Supervisor Agent</div>
+                        </div>
+                        <div class="component-desc">
+                            Orchestrates queries and routes to specialist agents
+                        </div>
+                        <div class="component-details">
+                            <div><strong>File:</strong> supervisor_simple.py</div>
+                            <div><strong>Role:</strong> Query analysis & routing</div>
+                            <div><strong>Tools:</strong> get_market_prices</div>
+                        </div>
+                    </div>
+                    
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">🌱</div>
+                            <div class="component-title">Agri Expert Agent</div>
+                        </div>
+                        <div class="component-desc">
+                            Crop disease diagnosis and treatment recommendations
+                        </div>
+                        <div class="component-details">
+                            <div><strong>File:</strong> agri_expert.py</div>
+                            <div><strong>Specialty:</strong> Disease detection, treatments</div>
+                            <div><strong>Input:</strong> Text + Images</div>
+                        </div>
+                    </div>
+                    
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">💰</div>
+                            <div class="component-title">Market Expert Agent</div>
+                        </div>
+                        <div class="component-desc">
+                            Real-time market prices and mandi information
+                        </div>
+                        <div class="component-details">
+                            <div><strong>File:</strong> market_expert.py</div>
+                            <div><strong>Specialty:</strong> Price analysis, trends</div>
+                            <div><strong>Data:</strong> Live + Historical</div>
+                        </div>
+                    </div>
+                    
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">🌤️</div>
+                            <div class="component-title">Weather Expert Agent</div>
+                        </div>
+                        <div class="component-desc">
+                            Weather forecasts and climate-based farming advice
+                        </div>
+                        <div class="component-details">
+                            <div><strong>File:</strong> weather_expert.py</div>
+                            <div><strong>Specialty:</strong> 7-day forecast, irrigation</div>
+                            <div><strong>Location:</strong> District-specific</div>
+                        </div>
+                    </div>
+                    
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">📋</div>
+                            <div class="component-title">Policy Expert Agent</div>
+                        </div>
+                        <div class="component-desc">
+                            Government schemes, subsidies, and eligibility info
+                        </div>
+                        <div class="component-details">
+                            <div><strong>File:</strong> policy_expert.py</div>
+                            <div><strong>Specialty:</strong> PM-Kisan, PMFBY, PMKSY</div>
+                            <div><strong>Source:</strong> Government PDFs</div>
+                        </div>
+                    </div>
+                    
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">🏛️</div>
+                            <div class="component-title">Tourism Expert Agent</div>
+                        </div>
+                        <div class="component-desc">
+                            Rural tourism opportunities and agri-tourism info
+                        </div>
+                        <div class="component-details">
+                            <div><strong>File:</strong> tourism_expert.py</div>
+                            <div><strong>Specialty:</strong> Local attractions, agri-tourism</div>
+                            <div><strong>Region:</strong> Maharashtra focus</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrows">↓ External API Calls ↓</div>
+            
+            <!-- Layer 5: External Services -->
+            <div class="layer services">
+                <div class="layer-title">
+                    <span>🔌</span>
+                    <span>Layer 5: External Services & AI Layer</span>
+                </div>
+                <div class="layer-content">
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">🧠</div>
+                            <div class="component-title">AWS Bedrock</div>
+                        </div>
+                        <div class="component-desc">
+                            Foundation model for AI-powered responses
+                        </div>
+                        <div class="component-details">
+                            <div><strong>Model:</strong> Amazon Nova Lite v1.0</div>
+                            <div><strong>Capabilities:</strong> Text + Image analysis</div>
+                            <div><strong>Temperature:</strong> 0.7</div>
+                        </div>
+                    </div>
+                    
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">📊</div>
+                            <div class="component-title">Agmarknet API</div>
+                        </div>
+                        <div class="component-desc">
+                            Live market prices from data.gov.in
+                        </div>
+                        <div class="component-details">
+                            <div><strong>Source:</strong> data.gov.in</div>
+                            <div><strong>Data:</strong> Real-time mandi prices</div>
+                            <div><strong>Coverage:</strong> All India</div>
+                        </div>
+                    </div>
+                    
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">🌡️</div>
+                            <div class="component-title">Weather API</div>
+                        </div>
+                        <div class="component-desc">
+                            Weather forecasts and climate data
+                        </div>
+                        <div class="component-details">
+                            <div><strong>Provider:</strong> Weather service</div>
+                            <div><strong>Forecast:</strong> 7-day prediction</div>
+                            <div><strong>Data:</strong> Temp, rainfall, humidity</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrows">↓ Data Access ↓</div>
+            
+            <!-- Layer 6: Data Layer -->
+            <div class="layer data">
+                <div class="layer-title">
+                    <span>💾</span>
+                    <span>Layer 6: Data Storage Layer</span>
+                </div>
+                <div class="layer-content">
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">📄</div>
+                            <div class="component-title">Government Schemes</div>
+                        </div>
+                        <div class="component-desc">
+                            PDF documents with scheme details
+                        </div>
+                        <div class="component-details">
+                            <div><strong>Location:</strong> data/government_schemes/</div>
+                            <div><strong>Files:</strong> 8 scheme PDFs</div>
+                            <div><strong>Content:</strong> Guidelines, eligibility</div>
+                        </div>
+                    </div>
+                    
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">📈</div>
+                            <div class="component-title">Market Price Data</div>
+                        </div>
+                        <div class="component-desc">
+                            Historical market price CSV for fallback
+                        </div>
+                        <div class="component-details">
+                            <div><strong>Location:</strong> data/mandi_prices/</div>
+                            <div><strong>File:</strong> Agriculture_price_dataset.csv</div>
+                            <div><strong>Usage:</strong> API fallback</div>
+                        </div>
+                    </div>
+                    
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">🖼️</div>
+                            <div class="component-title">Disease Dataset</div>
+                        </div>
+                        <div class="component-desc">
+                            PlantVillage dataset for disease reference
+                        </div>
+                        <div class="component-details">
+                            <div><strong>Location:</strong> data/plantvillage/</div>
+                            <div><strong>Images:</strong> Training & validation sets</div>
+                            <div><strong>Classes:</strong> 38 disease categories</div>
+                        </div>
+                    </div>
+                    
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">🗺️</div>
+                            <div class="component-title">Tourism Data</div>
+                        </div>
+                        <div class="component-desc">
+                            Regional tourism information JSON
+                        </div>
+                        <div class="component-details">
+                            <div><strong>Location:</strong> data/tourism/</div>
+                            <div><strong>File:</strong> maharashtra_nashik_tourism.json</div>
+                            <div><strong>Content:</strong> Attractions, agri-tourism</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

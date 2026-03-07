@@ -1,0 +1,21 @@
+{
+  "performanceScore": 50.0,
+  "lambda": {},
+  "web": {
+    "contentLength": 60543,
+    "loadTime": 784,
+    "statusCode": 200
+  },
+  "maxScore": 100,
+  "timestamp": "2026-03-06 22:37:22",
+  "api": {
+    "minResponseTime": 4121.0,
+    "totalTests": 10,
+    "avgResponseTime": 5995.0,
+    "maxResponseTime": 14046.0,
+    "successRate": 100.0
+  },
+  "cloudwatch": {
+    "recentLogStreams": 2
+  }
+}

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramSetu - Use Case Diagram</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .diagram-container {
+            width: 1600px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 48px;
+            color: #2E7D32;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 24px;
+            color: #666;
+        }
+        
+        .usecase-diagram {
+            position: relative;
+            height: 900px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
+            border-radius: 20px;
+            border: 3px solid #2E7D32;
+            padding: 40px;
+        }
+        
+        .system-boundary {
+            position: absolute;
+            left: 300px;
+            top: 50px;
+            right: 50px;
+            bottom: 50px;
+            border: 3px dashed #43A047;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.7);
+        }
+        
+        .system-label {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2E7D32;
+            color: white;
+            padding: 10px 30px;
+            border-radius: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .actor {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .actor-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        
+        .actor-label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+        }
+        
+        .usecase {
+            position: absolute;
+            background: linear-gradient(135deg, #43A047 0%, #2E7D32 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            min-width: 200px;
+        }
+        
+        .usecase.secondary {
+            background: linear-gradient(135deg, #00ACC1 0%, #0097A7 100%);
+            font-size: 14px;
+            min-width: 180px;
+        }
+        
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .connection-line {
+            stroke: #666;
+            stroke-width: 2;
+            stroke-dasharray: 5, 5;
+        }
+        
+        .legend {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f5f7fa;
+            border-radius: 15px;
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legend-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="diagram-container">
+        <div class="header">
+            <h1>🌾 GramSetu Use Case Diagram</h1>
+            <p>Actor Interactions & System Capabilities</p>
+        </div>
+        
+        <div class="usecase-diagram">
+            <!-- SVG for connection lines -->
+            <svg>
+                <!-- Farmer to Use Cases -->
+                <line x1="150" y1="150" x2="450" y2="120" class="connection-line"/>
+                <line x1="150" y1="150" x2="450" y2="200" class="connection-line"/>
+                <line x1="150" y1="150" x2="450" y2="280" class="connection-line"/>
+                <line x1="150" y1="150" x2="450" y2="360" class="connection-line"/>
+                <line x1="150" y1="150" x2="450" y2="440" class="connection-line"/>
+                <line x1="150" y1="150" x2="450" y2="520" class="connection-line"/>
+                <line x1="150" y1="150" x2="450" y2="600" class="connection-line"/>
+                <line x1="150" y1="150" x2="450" y2="680" class="connection-line"/>
+                
+                <!-- External Systems -->
+                <line x1="1350" y1="150" x2="1100" y2="200" class="connection-line"/>
+                <line x1="1350" y1="300" x2="1100" y2="280" class="connection-line"/>
+                <line x1="1350" y1="450" x2="1100" y2="440" class="connection-line"/>
+                <line x1="1350" y1="600" x2="1100" y2="600" class="connection-line"/>
+            </svg>
+            
+            <!-- System Boundary -->
+            <div class="system-boundary">
+                <div class="system-label">GramSetu System</div>
+            </div>
+            
+            <!-- Primary Actor: Farmer -->
+            <div class="actor" style="left: 80px; top: 80px;">
+                <div class="actor-icon">👨‍🌾</div>
+                <div class="actor-label">Farmer<br>(Primary User)</div>
+            </div>
+            
+            <!-- Use Cases -->
+            <div class="usecase" style="left: 400px; top: 100px;">
+                🔬 Diagnose Crop Disease
+            </div>
+            
+            <div class="usecase" style="left: 400px; top: 180px;">
+                💰 Check Market Prices
+            </div>
+            
+            <div class="usecase" style="left: 400px; top: 260px;">
+                🌤️ Get Weather Forecast
+            </div>
+            
+            <div class="usecase" style="left: 400px; top: 340px;">
+                📋 Learn About Schemes
+            </div>
+            
+            <div class="usecase" style="left: 400px; top: 420px;">
+                🌱 Get Farming Advice
+            </div>
+            
+            <div class="usecase" style="left: 400px; top: 500px;">
+                💧 Plan Irrigation
+            </div>
+            
+            <div class="usecase" style="left: 400px; top: 580px;">
+                🏛️ Find Tourism Info
+            </div>
+            
+            <div class="usecase" style="left: 400px; top: 660px;">
+                📱 Access via Mobile/Web
+            </div>
+            
+            <!-- Secondary Use Cases (Extended) -->
+            <div class="usecase secondary" style="left: 850px; top: 100px;">
+                📸 Upload Crop Image
+            </div>
+            
+            <div class="usecase secondary" style="left: 850px; top: 180px;">
+                📊 Compare Mandi Prices
+            </div>
+            
+            <div class="usecase secondary" style="left: 850px; top: 260px;">
+                🌡️ View 7-Day Forecast
+            </div>
+            
+            <div class="usecase secondary" style="left: 850px; top: 340px;">
+                📄 Download Scheme PDFs
+            </div>
+            
+            <div class="usecase secondary" style="left: 850px; top: 420px;">
+                🧪 Get Treatment Plans
+            </div>
+            
+            <div class="usecase secondary" style="left: 850px; top: 500px;">
+                💬 Chat with AI Agent
+            </div>
+            
+            <div class="usecase secondary" style="left: 850px; top: 580px;">
+                🌐 Switch Language
+            </div>
+            
+            <div class="usecase secondary" style="left: 850px; top: 660px;">
+                📜 View Chat History
+            </div>
+            
+            <!-- External Actors/Systems -->
+            <div class="actor" style="right: 80px; top: 80px;">
+                <div class="actor-icon" style="background: linear-gradient(135deg, #E91E63 0%, #C2185B 100%);">🧠</div>
+                <div class="actor-label">AWS Bedrock<br>(AI Service)</div>
+            </div>
+            
+            <div class="actor" style="right: 80px; top: 230px;">
+                <div class="actor-icon" style="background: linear-gradient(135deg, #F9A825 0%, #F57F17 100%);">📊</div>
+                <div class="actor-label">Agmarknet<br>(Price API)</div>
+            </div>
+            
+            <div class="actor" style="right: 80px; top: 380px;">
+                <div class="actor-icon" style="background: linear-gradient(135deg, #00ACC1 0%, #0097A7 100%);">☁️</div>
+                <div class="actor-label">Weather<br>Service</div>
+            </div>
+            
+            <div class="actor" style="right: 80px; top: 530px;">
+                <div class="actor-icon" style="background: linear-gradient(135deg, #43A047 0%, #2E7D32 100%);">💾</div>
+                <div class="actor-label">S3 Storage<br>(Data)</div>
+            </div>
+        </div>
+        
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                <span>Primary Actor (Farmer)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box" style="background: linear-gradient(135deg, #43A047 0%, #2E7D32 100%); border-radius: 50px; width: 80px;"></div>
+                <span>Primary Use Case</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box" style="background: linear-gradient(135deg, #00ACC1 0%, #0097A7 100%); border-radius: 50px; width: 80px;"></div>
+                <span>Secondary Use Case</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box" style="background: linear-gradient(135deg, #E91E63 0%, #C2185B 100%);"></div>
+                <span>External System</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

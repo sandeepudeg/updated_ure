@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramSetu - Process Flow Diagram</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .diagram-container {
+            width: 1600px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 48px;
+            color: #2E7D32;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 24px;
+            color: #666;
+        }
+        
+        .flow-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .flow-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .flow-box {
+            background: linear-gradient(135deg, #43A047 0%, #2E7D32 100%);
+            color: white;
+            padding: 25px 35px;
+            border-radius: 15px;
+            min-width: 250px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        
+        .flow-box.start {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .flow-box.decision {
+            background: linear-gradient(135deg, #F9A825 0%, #F57F17 100%);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            min-width: 280px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .flow-box.process {
+            background: linear-gradient(135deg, #00ACC1 0%, #0097A7 100%);
+        }
+        
+        .flow-box.agent {
+            background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%);
+        }
+        
+        .flow-box.end {
+            background: linear-gradient(135deg, #E91E63 0%, #C2185B 100%);
+            border-radius: 50px;
+        }
+        
+        .flow-box h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+        
+        .flow-box p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .arrow {
+            font-size: 36px;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .arrow-down {
+            font-size: 36px;
+            color: #333;
+            text-align: center;
+        }
+        
+        .branch-container {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+        }
+        
+        .branch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .branch-label {
+            font-size: 16px;
+            font-weight: bold;
+            color: #666;
+            background: #FFF9E6;
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: 2px solid #F9A825;
+        }
+        
+        .legend {
+            margin-top: 40px;
+            padding: 20px;
+            background: #f5f7fa;
+            border-radius: 15px;
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legend-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+        
+        .legend-text {
+            font-size: 14px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="diagram-container">
+        <div class="header">
+            <h1>🌾 GramSetu Process Flow Diagram</h1>
+            <p>End-to-End User Journey & System Processing</p>
+        </div>
+        
+        <div class="flow-diagram">
+            <!-- Start -->
+            <div class="flow-row">
+                <div class="flow-box start">
+                    <h3>👤 Farmer Access</h3>
+                    <p>Opens GramSetu Web/Mobile UI</p>
+                </div>
+            </div>
+            
+            <div class="arrow-down">↓</div>
+            
+            <!-- Input -->
+            <div class="flow-row">
+                <div class="flow-box process">
+                    <h3>📝 User Input</h3>
+                    <p>Text query or Image upload</p>
+                </div>
+            </div>
+            
+            <div class="arrow-down">↓</div>
+            
+            <!-- API Call -->
+            <div class="flow-row">
+                <div class="flow-box process">
+                    <h3>🚪 API Gateway</h3>
+                    <p>POST /dev/query with user data</p>
+                </div>
+            </div>
+            
+            <div class="arrow-down">↓</div>
+            
+            <!-- Lambda -->
+            <div class="flow-row">
+                <div class="flow-box process">
+                    <h3>⚡ Lambda Function</h3>
+                    <p>Docker container processes request</p>
+                </div>
+            </div>
+            
+            <div class="arrow-down">↓</div>
+            
+            <!-- Supervisor Agent -->
+            <div class="flow-row">
+                <div class="flow-box agent">
+                    <h3>🤖 Supervisor Agent</h3>
+                    <p>Analyzes query & routes to specialist</p>
+                </div>
+            </div>
+            
+            <div class="arrow-down">↓</div>
+            
+            <!-- Decision Point -->
+            <div class="flow-row">
+                <div class="flow-box decision">
+                    <div>
+                        <h3>Query Type?</h3>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="arrow-down">↓</div>
+            
+            <!-- Branches -->
+            <div class="branch-container">
+                <!-- Branch 1: Disease -->
+                <div class="branch">
+                    <div class="branch-label">🔬 Disease Query</div>
+                    <div class="flow-box agent">
+                        <h3>Agri Expert</h3>
+                        <p>Image analysis</p>
+                    </div>
+                    <div class="arrow-down">↓</div>
+                    <div class="flow-box process">
+                        <h3>AWS Bedrock</h3>
+                        <p>AI analysis</p>
+                    </div>
+                </div>
+                
+                <!-- Branch 2: Market Price -->
+                <div class="branch">
+                    <div class="branch-label">💰 Price Query</div>
+                    <div class="flow-box agent">
+                        <h3>Market Expert</h3>
+                        <p>Price lookup</p>
+                    </div>
+                    <div class="arrow-down">↓</div>
+                    <div class="flow-box process">
+                        <h3>Agmarknet API</h3>
+                        <p>Live data</p>
+                    </div>
+                </div>
+                
+                <!-- Branch 3: Weather -->
+                <div class="branch">
+                    <div class="branch-label">🌤️ Weather Query</div>
+                    <div class="flow-box agent">
+                        <h3>Weather Expert</h3>
+                        <p>Forecast</p>
+                    </div>
+                    <div class="arrow-down">↓</div>
+                    <div class="flow-box process">
+                        <h3>Weather API</h3>
+                        <p>7-day forecast</p>
+                    </div>
+                </div>
+                
+                <!-- Branch 4: Policy -->
+                <div class="branch">
+                    <div class="branch-label">📋 Scheme Query</div>
+                    <div class="flow-box agent">
+                        <h3>Policy Expert</h3>
+                        <p>Scheme info</p>
+                    </div>
+                    <div class="arrow-down">↓</div>
+                    <div class="flow-box process">
+                        <h3>S3 Storage</h3>
+                        <p>PDF docs</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="arrow-down">↓</div>
+            
+            <!-- Response Generation -->
+            <div class="flow-row">
+                <div class="flow-box agent">
+                    <h3>🧠 Response Generation</h3>
+                    <p>Agent formats actionable advice</p>
+                </div>
+            </div>
+            
+            <div class="arrow-down">↓</div>
+            
+            <!-- Return to User -->
+            <div class="flow-row">
+                <div class="flow-box process">
+                    <h3>📤 API Response</h3>
+                    <p>JSON with formatted answer</p>
+                </div>
+            </div>
+            
+            <div class="arrow-down">↓</div>
+            
+            <!-- Display -->
+            <div class="flow-row">
+                <div class="flow-box end">
+                    <h3>✅ Display to Farmer</h3>
+                    <p>Chat interface shows response</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                <span class="legend-text">Start/End Point</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box" style="background: linear-gradient(135deg, #00ACC1 0%, #0097A7 100%);"></div>
+                <span class="legend-text">Process/System</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box" style="background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%);"></div>
+                <span class="legend-text">AI Agent</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box" style="background: linear-gradient(135deg, #F9A825 0%, #F57F17 100%);"></div>
+                <span class="legend-text">Decision Point</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

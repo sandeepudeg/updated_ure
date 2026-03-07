@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramSetu - Cost Simulator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .slide {
+            width: 1920px;
+            height: 1080px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
+            padding: 20px 40px;
+            color: white;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 3px;
+        }
+        
+        .header p {
+            font-size: 20px;
+            opacity: 0.95;
+        }
+        
+        /* Main Content */
+        .content {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 25px;
+            padding: 30px;
+            flex: 1;
+            background: #f5f7fa;
+        }
+        
+        /* Left Panel - Controls */
+        .controls-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .control-group {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .control-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2E7D32;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .control-item {
+            margin-bottom: 15px;
+        }
+        
+        .control-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .control-value {
+            color: #2E7D32;
+            font-weight: bold;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #43A047;
+            cursor: pointer;
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #43A047;
+            cursor: pointer;
+            border: none;
+        }
+        
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        
+        select:focus {
+            border-color: #43A047;
+            outline: none;
+        }
+        
+        /* Right Panel - Results */
+        .results-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        /* Total Cost Display */
+        .total-display {
+            background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .total-label {
+            font-size: 22px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .total-amount {
+            font-size: 64px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        /* Graph Container */
+        .graph-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .graph-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .graph-canvas {
+            flex: 1;
+            position: relative;
+        }
+        
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Cost Breakdown */
+        .breakdown-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .breakdown-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        
+        .breakdown-item.lambda { border-left-color: #667eea; }
+        .breakdown-item.bedrock { border-left-color: #43A047; }
+        .breakdown-item.storage { border-left-color: #F9A825; }
+        .breakdown-item.network { border-left-color: #E91E63; }
+        .breakdown-item.monitoring { border-left-color: #9C27B0; }
+        
+        .breakdown-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .breakdown-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2E7D32;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #2E7D32;
+            color: white;
+            padding: 12px 40px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <!-- Header -->
+        <div class="header">
+            <h1>💰 Interactive Cost Simulator</h1>
+            <p>Adjust parameters to see real-time cost estimates</p>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Left Panel - Controls -->
+            <div class="controls-panel">
+                <!-- Users Control -->
+                <div class="control-group">
+                    <div class="control-title">
+                        <span>👥</span>
+                        <span>Daily Active Users</span>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-label">
+                            <span>Users per day</span>
+                            <span class="control-value" id="usersValue">1000</span>
+                        </div>
+                        <input type="range" id="usersSlider" min="100" max="10000" value="1000" step="100">
+                    </div>
+                </div>
+                
+                <!-- Model Selection -->
+                <div class="control-group">
+                    <div class="control-title">
+                        <span>🧠</span>
+                        <span>AI Model Selection</span>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-label">
+                            <span>Bedrock Model</span>
+                        </div>
+                        <select id="modelSelect">
+                            <option value="nova-lite" selected>Nova Lite (Cost-effective)</option>
+                            <option value="nova-pro">Nova Pro (Balanced)</option>
+                            <option value="claude-haiku">Claude Haiku (Fast)</option>
+                            <option value="claude-sonnet">Claude Sonnet (Advanced)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Memory/Storage Control -->
+                <div class="control-group">
+                    <div class="control-title">
+                        <span>💾</span>
+                        <span>Memory & Storage</span>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-label">
+                            <span>Lambda Memory (MB)</span>
+                            <span class="control-value" id="memoryValue">1024</span>
+                        </div>
+                        <input type="range" id="memorySlider" min="512" max="3008" value="1024" step="256">
+                    </div>
+                    <div class="control-item">
+                        <div class="control-label">
+                            <span>Storage (GB)</span>
+                            <span class="control-value" id="storageValue">5</span>
+                        </div>
+                        <input type="range" id="storageSlider" min="1" max="50" value="5" step="1">
+                    </div>
+                </div>
+                
+                <!-- Requests per User -->
+                <div class="control-group">
+                    <div class="control-title">
+                        <span>📊</span>
+                        <span>Usage Pattern</span>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-label">
+                            <span>Requests per user</span>
+                            <span class="control-value" id="requestsValue">3</span>
+                        </div>
+                        <input type="range" id="requestsSlider" min="1" max="10" value="3" step="1">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Panel - Results -->
+            <div class="results-panel">
+                <!-- Total Cost Display -->
+                <div class="total-display">
+                    <div class="total-label">💵 Estimated Monthly Cost</div>
+                    <div class="total-amount" id="totalCost">$31</div>
+                </div>
+                
+                <!-- Graph -->
+                <div class="graph-container">
+                    <div class="graph-title">📈 Cost Trend Over Time</div>
+                    <div class="graph-canvas">
+                        <canvas id="costGraph"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Cost Breakdown -->
+                <div class="breakdown-container">
+                    <div class="breakdown-title">Cost Breakdown</div>
+                    <div class="breakdown-item lambda">
+                        <span class="breakdown-label">⚡ Lambda Compute</span>
+                        <span class="breakdown-value" id="lambdaCost">$7</span>
+                    </div>
+                    <div class="breakdown-item bedrock">
+                        <span class="breakdown-label">🧠 Bedrock AI</span>
+                        <span class="breakdown-value" id="bedrockCost">$15</span>
+                    </div>
+                    <div class="breakdown-item storage">
+                        <span class="breakdown-label">💾 Storage (S3+ECR)</span>
+                        <span class="breakdown-value" id="storageCost">$1</span>
+                    </div>
+                    <div class="breakdown-item network">
+                        <span class="breakdown-label">🌐 Network (CDN+API)</span>
+                        <span class="breakdown-value" id="networkCost">$6</span>
+                    </div>
+                    <div class="breakdown-item monitoring">
+                        <span class="breakdown-label">📊 Monitoring</span>
+                        <span class="breakdown-value" id="monitoringCost">$2</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            🌾 GramSetu - Real-time Cost Estimation | Adjust parameters to see instant updates
+        </div>
+    </div>
+    
+    <script>
+        // Cost calculation parameters
+        const modelPricing = {
+            'nova-lite': { input: 0.00006, output: 0.00024, multiplier: 1 },
+            'nova-pro': { input: 0.0008, output: 0.0032, multiplier: 1.5 },
+            'claude-haiku': { input: 0.00025, output: 0.00125, multiplier: 1.2 },
+            'claude-sonnet': { input: 0.003, output: 0.015, multiplier: 2 }
+        };
+        
+        // Get DOM elements
+        const usersSlider = document.getElementById('usersSlider');
+        const usersValue = document.getElementById('usersValue');
+        const modelSelect = document.getElementById('modelSelect');
+        const memorySlider = document.getElementById('memorySlider');
+        const memoryValue = document.getElementById('memoryValue');
+        const storageSlider = document.getElementById('storageSlider');
+        const storageValue = document.getElementById('storageValue');
+        const requestsSlider = document.getElementById('requestsSlider');
+        const requestsValue = document.getElementById('requestsValue');
+        
+        // Graph setup
+        const canvas = document.getElementById('costGraph');
+        const ctx = canvas.getContext('2d');
+        let costHistory = [];
+        let maxDataPoints = 30;
+        
+        // Initialize canvas size
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+        }
+        resizeCanvas();
+        
+        // Calculate costs
+        function calculateCosts() {
+            const users = parseInt(usersSlider.value);
+            const model = modelSelect.value;
+            const memory = parseInt(memorySlider.value);
+            const storage = parseInt(storageSlider.value);
+            const requestsPerUser = parseInt(requestsSlider.value);
+            
+            const totalRequests = users * requestsPerUser * 30; // Monthly
+            const avgTokensPerRequest = 2000; // Estimated
+            
+            // Lambda cost (based on memory and execution time)
+            const lambdaGBSeconds = (memory / 1024) * (totalRequests * 3); // 3 sec avg
+            const lambdaCost = (lambdaGBSeconds * 0.0000166667) + (totalRequests / 1000000 * 0.20);
+            
+            // Bedrock cost (based on model and tokens)
+            const modelPrice = modelPricing[model];
+            const totalTokens = totalRequests * avgTokensPerRequest;
+            const bedrockCost = (totalTokens / 1000) * (modelPrice.input + modelPrice.output) * modelPrice.multiplier;
+            
+            // Storage cost
+            const storageCost = storage * 0.023;
+            
+            // Network cost (CDN + API Gateway)
+            const networkCost = (totalRequests / 1000000 * 1.0) + (users * 0.1);
+            
+            // Monitoring cost
+            const monitoringCost = Math.max(1, totalRequests / 1000000 * 0.5);
+            
+            const totalCost = lambdaCost + bedrockCost + storageCost + networkCost + monitoringCost;
+            
+            return {
+                lambda: lambdaCost,
+                bedrock: bedrockCost,
+                storage: storageCost,
+                network: networkCost,
+                monitoring: monitoringCost,
+                total: totalCost
+            };
+        }
+        
+        // Update display
+        function updateDisplay() {
+            const costs = calculateCosts();
+            
+            document.getElementById('totalCost').textContent = `$${Math.round(costs.total)}`;
+            document.getElementById('lambdaCost').textContent = `$${Math.round(costs.lambda)}`;
+            document.getElementById('bedrockCost').textContent = `$${Math.round(costs.bedrock)}`;
+            document.getElementById('storageCost').textContent = `$${Math.round(costs.storage)}`;
+            document.getElementById('networkCost').textContent = `$${Math.round(costs.network)}`;
+            document.getElementById('monitoringCost').textContent = `$${Math.round(costs.monitoring)}`;
+            
+            // Add to history
+            costHistory.push(costs.total);
+            if (costHistory.length > maxDataPoints) {
+                costHistory.shift();
+            }
+            
+            drawGraph();
+        }
+        
+        // Draw graph
+        function drawGraph() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            if (costHistory.length < 2) return;
+            
+            const padding = 40;
+            const graphWidth = canvas.width - padding * 2;
+            const graphHeight = canvas.height - padding * 2;
+            
+            const maxCost = Math.max(...costHistory) * 1.1;
+            const minCost = Math.min(...costHistory) * 0.9;
+            const costRange = maxCost - minCost || 1;
+            
+            // Draw axes
+            ctx.strokeStyle = '#ddd';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, canvas.height - padding);
+            ctx.lineTo(canvas.width - padding, canvas.height - padding);
+            ctx.stroke();
+            
+            // Draw grid lines
+            ctx.strokeStyle = '#f0f0f0';
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= 5; i++) {
+                const y = padding + (graphHeight / 5) * i;
+                ctx.beginPath();
+                ctx.moveTo(padding, y);
+                ctx.lineTo(canvas.width - padding, y);
+                ctx.stroke();
+                
+                // Y-axis labels
+                const value = maxCost - (costRange / 5) * i;
+                ctx.fillStyle = '#666';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'right';
+                ctx.fillText(`$${Math.round(value)}`, padding - 10, y + 4);
+            }
+            
+            // Draw line
+            ctx.strokeStyle = '#43A047';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            
+            costHistory.forEach((cost, index) => {
+                const x = padding + (graphWidth / (maxDataPoints - 1)) * index;
+                const y = canvas.height - padding - ((cost - minCost) / costRange) * graphHeight;
+                
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            
+            ctx.stroke();
+            
+            // Draw points
+            ctx.fillStyle = '#2E7D32';
+            costHistory.forEach((cost, index) => {
+                const x = padding + (graphWidth / (maxDataPoints - 1)) * index;
+                const y = canvas.height - padding - ((cost - minCost) / costRange) * graphHeight;
+                
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            
+            // X-axis label
+            ctx.fillStyle = '#666';
+            ctx.font = '14px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Time (adjustments)', canvas.width / 2, canvas.height - 10);
+        }
+        
+        // Event listeners
+        usersSlider.addEventListener('input', (e) => {
+            usersValue.textContent = e.target.value;
+            updateDisplay();
+        });
+        
+        modelSelect.addEventListener('change', updateDisplay);
+        
+        memorySlider.addEventListener('input', (e) => {
+            memoryValue.textContent = e.target.value;
+            updateDisplay();
+        });
+        
+        storageSlider.addEventListener('input', (e) => {
+            storageValue.textContent = e.target.value;
+            updateDisplay();
+        });
+        
+        requestsSlider.addEventListener('input', (e) => {
+            requestsValue.textContent = e.target.value;
+            updateDisplay();
+        });
+        
+        // Initial calculation
+        updateDisplay();
+        
+        // Auto-update simulation (optional - for demo)
+        let autoSimulate = false;
+        if (autoSimulate) {
+            setInterval(() => {
+                const randomUsers = 500 + Math.random() * 2000;
+                usersSlider.value = randomUsers;
+                usersValue.textContent = Math.round(randomUsers);
+                updateDisplay();
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

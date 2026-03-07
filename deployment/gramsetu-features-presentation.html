@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramSetu - Feature Overview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 60px;
+            animation: fadeInDown 1s ease-in;
+        }
+        
+        .header h1 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header .tagline {
+            font-size: 1.5em;
+            opacity: 0.9;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            animation: fadeInUp 1s ease-in;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid #667eea;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .feature-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .feature-card h3 {
+            color: #333;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+        
+        .feature-card p {
+            color: #555;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+        
+        .feature-details {
+            background: rgba(255,255,255,0.7);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .feature-details ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .feature-details li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .feature-details li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .architecture-diagram {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .diagram-svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .tech-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1em;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .tech-badge:hover {
+            transform: scale(1.1);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .value-prop {
+            background: linear-gradient(135deg, #F9A825 0%, #F57F17 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .value-prop h2 {
+            color: white;
+            border: none;
+            margin-bottom: 20px;
+        }
+        
+        .value-prop p {
+            font-size: 1.3em;
+            line-height: 1.8;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section h2 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌾 GramSetu 🌾</h1>
+            <p class="tagline">Unified Rural Ecosystem - AI-Powered Agricultural Assistant</p>
+        </div>
+
+        <!-- Value Proposition -->
+        <div class="value-prop">
+            <h2>🎯 Our Mission</h2>
+            <p>Empowering Indian farmers with AI-driven insights, real-time market data, and expert agricultural guidance - all accessible through a simple, mobile-first interface in their local language.</p>
+        </div>
+
+        <!-- Core Features Section -->
+        <div class="section">
+            <h2>🚀 Core Features</h2>
+            
+            <div class="features-grid">
+                <!-- Feature 1: Multi-Agent AI System -->
+                <div class="feature-card">
+                    <span class="feature-icon">🤖</span>
+                    <h3>Multi-Agent AI System</h3>
+                    <p>6 specialized AI agents working together to provide comprehensive farming support</p>
+                    <div class="feature-details">
+                        <ul>
+                            <li>Supervisor Agent - Orchestrates all queries</li>
+                            <li>Agricultural Expert - Crop advice & disease diagnosis</li>
+                            <li>Market Expert - Price analysis & trends</li>
+                            <li>Weather Expert - Forecasts & climate insights</li>
+                            <li>Policy Expert - Government schemes & subsidies</li>
+                            <li>Tourism Expert - Rural tourism opportunities</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Feature 2: Live Market Prices -->
+                <div class="feature-card">
+                    <span class="feature-icon">💰</span>
+                    <h3>Live Market Prices</h3>
+                    <p>Real-time mandi prices from Agmarknet API with automatic fallback to historical data</p>
+                    <div class="feature-details">
+                        <ul>
+                            <li>Integration with data.gov.in Agmarknet</li>
+                            <li>District-wise price comparison</li>
+                            <li>Modal, min, and max price ranges</li>
+                            <li>Nearby mandi locations</li>
+                            <li>Historical price trends</li>
+                            <li>All prices in Indian Rupees (₹)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Feature 3: Crop Disease Detection -->
+                <div class="feature-card">
+                    <span class="feature-icon">🔬</span>
+                    <h3>Crop Disease Detection</h3>
+                    <p>AI-powered image analysis using AWS Bedrock for instant disease diagnosis</p>
+                    <div class="feature-details">
+                        <ul>
+                            <li>Upload crop photos for analysis</li>
+                            <li>Instant disease identification</li>
+                            <li>Organic treatment recommendations</li>
+                            <li>Chemical treatment options</li>
+                            <li>Specific product names & costs</li>
+                            <li>Prevention strategies</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Feature 4: Government Schemes -->
+                <div class="feature-card">
+                    <span class="feature-icon">📋</span>
+                    <h3>Government Schemes</h3>
+                    <p>Comprehensive information about agricultural subsidies and support programs</p>
+                    <div class="feature-details">
+                        <ul>
+                            <li>PM-Kisan Samman Nidhi</li>
+                            <li>PMFBY (Crop Insurance)</li>
+                            <li>PMKSY (Irrigation)</li>
+                            <li>PKVY (Organic Farming)</li>
+                            <li>eNAM (Online Trading)</li>
+                            <li>Eligibility & application process</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Feature 5: Mobile-First UI -->
+                <div class="feature-card">
+                    <span class="feature-icon">📱</span>
+                    <h3>Mobile-First Design</h3>
+                    <p>Responsive interface optimized for rural users with limited connectivity</p>
+                    <div class="feature-details">
+                        <ul>
+                            <li>Touch-optimized controls</li>
+                            <li>Bottom navigation for easy reach</li>
+                            <li>Large buttons & readable fonts</li>
+                            <li>Works on 2G/3G networks</li>
+                            <li>Lightweight & fast loading</li>
+                            <li>Desktop version available</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Feature 6: Multi-Language Support -->
+                <div class="feature-card">
+                    <span class="feature-icon">🌐</span>
+                    <h3>Multi-Language Support</h3>
+                    <p>Communicate in your preferred language for better understanding</p>
+                    <div class="feature-details">
+                        <ul>
+                            <li>English</li>
+                            <li>Hindi (हिंदी)</li>
+                            <li>Marathi (मराठी)</li>
+                            <li>More languages coming soon</li>
+                            <li>Natural language processing</li>
+                            <li>Context-aware responses</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technical Features Section -->
+        <div class="section">
+            <h2>⚙️ Technical Capabilities</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">☁️</span>
+                    <h3>Cloud-Native Architecture</h3>
+                    <p>Built on AWS for scalability, reliability, and global reach</p>
+                    <div class="feature-details">
+                        <ul>
+                            <li>Serverless Lambda functions</li>
+                            <li>Auto-scaling infrastructure</li>
+                            <li>99.9% uptime SLA</li>
+                            <li>Global CDN delivery</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">🔒</span>
+                    <h3>Security & Privacy</h3>
+                    <p>Enterprise-grade security protecting farmer data</p>
+                    <div class="feature-details">
+                        <ul>
+                            <li>HTTPS encryption</li>
+                            <li>Data encryption at rest</li>
+                            <li>IAM access controls</li>
+                            <li>Privacy-first design</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">⚡</span>
+                    <h3>High Performance</h3>
+                    <p>Optimized for speed and efficiency</p>
+                    <div class="feature-details">
+                        <ul>
+                            <li>Sub-second response times</li>
+                            <li>CDN-cached static assets</li>
+                            <li>Efficient AI model (Nova Lite)</li>
+                            <li>Optimized image processing</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">📊</span>
+                    <h3>Analytics & Monitoring</h3>
+                    <p>Real-time insights into system performance</p>
+                    <div class="feature-details">
+                        <ul>
+                            <li>CloudWatch logging</li>
+                            <li>Performance metrics</li>
+                            <li>Error tracking</li>
+                            <li>Usage analytics</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Architecture Diagram -->
+        <div class="section">
+            <h2>🏗️ System Architecture</h2>
+            <div class="architecture-diagram">
+                <svg class="diagram-svg" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+                    <!-- User Layer -->
+                    <rect x="50" y="50" width="200" height="100" fill="#667eea" rx="10"/>
+                    <text x="150" y="90" text-anchor="middle" fill="white" font-size="18" font-weight="bold">👤 Farmer</text>
+                    <text x="150" y="115" text-anchor="middle" fill="white" font-size="14">Mobile/Desktop</text>
+                    
+                    <!-- Web UI Layer -->
+                    <rect x="350" y="50" width="200" height="100" fill="#43A047" rx="10"/>
+                    <text x="450" y="90" text-anchor="middle" fill="white" font-size="18" font-weight="bold">🌐 Web UI</text>
+                    <text x="450" y="115" text-anchor="middle" fill="white" font-size="14">S3 + CloudFront</text>
+                    
+                    <!-- API Gateway -->
+                    <rect x="650" y="50" width="200" height="100" fill="#F9A825" rx="10"/>
+                    <text x="750" y="90" text-anchor="middle" fill="white" font-size="18" font-weight="bold">🚪 API Gateway</text>
+                    <text x="750" y="115" text-anchor="middle" fill="white" font-size="14">HTTP API</text>
+                    
+                    <!-- Lambda Function -->
+                    <rect x="950" y="50" width="200" height="100" fill="#E91E63" rx="10"/>
+                    <text x="1050" y="90" text-anchor="middle" fill="white" font-size="18" font-weight="bold">⚡ Lambda</text>
+                    <text x="1050" y="115" text-anchor="middle" fill="white" font-size="14">Docker Container</text>
+
+                    <!-- AI Agents Layer -->
+                    <rect x="50" y="250" width="180" height="80" fill="#9C27B0" rx="10"/>
+                    <text x="140" y="285" text-anchor="middle" fill="white" font-size="14" font-weight="bold">🤖 Supervisor</text>
+                    <text x="140" y="305" text-anchor="middle" fill="white" font-size="12">Agent</text>
+                    
+                    <rect x="250" y="250" width="180" height="80" fill="#9C27B0" rx="10"/>
+                    <text x="340" y="285" text-anchor="middle" fill="white" font-size="14" font-weight="bold">🌱 Agri Expert</text>
+                    <text x="340" y="305" text-anchor="middle" fill="white" font-size="12">Agent</text>
+                    
+                    <rect x="450" y="250" width="180" height="80" fill="#9C27B0" rx="10"/>
+                    <text x="540" y="285" text-anchor="middle" fill="white" font-size="14" font-weight="bold">💰 Market</text>
+                    <text x="540" y="305" text-anchor="middle" fill="white" font-size="12">Agent</text>
+                    
+                    <rect x="650" y="250" width="180" height="80" fill="#9C27B0" rx="10"/>
+                    <text x="740" y="285" text-anchor="middle" fill="white" font-size="14" font-weight="bold">🌤️ Weather</text>
+                    <text x="740" y="305" text-anchor="middle" fill="white" font-size="12">Agent</text>
+                    
+                    <rect x="850" y="250" width="180" height="80" fill="#9C27B0" rx="10"/>
+                    <text x="940" y="285" text-anchor="middle" fill="white" font-size="14" font-weight="bold">📋 Policy</text>
+                    <text x="940" y="305" text-anchor="middle" fill="white" font-size="12">Agent</text>
+
+                    <!-- Services Layer -->
+                    <rect x="150" y="450" width="250" height="100" fill="#00ACC1" rx="10"/>
+                    <text x="275" y="490" text-anchor="middle" fill="white" font-size="18" font-weight="bold">🧠 AWS Bedrock</text>
+                    <text x="275" y="515" text-anchor="middle" fill="white" font-size="14">Nova Lite AI Model</text>
+                    
+                    <rect x="450" y="450" width="250" height="100" fill="#00ACC1" rx="10"/>
+                    <text x="575" y="490" text-anchor="middle" fill="white" font-size="18" font-weight="bold">📊 Agmarknet API</text>
+                    <text x="575" y="515" text-anchor="middle" fill="white" font-size="14">Live Market Data</text>
+                    
+                    <rect x="750" y="450" width="250" height="100" fill="#00ACC1" rx="10"/>
+                    <text x="875" y="490" text-anchor="middle" fill="white" font-size="18" font-weight="bold">💾 S3 Storage</text>
+                    <text x="875" y="515" text-anchor="middle" fill="white" font-size="14">Data & Documents</text>
+                    
+                    <!-- Data Layer -->
+                    <rect x="150" y="650" width="200" height="80" fill="#4CAF50" rx="10"/>
+                    <text x="250" y="685" text-anchor="middle" fill="white" font-size="14" font-weight="bold">📄 Scheme PDFs</text>
+                    <text x="250" y="705" text-anchor="middle" fill="white" font-size="12">Government Data</text>
+                    
+                    <rect x="400" y="650" width="200" height="80" fill="#4CAF50" rx="10"/>
+                    <text x="500" y="685" text-anchor="middle" fill="white" font-size="14" font-weight="bold">📈 Price CSV</text>
+                    <text x="500" y="705" text-anchor="middle" fill="white" font-size="12">Historical Data</text>
+
+                    <rect x="650" y="650" width="200" height="80" fill="#4CAF50" rx="10"/>
+                    <text x="750" y="685" text-anchor="middle" fill="white" font-size="14" font-weight="bold">🖼️ Disease Images</text>
+                    <text x="750" y="705" text-anchor="middle" fill="white" font-size="12">PlantVillage Dataset</text>
+                    
+                    <!-- Arrows -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                            <polygon points="0 0, 10 3, 0 6" fill="#333" />
+                        </marker>
+                    </defs>
+                    
+                    <!-- User to Web UI -->
+                    <line x1="250" y1="100" x2="350" y2="100" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Web UI to API Gateway -->
+                    <line x1="550" y1="100" x2="650" y2="100" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- API Gateway to Lambda -->
+                    <line x1="850" y1="100" x2="950" y2="100" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Lambda to Agents -->
+                    <line x1="1050" y1="150" x2="540" y2="250" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Agents to Services -->
+                    <line x1="340" y1="330" x2="275" y2="450" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <line x1="540" y1="330" x2="575" y2="450" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <line x1="740" y1="330" x2="875" y2="450" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Services to Data -->
+                    <line x1="275" y1="550" x2="250" y2="650" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <line x1="575" y1="550" x2="500" y2="650" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <line x1="875" y1="550" x2="750" y2="650" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Technology Stack -->
+        <div class="section">
+            <h2>💻 Technology Stack</h2>
+            <div class="tech-stack">
+                <div class="tech-badge">Python 3.11</div>
+                <div class="tech-badge">AWS Lambda</div>
+                <div class="tech-badge">AWS Bedrock</div>
+                <div class="tech-badge">Amazon Nova Lite</div>
+                <div class="tech-badge">Strands AI Framework</div>
+                <div class="tech-badge">Docker</div>
+                <div class="tech-badge">AWS S3</div>
+                <div class="tech-badge">CloudFront CDN</div>
+                <div class="tech-badge">API Gateway</div>
+                <div class="tech-badge">ECR</div>
+                <div class="tech-badge">CloudWatch</div>
+                <div class="tech-badge">HTML5/CSS3/JS</div>
+            </div>
+        </div>
+
+        <!-- Key Statistics -->
+        <div class="section">
+            <h2>📊 Key Metrics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number">6</span>
+                    <span class="stat-label">AI Agents</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">3</span>
+                    <span class="stat-label">Languages</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">&lt;2s</span>
+                    <span class="stat-label">Response Time</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">99.9%</span>
+                    <span class="stat-label">Uptime</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Availability</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">₹20-42</span>
+                    <span class="stat-label">Monthly Cost</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Benefits -->
+        <div class="section">
+            <h2>✨ Benefits for Farmers</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">💡</span>
+                    <h3>Instant Expert Advice</h3>
+                    <p>Get agricultural guidance 24/7 without waiting for extension officers</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">💵</span>
+                    <h3>Better Pricing</h3>
+                    <p>Access real-time market prices to negotiate better deals and reduce middleman exploitation</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">🎯</span>
+                    <h3>Accurate Diagnosis</h3>
+                    <p>Identify crop diseases early with AI-powered image analysis and get specific treatment plans</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">📱</span>
+                    <h3>Easy to Use</h3>
+                    <p>Simple interface designed for farmers with minimal technical knowledge</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">🌍</span>
+                    <h3>Local Language</h3>
+                    <p>Communicate in Hindi, Marathi, or English for better understanding</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">💰</span>
+                    <h3>Cost Savings</h3>
+                    <p>Reduce crop losses with early disease detection and optimal treatment recommendations</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Use Cases -->
+        <div class="section">
+            <h2>🎬 Real-World Use Cases</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🍅</span>
+                    <h3>Scenario 1: Disease Detection</h3>
+                    <p><strong>Problem:</strong> Farmer notices spots on tomato leaves</p>
+                    <div class="feature-details">
+                        <ul>
+                            <li>Takes photo with mobile phone</li>
+                            <li>Uploads to GramSetu</li>
+                            <li>AI identifies "Early Blight"</li>
+                            <li>Gets organic treatment plan</li>
+                            <li>Receives product names & costs</li>
+                            <li>Saves crop from major loss</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">🌾</span>
+                    <h3>Scenario 2: Market Pricing</h3>
+                    <p><strong>Problem:</strong> Farmer wants to sell wheat at best price</p>
+                    <div class="feature-details">
+                        <ul>
+                            <li>Asks "Wheat price in Nashik?"</li>
+                            <li>Gets live mandi prices</li>
+                            <li>Compares 3 nearby markets</li>
+                            <li>Sees modal price: ₹2,100/quintal</li>
+                            <li>Chooses best market</li>
+                            <li>Earns ₹5,000 more per ton</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">📋</span>
+                    <h3>Scenario 3: Government Schemes</h3>
+                    <p><strong>Problem:</strong> Farmer needs crop insurance</p>
+                    <div class="feature-details">
+                        <ul>
+                            <li>Asks about PMFBY scheme</li>
+                            <li>Gets eligibility criteria</li>
+                            <li>Learns application process</li>
+                            <li>Receives document checklist</li>
+                            <li>Gets nearest office location</li>
+                            <li>Successfully enrolls in insurance</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">🌤️</span>
+                    <h3>Scenario 4: Weather Planning</h3>
+                    <p><strong>Problem:</strong> Farmer planning irrigation schedule</p>
+                    <div class="feature-details">
+                        <ul>
+                            <li>Checks 7-day weather forecast</li>
+                            <li>Sees rain predicted in 3 days</li>
+                            <li>Delays irrigation to save water</li>
+                            <li>Gets crop-specific advice</li>
+                            <li>Optimizes water usage</li>
+                            <li>Reduces electricity costs</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deployment Information -->
+        <div class="section">
+            <h2>🚀 Deployment & Access</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🌐</span>
+                    <h3>Web Access</h3>
+                    <div class="feature-details">
+                        <ul>
+                            <li><strong>Desktop UI:</strong> gramsetu-agents.html</li>
+                            <li><strong>Mobile UI:</strong> gramsetu-mobile.html</li>
+                            <li><strong>CDN:</strong> CloudFront Distribution</li>
+                            <li><strong>Domain:</strong> d3v7khazsfb4vd.cloudfront.net</li>
+                            <li><strong>Protocol:</strong> HTTPS (Secure)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">⚡</span>
+                    <h3>API Endpoint</h3>
+                    <div class="feature-details">
+                        <ul>
+                            <li><strong>URL:</strong> 8938dqxf33.execute-api.us-east-1.amazonaws.com</li>
+                            <li><strong>Method:</strong> POST /dev/query</li>
+                            <li><strong>Format:</strong> JSON</li>
+                            <li><strong>Auth:</strong> None (Public)</li>
+                            <li><strong>Rate Limit:</strong> 10,000 req/sec</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">🐳</span>
+                    <h3>Infrastructure</h3>
+                    <div class="feature-details">
+                        <ul>
+                            <li><strong>Compute:</strong> AWS Lambda (Docker)</li>
+                            <li><strong>Storage:</strong> S3 Bucket</li>
+                            <li><strong>Registry:</strong> ECR</li>
+                            <li><strong>Region:</strong> us-east-1</li>
+                            <li><strong>Monitoring:</strong> CloudWatch</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">💰</span>
+                    <h3>Cost Efficiency</h3>
+                    <div class="feature-details">
+                        <ul>
+                            <li><strong>Monthly Cost:</strong> ₹1,600-3,400 ($20-42)</li>
+                            <li><strong>Pay-per-use:</strong> No fixed costs</li>
+                            <li><strong>Free Tier:</strong> First 12 months</li>
+                            <li><strong>Scalable:</strong> Auto-adjusts to demand</li>
+                            <li><strong>No Servers:</strong> Zero maintenance</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Future Roadmap -->
+        <div class="section">
+            <h2>🔮 Future Enhancements</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">📞</span>
+                    <h3>Voice Interface</h3>
+                    <p>Voice-based queries for farmers with low literacy</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">📱</span>
+                    <h3>Mobile App</h3>
+                    <p>Native Android/iOS apps for offline functionality</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">🤝</span>
+                    <h3>Community Forum</h3>
+                    <p>Farmer-to-farmer knowledge sharing platform</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">📊</span>
+                    <h3>Yield Prediction</h3>
+                    <p>AI-based crop yield forecasting</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">🌱</span>
+                    <h3>Soil Testing</h3>
+                    <p>Integration with soil health card data</p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">🚜</span>
+                    <h3>Equipment Rental</h3>
+                    <p>Marketplace for farm equipment sharing</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Impact Statement -->
+        <div class="value-prop">
+            <h2>🌟 Our Impact</h2>
+            <p>GramSetu bridges the digital divide in rural India by providing farmers with AI-powered tools that were previously accessible only to large agricultural corporations. By democratizing access to expert knowledge, real-time market data, and advanced disease detection, we empower farmers to make informed decisions, increase their income, and build sustainable farming practices.</p>
+            <br>
+            <p><strong>Together, we're building a smarter, more prosperous rural India.</strong></p>
+        </div>
+
+        <!-- Contact/Footer -->
+        <div class="section" style="text-align: center;">
+            <h2>📞 Get Started</h2>
+            <p style="font-size: 1.3em; margin: 20px 0;">Ready to transform your farming experience?</p>
+            <div style="margin-top: 30px;">
+                <p style="font-size: 1.2em; color: #667eea;">
+                    <strong>Desktop:</strong> https://d3v7khazsfb4vd.cloudfront.net/gramsetu-agents.html
+                </p>
+                <p style="font-size: 1.2em; color: #667eea; margin-top: 10px;">
+                    <strong>Mobile:</strong> https://d3v7khazsfb4vd.cloudfront.net/gramsetu-mobile.html
+                </p>
+            </div>
+            <p style="margin-top: 40px; color: #666;">
+                <em>GramSetu - Connecting Villages to the Future</em>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

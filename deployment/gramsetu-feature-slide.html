@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramSetu - Feature Overview Slide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .slide {
+            width: 1920px;
+            height: 1080px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Header Section */
+        .header {
+            background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
+            padding: 40px 60px;
+            color: white;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 72px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header .tagline {
+            font-size: 32px;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+        
+        /* Main Content */
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 50px 60px;
+            flex: 1;
+        }
+        
+        /* Left Column - Features */
+        .features-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .section-title {
+            font-size: 36px;
+            color: #2E7D32;
+            margin-bottom: 15px;
+            border-bottom: 4px solid #43A047;
+            padding-bottom: 10px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #43A047;
+        }
+        
+        .feature-icon {
+            font-size: 48px;
+            min-width: 60px;
+            text-align: center;
+        }
+        
+        .feature-content h3 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .feature-content p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.4;
+        }
+        
+        /* Right Column - Architecture & Stats */
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        /* Architecture Diagram */
+        .architecture-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border: 3px solid #667eea;
+        }
+        
+        .architecture-box h2 {
+            font-size: 28px;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .arch-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .arch-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .arch-box {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            min-width: 140px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .arch-box.user { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .arch-box.web { background: linear-gradient(135deg, #43A047 0%, #2E7D32 100%); }
+        .arch-box.api { background: linear-gradient(135deg, #F9A825 0%, #F57F17 100%); }
+        .arch-box.lambda { background: linear-gradient(135deg, #E91E63 0%, #C2185B 100%); }
+        .arch-box.agent { background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%); font-size: 12px; padding: 10px; min-width: 100px; }
+        .arch-box.service { background: linear-gradient(135deg, #00ACC1 0%, #0097A7 100%); font-size: 12px; }
+        
+        .arrow {
+            font-size: 24px;
+            color: #666;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        /* Tech Stack */
+        .tech-stack {
+            background: linear-gradient(135deg, #FFF9E6 0%, #FFE082 100%);
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid #F9A825;
+        }
+        
+        .tech-stack h2 {
+            font-size: 24px;
+            color: #F57F17;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .tech-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .tech-badge {
+            background: linear-gradient(135deg, #F9A825 0%, #F57F17 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+        }
+        
+        /* Footer */
+        .footer {
+            background: #2E7D32;
+            color: white;
+            padding: 20px 60px;
+            text-align: center;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <!-- Header -->
+        <div class="header">
+            <h1>🌾 GramSetu - Unified Rural Ecosystem 🌾</h1>
+            <p class="tagline">AI-Powered Agricultural Assistant for Indian Farmers</p>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Left Column: Features -->
+            <div class="features-column">
+                <h2 class="section-title">🚀 Key Features</h2>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🤖</div>
+                    <div class="feature-content">
+                        <h3>Multi-Agent AI System</h3>
+                        <p>6 specialized AI agents: Supervisor, Agri Expert, Market, Weather, Policy & Tourism</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">💰</div>
+                    <div class="feature-content">
+                        <h3>Live Market Prices</h3>
+                        <p>Real-time mandi prices from Agmarknet API with district-wise comparison</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🔬</div>
+                    <div class="feature-content">
+                        <h3>Crop Disease Detection</h3>
+                        <p>AI-powered image analysis with treatment recommendations & product costs</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">📋</div>
+                    <div class="feature-content">
+                        <h3>Government Schemes</h3>
+                        <p>PM-Kisan, PMFBY, PMKSY, PKVY, eNAM - eligibility & application info</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">📱</div>
+                    <div class="feature-content">
+                        <h3>Mobile-First Design</h3>
+                        <p>Responsive UI optimized for rural users with 2G/3G connectivity</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🌐</div>
+                    <div class="feature-content">
+                        <h3>Multi-Language Support</h3>
+                        <p>English, Hindi (हिंदी), Marathi (मराठी) with natural language processing</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column: Architecture & Stats -->
+            <div class="right-column">
+                <!-- Architecture -->
+                <div class="architecture-box">
+                    <h2>🏗️ System Architecture</h2>
+                    <div class="arch-flow">
+                        <div class="arch-row">
+                            <div class="arch-box user">👤 Farmer</div>
+                            <span class="arrow">→</span>
+                            <div class="arch-box web">🌐 Web UI<br>(S3+CDN)</div>
+                            <span class="arrow">→</span>
+                            <div class="arch-box api">🚪 API<br>Gateway</div>
+                            <span class="arrow">→</span>
+                            <div class="arch-box lambda">⚡ Lambda<br>(Docker)</div>
+                        </div>
+                        
+                        <div class="arch-row">
+                            <div class="arch-box agent">🤖 Supervisor</div>
+                            <div class="arch-box agent">🌱 Agri</div>
+                            <div class="arch-box agent">💰 Market</div>
+                            <div class="arch-box agent">🌤️ Weather</div>
+                            <div class="arch-box agent">📋 Policy</div>
+                        </div>
+                        
+                        <div class="arch-row">
+                            <div class="arch-box service">🧠 AWS Bedrock<br>(Nova Lite)</div>
+                            <div class="arch-box service">📊 Agmarknet<br>API</div>
+                            <div class="arch-box service">💾 S3 Storage<br>(Data)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <span class="stat-number">6</span>
+                        <span class="stat-label">AI Agents</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">3</span>
+                        <span class="stat-label">Languages</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">&lt;2s</span>
+                        <span class="stat-label">Response</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">99.9%</span>
+                        <span class="stat-label">Uptime</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">24/7</span>
+                        <span class="stat-label">Available</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">₹20-42</span>
+                        <span class="stat-label">Monthly</span>
+                    </div>
+                </div>
+                
+                <!-- Tech Stack -->
+                <div class="tech-stack">
+                    <h2>💻 Technology Stack</h2>
+                    <div class="tech-badges">
+                        <div class="tech-badge">Python 3.11</div>
+                        <div class="tech-badge">AWS Lambda</div>
+                        <div class="tech-badge">AWS Bedrock</div>
+                        <div class="tech-badge">Nova Lite AI</div>
+                        <div class="tech-badge">Strands Framework</div>
+                        <div class="tech-badge">Docker</div>
+                        <div class="tech-badge">S3 + CloudFront</div>
+                        <div class="tech-badge">API Gateway</div>
+                        <div class="tech-badge">ECR</div>
+                        <div class="tech-badge">CloudWatch</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <strong>🌟 Empowering Indian Farmers with AI-Driven Insights & Real-Time Market Data</strong> | 
+            Desktop: d3v7khazsfb4vd.cloudfront.net/gramsetu-agents.html | 
+            Mobile: d3v7khazsfb4vd.cloudfront.net/gramsetu-mobile.html
+        </div>
+    </div>
+</body>
+</html>
